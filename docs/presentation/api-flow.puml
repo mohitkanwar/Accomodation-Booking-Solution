@@ -1,20 +1,14 @@
 @startuml
-skinparam backgroundColor transparent
-skinparam shadowing false
-skinparam sequence {
-  ArrowColor #374151
-  LifeLineBorderColor #6B7280
-  ParticipantBorderColor #4B5563
-  ParticipantBackgroundColor #F7F9FC
-  ParticipantFontColor #111827
-}
+!include plantuml/sodexo-theme.puml
+
+title Accommodation Search, Request and Booking
 
 actor Employee
 participant "React Accommodation Lego" as Lego
-participant "Accommodation BFF" as BFF
-participant "Policy & Workflow" as Domain
-participant "Booking.com Adapter" as Adapter
-participant "Booking.com Demand API" as Booking
+participant "Accommodation BFF" as BFF #F5F6FC
+participant "Policy & Workflow" as Domain #E8EAF7
+participant "Booking.com Adapter" as Adapter #FDEBEC
+participant "Booking.com Demand API" as Booking #FDEBEC
 
 Employee -> Lego: Select office, dates and occupancy
 Lego -> BFF: Search accommodation
@@ -44,4 +38,9 @@ Booking --> Adapter: Confirmed order reference
 Adapter --> Domain: Booking confirmation
 Domain --> BFF: BOOKED
 BFF --> Lego: Confirmation and status
+
+note over Domain, Booking
+  Approval is not a confirmed reservation.
+  Only a successful supplier response produces BOOKED.
+end note
 @enduml

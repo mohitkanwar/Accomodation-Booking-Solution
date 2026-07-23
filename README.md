@@ -37,11 +37,11 @@ Insert the diagram with this placeholder:
 ```
 ````
 
-During `pnpm start` or `pnpm build`, the source is rendered to an ignored
-`api-flow.puml.svg` file and the generated SVG is embedded at the placeholder's
-position in the page. Text after `|` becomes the image's accessible alternative
-text. The `.puml` source remains the only diagram file that needs to be edited
-or committed.
+During `pnpm start` or `pnpm build`, the source is rendered under the ignored
+`static/plantuml/` directory and the page receives a base-URL-aware SVG image at
+the placeholder's position. Text after `|` becomes the image's accessible
+alternative text. The `.puml` source remains the only diagram file that needs
+to be edited or committed.
 
 Run generation directly when needed:
 
@@ -49,8 +49,33 @@ Run generation directly when needed:
 pnpm plantuml
 ```
 
+When the development server is already running, run this command and refresh
+the page to see the updated static SVG.
+
 Use one diagram per `.puml` file. A missing source, invalid diagram, missing
 Java runtime, failed download, or checksum mismatch stops the build.
+
+### Sodexo diagram theme
+
+The reusable theme is stored at `plantuml/sodexo-theme.puml`. The generator
+runs from the repository root, so the same include works in every diagram:
+
+```plantuml
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Accommodation Booking Context
+actor Employee
+component "Accommodation Lego" as Lego
+Employee --> Lego
+@enduml
+```
+
+The theme uses Sodexo blue for structure and hierarchy, red for selective
+emphasis, and accessible pale surfaces for identity, configuration, workflow,
+integration, and evidence elements. The two core color values are reference
+matches and should be checked against an authoritative Sodexo brand guide
+before use in externally published brand material.
 
 To use an existing local PlantUML JAR instead of the pinned download:
 

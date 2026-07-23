@@ -7,6 +7,7 @@ const navigationItems = require('./config/navigation.json');
 
 const docsVersion = process.env.DOCS_VERSION || packageJson.version;
 const buildTimestamp = process.env.BUILD_TIMESTAMP || new Date().toISOString();
+const baseUrl = '/Accomodation-Booking-Solution/';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -15,7 +16,7 @@ const config = {
   favicon: 'img/favicon.svg',
 
   url: 'https://mohitkanwar.github.io',
-  baseUrl: '/Accomodation-Booking-Solution/',
+  baseUrl,
 
   organizationName: 'mohitkanwar',
   projectName: 'Accomodation-Booking-Solution',
@@ -42,7 +43,9 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
-          remarkPlugins: [require('./plugins/plantuml-images.js')],
+          remarkPlugins: [
+            [require('./plugins/plantuml-images.js'), {baseUrl}],
+          ],
         },
         blog: false,
         theme: {

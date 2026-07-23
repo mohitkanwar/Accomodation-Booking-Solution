@@ -70,7 +70,12 @@ for (const markdownPath of markdownFiles) {
       await access(sourcePath);
       sources.set(sourcePath, {
         sourcePath,
-        outputPath: `${sourcePath}.svg`,
+        outputPath: path.join(
+          projectRoot,
+          'static',
+          'plantuml',
+          `${path.relative(docsRoot, sourcePath)}.svg`,
+        ),
         references: [
           ...(sources.get(sourcePath)?.references ?? []),
           relative(markdownPath),
@@ -115,6 +120,11 @@ for (const {sourcePath, outputPath} of sources.values()) {
     'java',
     [
       '-Djava.awt.headless=true',
+      `-DPLANTUML_SECURITY_PROFILE=${
+        process.env.PLANTUML_SECURITY_PROFILE || 'INTERNET'
+      }`,
+      `-Dplantuml.allowlist.path=${projectRoot}`,
+      `-Dplantuml.include.path=${projectRoot}`,
       '-jar',
       jarPath,
       '-charset',
@@ -124,7 +134,7 @@ for (const {sourcePath, outputPath} of sources.values()) {
       '-failfast2',
     ],
     {
-      cwd: path.dirname(sourcePath),
+      cwd: projectRoot,
       env: {
         ...process.env,
         PLANTUML_SECURITY_PROFILE:
@@ -152,6 +162,7 @@ for (const {sourcePath, outputPath} of sources.values()) {
     fail(`${relative(sourcePath)}: PlantUML did not return an SVG image.`);
   }
 
+  await mkdir(path.dirname(outputPath), {recursive: true});
   await writeFile(outputPath, svg, 'utf8');
   console.log(
     `PlantUML: ${relative(sourcePath)} → ${relative(outputPath)}`,

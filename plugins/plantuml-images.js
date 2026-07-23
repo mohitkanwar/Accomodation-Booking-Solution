@@ -1,6 +1,5 @@
 // @ts-check
 
-const {readFileSync} = require('node:fs');
 const path = require('node:path');
 
 /**
@@ -12,13 +11,13 @@ const path = require('node:path');
  *   ./api-flow.puml | Booking API flow
  *   ```
  */
-module.exports = function plantumlImages() {
+module.exports = function plantumlImages({baseUrl = '/'} = {}) {
   return (tree, file) => {
-    visit(tree, file);
+    visit(tree, file, baseUrl);
   };
 };
 
-function visit(node, file) {
+function visit(node, file, baseUrl) {
   if (!node || typeof node !== 'object') {
     return;
   }
@@ -40,14 +39,25 @@ function visit(node, file) {
 
       const sourceReference = match[1];
       const alt = (match[2] || path.basename(sourceReference, '.puml')).trim();
-      const svgPath = path.resolve(
+      const sourcePath = path.resolve(
         path.dirname(markdownPath),
-        `${sourceReference}.svg`,
+        sourceReference,
       );
-      const svg = readFileSync(svgPath);
+      const docsMarker = `${path.sep}docs${path.sep}`;
+      const docsIndex = sourcePath.lastIndexOf(docsMarker);
+      if (docsIndex === -1) {
+        throw new Error(`PlantUML source is outside docs/: ${sourceReference}`);
+      }
+
+      const docsRelativePath = sourcePath
+        .slice(docsIndex + docsMarker.length)
+        .split(path.sep)
+        .join('/');
+      const normalizedBaseUrl = `/${baseUrl}/`.replace(/\/+/g, '/');
 
       node.type = 'image';
-      node.url = `data:image/svg+xml;base64,${svg.toString('base64')}`;
+      node.url =
+        `${normalizedBaseUrl}plantuml/${docsRelativePath}.svg`;
       node.alt = alt;
       node.title = null;
       delete node.lang;
@@ -61,6 +71,6 @@ function visit(node, file) {
   }
 
   if (Array.isArray(node.children)) {
-    node.children.forEach((child) => visit(child, file));
+    node.children.forEach((child) => visit(child, file, baseUrl));
   }
 }

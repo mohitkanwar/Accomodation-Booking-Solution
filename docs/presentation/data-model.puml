@@ -1,24 +1,24 @@
 @startuml
 !pragma layout smetana
-skinparam backgroundColor transparent
-skinparam shadowing false
-skinparam linetype ortho
-skinparam entity {
-  BackgroundColor #F7F9FC
-  BorderColor #4B5563
-  FontColor #111827
-}
+!include plantuml/sodexo-theme.puml
 
-entity "Client" as Client
-entity "Employee Travel Profile" as Employee
-entity "Role Level" as Role
-entity "Destination Site" as Site
-entity "Travel Policy" as Policy
-entity "Booking Request" as Request
-entity "Approval" as Approval
-entity "Supplier Booking" as Booking
-entity "Audit Event" as Audit
-entity "Outbox Event" as Outbox
+title Accommodation Booking — Conceptual Data Model
+
+scale 1.2
+hide circle
+hide empty members
+skinparam linetype ortho
+
+entity "Client" as Client <<identity>> SODEXO_BLUE_PALE
+entity "Employee Travel Profile" as Employee <<identity>> SODEXO_BLUE_PALE
+entity "Role Level" as Role <<configuration>> SODEXO_BLUE_LIGHT
+entity "Destination Site" as Site <<configuration>> SODEXO_BLUE_LIGHT
+entity "Travel Policy" as Policy <<configuration>> SODEXO_BLUE_LIGHT
+entity "Booking Request" as Request <<workflow>> SODEXO_WHITE
+entity "Approval" as Approval <<workflow>> SODEXO_WHITE
+entity "Supplier Booking" as Booking <<integration>> SODEXO_RED_LIGHT
+entity "Audit Event" as Audit <<evidence>> SODEXO_SUCCESS_LIGHT
+entity "Outbox Event" as Outbox <<evidence>> SODEXO_SUCCESS_LIGHT
 
 Client ||--o{ Employee
 Client ||--o{ Role
@@ -34,4 +34,13 @@ Request ||--o{ Approval
 Request ||--o| Booking
 Request ||--o{ Audit
 Request ||--o{ Outbox
+
+legend right
+  |= Surface |= Responsibility |
+  |<#F5F6FC> Identity | Trusted client and employee context |
+  |<#DDE1F6> Configuration | Levels, sites and policy |
+  |<#FFFFFF> Workflow | Request and approval |
+  |<#FBDADD> Integration | External reservation |
+  |<#DDF2E9> Evidence | Audit and reliable delivery |
+endlegend
 @enduml

@@ -1,0 +1,152 @@
+' Sodexo-inspired PlantUML theme
+' Core palette references:
+'   Sodexo Blue  #2B3797
+'   Sodexo Red   #ED1C24
+'
+' Blue provides structure and hierarchy. Red is intentionally reserved for
+' emphasis, warnings, and external-system boundaries.
+
+!ifndef SODEXO_THEME_INCLUDED
+!define SODEXO_THEME_INCLUDED
+
+!define SODEXO_BLUE #2B3797
+!define SODEXO_BLUE_DARK #202A78
+!define SODEXO_BLUE_LIGHT #DDE1F6
+!define SODEXO_BLUE_PALE #F5F6FC
+!define SODEXO_RED #ED1C24
+!define SODEXO_RED_LIGHT #FBDADD
+!define SODEXO_INK #1A2040
+!define SODEXO_MUTED #5F6685
+!define SODEXO_BORDER #C9CEE8
+!define SODEXO_WHITE #FFFFFF
+!define SODEXO_SUCCESS #187A5A
+!define SODEXO_SUCCESS_LIGHT #DDF2E9
+!define SODEXO_WARNING #9A5A00
+!define SODEXO_WARNING_LIGHT #FFF4DD
+
+skinparam BackgroundColor transparent
+skinparam DefaultFontName Arial
+skinparam DefaultFontColor SODEXO_INK
+skinparam DefaultFontSize 14
+skinparam Shadowing false
+skinparam RoundCorner 14
+skinparam LineThickness 1.4
+skinparam ArrowColor SODEXO_BLUE
+skinparam ArrowFontColor SODEXO_INK
+skinparam ArrowThickness 1.5
+skinparam TitleFontColor SODEXO_BLUE_DARK
+skinparam TitleFontSize 22
+skinparam CaptionFontColor SODEXO_MUTED
+skinparam LegendBackgroundColor SODEXO_BLUE_PALE
+skinparam LegendBorderColor SODEXO_BORDER
+skinparam LegendFontColor SODEXO_INK
+
+skinparam actor {
+  BackgroundColor SODEXO_WHITE
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+}
+
+skinparam sequence {
+  ParticipantBackgroundColor SODEXO_WHITE
+  ParticipantBorderColor SODEXO_BLUE
+  ParticipantFontColor SODEXO_BLUE_DARK
+  LifeLineBorderColor SODEXO_BORDER
+  LifeLineBackgroundColor SODEXO_BLUE_PALE
+  ArrowColor SODEXO_BLUE
+  ArrowFontColor SODEXO_INK
+  DividerBackgroundColor SODEXO_BLUE
+  DividerBorderColor SODEXO_BLUE
+  DividerFontColor SODEXO_WHITE
+  GroupBackgroundColor SODEXO_BLUE_PALE
+  GroupBorderColor SODEXO_BORDER
+  GroupHeaderBackgroundColor SODEXO_BLUE_LIGHT
+  GroupFontColor SODEXO_BLUE_DARK
+  ReferenceBackgroundColor SODEXO_BLUE_PALE
+  ReferenceBorderColor SODEXO_BLUE
+  ReferenceFontColor SODEXO_BLUE_DARK
+}
+
+skinparam entity {
+  BackgroundColor SODEXO_WHITE
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+}
+
+skinparam entityBackgroundColor<<identity>> SODEXO_BLUE_PALE
+skinparam entityBorderColor<<identity>> SODEXO_BLUE
+skinparam entityBackgroundColor<<configuration>> SODEXO_BLUE_LIGHT
+skinparam entityBorderColor<<configuration>> SODEXO_BLUE
+skinparam entityBackgroundColor<<workflow>> SODEXO_WHITE
+skinparam entityBorderColor<<workflow>> SODEXO_BLUE_DARK
+skinparam entityBackgroundColor<<integration>> SODEXO_RED_LIGHT
+skinparam entityBorderColor<<integration>> SODEXO_RED
+skinparam entityBackgroundColor<<evidence>> SODEXO_SUCCESS_LIGHT
+skinparam entityBorderColor<<evidence>> SODEXO_SUCCESS
+
+skinparam component {
+  BackgroundColor SODEXO_WHITE
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+}
+
+skinparam rectangle {
+  BackgroundColor SODEXO_WHITE
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+}
+
+skinparam package {
+  BackgroundColor SODEXO_BLUE_PALE
+  BorderColor SODEXO_BORDER
+  FontColor SODEXO_BLUE_DARK
+}
+
+skinparam database {
+  BackgroundColor SODEXO_BLUE_LIGHT
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+}
+
+skinparam queue {
+  BackgroundColor SODEXO_SUCCESS_LIGHT
+  BorderColor SODEXO_SUCCESS
+  FontColor SODEXO_INK
+}
+
+skinparam state {
+  BackgroundColor SODEXO_WHITE
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+  StartColor SODEXO_BLUE
+  EndColor SODEXO_RED
+}
+
+skinparam activity {
+  BackgroundColor SODEXO_WHITE
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+  DiamondBackgroundColor SODEXO_BLUE_LIGHT
+  DiamondBorderColor SODEXO_BLUE
+  DiamondFontColor SODEXO_INK
+  StartColor SODEXO_BLUE
+  EndColor SODEXO_RED
+  BarColor SODEXO_BLUE
+}
+
+skinparam note {
+  BackgroundColor SODEXO_WARNING_LIGHT
+  BorderColor SODEXO_WARNING
+  FontColor SODEXO_INK
+}
+
+skinparam stereotype {
+  CBackgroundColor SODEXO_BLUE_LIGHT
+  CBorderColor SODEXO_BLUE
+  ABackgroundColor SODEXO_RED_LIGHT
+  ABorderColor SODEXO_RED
+  EBackgroundColor SODEXO_SUCCESS_LIGHT
+  EBorderColor SODEXO_SUCCESS
+}
+
+!endif
