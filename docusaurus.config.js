@@ -14,6 +14,15 @@ const config = {
   title: 'Accommodation Booking Solution',
   tagline: 'Architecture and solution documentation',
   favicon: 'img/favicon.svg',
+  headTags: [
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'theme-color',
+        content: '#2B3797',
+      },
+    },
+  ],
 
   url: 'https://mohitkanwar.github.io',
   baseUrl,
@@ -58,8 +67,16 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      colorMode: {
+        defaultMode: 'light',
+        respectPrefersColorScheme: true,
+      },
       navbar: {
         title: 'Accommodation Booking Solution',
+        logo: {
+          alt: 'Accommodation Booking Solution',
+          src: 'img/favicon.svg',
+        },
         items: navigationItems.map(({id: _id, ...item}) => item),
       },
       footer: {
