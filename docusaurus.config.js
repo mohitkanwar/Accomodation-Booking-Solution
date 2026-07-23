@@ -3,14 +3,10 @@
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 const packageJson = require('./package.json');
+const navigationItems = require('./config/navigation.json');
 
 const docsVersion = process.env.DOCS_VERSION || packageJson.version;
-const buildTimestamp = (
-  process.env.BUILD_TIMESTAMP || new Date().toISOString()
-)
-  .replace('T', ' ')
-  .replace(/\.\d{3}Z$/, ' UTC')
-  .replace(/Z$/, ' UTC');
+const buildTimestamp = process.env.BUILD_TIMESTAMP || new Date().toISOString();
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -27,6 +23,11 @@ const config = {
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
+
+  customFields: {
+    docsVersion,
+    buildTimestamp,
+  },
 
   i18n: {
     defaultLocale: 'en',
@@ -55,26 +56,11 @@ const config = {
     ({
       navbar: {
         title: 'Accommodation Booking Solution',
-        items: [
-          {
-            type: 'docSidebar',
-            sidebarId: 'documentationSidebar',
-            position: 'left',
-            label: 'Documentation',
-          },
-          {
-            href: 'https://github.com/mohitkanwar/Accomodation-Booking-Solution',
-            label: 'GitHub',
-            position: 'right',
-          },
-        ],
+        items: navigationItems.map(({id: _id, ...item}) => item),
       },
       footer: {
         style: 'dark',
-        copyright: `
-          <span>Copyright © ${new Date().getFullYear()} Accommodation Booking Solution.</span>
-          <span class="footer-build-meta">v${docsVersion} · Built ${buildTimestamp}</span>
-        `,
+        copyright: `Copyright © ${new Date().getFullYear()} Accommodation Booking Solution.`,
       },
       prism: {
         theme: lightCodeTheme,

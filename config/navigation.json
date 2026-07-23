@@ -1,0 +1,15 @@
+[
+  {
+    "id": "documentation",
+    "type": "docSidebar",
+    "sidebarId": "documentationSidebar",
+    "position": "left",
+    "label": "Documentation"
+  },
+  {
+    "id": "github",
+    "href": "https://github.com/mohitkanwar/Accomodation-Booking-Solution",
+    "label": "GitHub",
+    "position": "right"
+  }
+]
