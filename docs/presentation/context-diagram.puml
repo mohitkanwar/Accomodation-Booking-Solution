@@ -1,7 +1,7 @@
 @startuml
-!include plantuml/vendor/c4-plantuml/C4_Context.puml
-!include plantuml/sodexo-theme.puml
-!include plantuml/sodexo-c4-theme.puml
+!include ../../plantuml/vendor/c4-plantuml/C4_Context.puml
+!include ../../plantuml/sodexo-theme.puml
+!include ../../plantuml/sodexo-c4-theme.puml
 
 title Employee Accommodation Booking — System Context
 caption C4 Level 1 · Initial discovery view

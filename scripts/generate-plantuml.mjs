@@ -134,7 +134,9 @@ for (const {sourcePath, outputPath} of sources.values()) {
       '-failfast2',
     ],
     {
-      cwd: projectRoot,
+      // Resolve relative !include paths exactly as an editor does when the
+      // source file is opened directly.
+      cwd: path.dirname(sourcePath),
       env: {
         ...process.env,
         PLANTUML_SECURITY_PROFILE:
