@@ -7,40 +7,37 @@ sidebar_position: 1
 
 # Accommodation Booking Solution
 
-This knowledge base describes the discovery, requirements, architecture,
-controls, delivery approach, and operating model for an employee accommodation
-booking capability embedded in the existing Sodexo B2C application.
+This site is the shared workspace for discovering an employee accommodation
+booking capability for the existing Sodexo B2C application. It is designed for
+business owners, product owners, operations, architects, engineers, security,
+finance, and delivery teams to make decisions together.
 
-## Current position
+## The proposition
 
 Tetrapak employees will search Booking.com accommodation inventory and submit a
 booking request. A client-side operator will review the request, validate it
 against corporate travel policy, and complete the reservation.
 
-The proposed integration is server-side: the React accommodation Lego
-communicates with an Accommodation Booking Backend-for-Frontend and domain
-service. That service protects supplier credentials, applies policy, manages
-workflow state, normalises Booking.com responses, and retains an auditable
-record.
+The working architectural direction is a React accommodation Lego backed by an
+Accommodation Booking service. The backend protects supplier credentials,
+applies policy, manages workflow state, normalises Booking.com responses, and
+retains an auditable record.
 
 :::warning Discovery gates
 
-Full booking scope depends on confirming Booking.com commercial access, the
-payment and merchant-of-record model, exact policy calculations, and the
-authoritative source of employee levels.
+Do not commit to full in-app booking until Booking.com commercial access, the
+payment and merchant-of-record model, policy calculations, and the source of
+employee levels have been confirmed.
 
 :::
 
-## How to use this documentation
+## Use this site as a workshop
 
-- **Executives and sponsors:** start with Executive Overview, Business and
-  Product, Governance and Risk, and Roadmap and Migration.
-- **Product and operations:** use User and Organisation Model, Accommodation
-  Supply, Booking and Servicing, and Operational Playbooks.
-- **Architecture and engineering:** use Domain Design, Integrations, API and
-  Event Contracts, Solution Architecture, Security, Quality, and Platform
-  Operations.
-- **Finance and procurement:** use Payments, Billing and Finance, plus the open
-  decisions in Governance and Risk.
+Work from top to bottom in the sidebar. Each page contains:
 
-Pages without source-backed content have intentionally been left empty.
+- **Current understanding** — the proposition or recommendation brought into
+  the room.
+- **Workshop questions** — points requiring cross-functional agreement.
+- **Decisions and outputs** — evidence that must leave the workshop.
+
+Start with [Workshop Overview](./workshop/workshop-overview.md).
