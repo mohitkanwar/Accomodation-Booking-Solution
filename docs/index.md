@@ -5,39 +5,43 @@ slug: /
 sidebar_position: 1
 ---
 
-# Accommodation Booking Solution
+# Accommodation Booking: Initial Discovery
 
-This site is the shared workspace for discovering an employee accommodation
-booking capability for the existing Sodexo B2C application. It is designed for
-business owners, product owners, operations, architects, engineers, security,
-finance, and delivery teams to make decisions together.
+This is a 60-minute initial-discovery presentation for business owners, product
+owners, operations, and technology teams.
 
-## The proposition
+## Purpose
 
-Tetrapak employees will search Booking.com accommodation inventory and submit a
-booking request. A client-side operator will review the request, validate it
-against corporate travel policy, and complete the reservation.
+Build a shared understanding of Tetrapak's request, expose the decisions that
+determine scope and feasibility, and agree the work required to reach delivery
+readiness.
 
-The working architectural direction is a React accommodation Lego backed by an
-Accommodation Booking service. The backend protects supplier credentials,
-applies policy, manages workflow state, normalises Booking.com responses, and
-retains an auditable record.
+This is not a final solution design or delivery commitment. The data model,
+flows, and principles are initial hypotheses to support discussion.
 
-:::warning Discovery gates
+## 60-minute agenda
 
-Do not commit to full in-app booking until Booking.com commercial access, the
-payment and merchant-of-record model, policy calculations, and the source of
-employee levels have been confirmed.
+| Topic | Time |
+| --- | ---: |
+| [Context and understanding](./presentation/context-and-understanding.md) | 5 min |
+| [Discovery questions](./presentation/discovery-questions.md) | 12 min |
+| [Initial data model](./presentation/data-model.md) | 10 min |
+| [High-level API flow](./presentation/api-flow.md) | 10 min |
+| [Architecture principles](./presentation/architecture-principles.md) | 8 min |
+| [Next steps and workshops](./presentation/next-steps-and-workshops.md) | 5 min |
+| Q&A and decision recap | 10 min |
+
+## Desired outcome
+
+- Agreement on what problem the feature solves.
+- A visible list of business, product, commercial, and technical unknowns.
+- Acceptance or challenge of the initial domain and integration boundaries.
+- Named owners for the validation workshops and blocking decisions.
+
+:::warning Readiness gates
+
+Do not commit to integrated booking until Booking.com commercial access, the
+payment and merchant-of-record model, the exact policy calculation, and the
+authoritative employee-role source are confirmed.
 
 :::
-
-## Use this site as a workshop
-
-Work from top to bottom in the sidebar. Each page contains:
-
-- **Current understanding** — the proposition or recommendation brought into
-  the room.
-- **Workshop questions** — points requiring cross-functional agreement.
-- **Decisions and outputs** — evidence that must leave the workshop.
-
-Start with [Workshop Overview](./workshop/workshop-overview.md).
