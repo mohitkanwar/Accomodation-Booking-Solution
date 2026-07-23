@@ -1,0 +1,23 @@
+' Sodexo styling adapter for C4-PlantUML diagrams.
+' Include C4_Context.puml (or another C4 library), then sodexo-theme.puml,
+' before including this file.
+
+!ifndef SODEXO_C4_THEME_INCLUDED
+!define SODEXO_C4_THEME_INCLUDED
+
+UpdateElementStyle("person", $bgColor=SODEXO_BLUE, $fontColor=SODEXO_WHITE, $borderColor=SODEXO_BLUE_DARK, $shadowing="false", $legendText="Person")
+UpdateElementStyle("external_person", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_INK, $borderColor=SODEXO_BLUE, $shadowing="false", $legendText="External person")
+UpdateElementStyle("system", $bgColor=SODEXO_BLUE, $fontColor=SODEXO_WHITE, $borderColor=SODEXO_BLUE_DARK, $shadowing="false", $legendText="System in scope")
+UpdateElementStyle("external_system", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_INK, $borderColor=SODEXO_BORDER, $shadowing="false", $legendText="Supporting system")
+
+UpdateBoundaryStyle($bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BORDER, $shadowing="false", $borderStyle="dashed", $borderThickness="1")
+
+AddElementTag("supplier", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $legendText="External supplier")
+AddElementTag("delivery", $bgColor=SODEXO_SUCCESS_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_SUCCESS, $shadowing="false", $legendText="Delivery service")
+
+UpdateRelStyle(SODEXO_INK, SODEXO_BLUE)
+
+skinparam ArrowThickness 1.5
+skinparam defaultTextAlignment center
+
+!endif

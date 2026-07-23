@@ -1,0 +1,39 @@
+@startuml
+!include plantuml/vendor/c4-plantuml/C4_Context.puml
+!include plantuml/sodexo-theme.puml
+!include plantuml/sodexo-c4-theme.puml
+
+title Employee Accommodation Booking — System Context
+caption C4 Level 1 · Initial discovery view
+
+LAYOUT_LANDSCAPE()
+
+Person(employee, "Eligible Employee", "Searches accommodation and submits a booking request")
+Person(operator, "Tetrapak Booking Operator", "Reviews requests and creates the confirmed reservation")
+Person(clientAdmin, "Client Administrator", "Maintains destinations, role levels and booking policies")
+
+System(accommodation, "Accommodation Booking Capability", "Sodexo B2C capability for policy-aware search, request, approval,\nbooking orchestration, administration and audit")
+
+System_Ext(b2c, "Existing Sodexo B2C Application", "Hosts the React micro frontend and provides the authenticated user experience")
+System_Ext(identity, "Identity & Employee Context", "Provides trusted client, employee and role-level attributes")
+System_Ext(booking, "Booking.com Demand API", "Provides accommodation content, availability, prices and order operations", $tags="supplier")
+System_Ext(notifications, "Notification Services", "Delivers request, decision and booking-status messages", $tags="delivery")
+
+Rel(employee, b2c, "Uses", "HTTPS")
+Rel(b2c, accommodation, "Loads the Lego and invokes booking APIs", "HTTPS / JSON")
+Rel(accommodation, identity, "Resolves trusted client and role context", "Internal API")
+Rel(operator, accommodation, "Reviews, decides and books", "Operator UI / HTTPS")
+Rel(clientAdmin, accommodation, "Configures client policies and access", "Admin UI / HTTPS")
+Rel(accommodation, booking, "Searches, rechecks, previews and creates orders", "Demand API / HTTPS")
+Rel(accommodation, notifications, "Publishes employee and operator updates", "Events / API")
+
+Lay_D(employee, b2c)
+Lay_R(b2c, accommodation)
+Lay_D(operator, accommodation)
+Lay_D(clientAdmin, accommodation)
+Lay_R(accommodation, booking)
+Lay_D(identity, accommodation)
+Lay_D(notifications, booking)
+
+SHOW_LEGEND(false)
+@enduml

@@ -18,6 +18,18 @@ accommodation inside the existing Sodexo B2C application.
 - An administration capability manages destinations, role levels, policies, and
   technical configuration.
 
+## System context
+
+```plantuml-image
+./context-diagram.puml | C4 system context for employee accommodation booking
+```
+
+The accommodation booking capability is the system in scope. The existing B2C
+application hosts its React Lego, while trusted identity context, Booking.com,
+and notification services remain external dependencies. Internal containers and
+implementation choices are intentionally deferred to lower-level architecture
+views.
+
 ## Interpreted business journey
 
 ```text
