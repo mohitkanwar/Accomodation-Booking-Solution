@@ -2,6 +2,15 @@
 
 const lightCodeTheme = require('prism-react-renderer').themes.github;
 const darkCodeTheme = require('prism-react-renderer').themes.dracula;
+const packageJson = require('./package.json');
+
+const docsVersion = process.env.DOCS_VERSION || packageJson.version;
+const buildTimestamp = (
+  process.env.BUILD_TIMESTAMP || new Date().toISOString()
+)
+  .replace('T', ' ')
+  .replace(/\.\d{3}Z$/, ' UTC')
+  .replace(/Z$/, ' UTC');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -62,7 +71,10 @@ const config = {
       },
       footer: {
         style: 'dark',
-        copyright: `Copyright © ${new Date().getFullYear()} Accommodation Booking Solution.`,
+        copyright: `
+          <span>Copyright © ${new Date().getFullYear()} Accommodation Booking Solution.</span>
+          <span class="footer-build-meta">v${docsVersion} · Built ${buildTimestamp}</span>
+        `,
       },
       prism: {
         theme: lightCodeTheme,

@@ -17,3 +17,11 @@
   --ifm-color-primary-lighter: #a5c6fa;
   --ifm-color-primary-lightest: #d5e4fd;
 }
+
+.footer-build-meta {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  opacity: 0.65;
+}

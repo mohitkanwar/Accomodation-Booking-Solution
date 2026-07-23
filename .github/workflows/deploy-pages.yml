@@ -36,6 +36,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Set build metadata
+        run: |
+          BASE_VERSION="$(node -p "require('./package.json').version")"
+          MAJOR_MINOR="${BASE_VERSION%.*}"
+          echo "DOCS_VERSION=${MAJOR_MINOR}.${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+          echo "BUILD_TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_ENV"
+
       - name: Build Docusaurus
         run: pnpm build
 
