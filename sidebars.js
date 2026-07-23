@@ -4,7 +4,16 @@
 const sidebars = {
   documentationSidebar: [
     'introduction',
-    'presentation/context-and-understanding',
+    {
+      type: 'category',
+      label: '1. Context and Understanding',
+      link: {
+        type: 'doc',
+        id: 'presentation/context-and-understanding',
+      },
+      items: ['presentation/users'],
+      collapsed: false,
+    },
     'presentation/discovery-questions',
     'presentation/data-model',
     'presentation/api-flow',
