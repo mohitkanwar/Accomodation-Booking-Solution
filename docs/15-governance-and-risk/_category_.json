@@ -1,0 +1,8 @@
+{
+  "label": "Governance and Risk",
+  "position": 17,
+  "link": {
+    "type": "generated-index",
+    "description": "Ownership, decisions, risks, dependencies, debt, vendors, architecture review, and evidence."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "label": "API and Event Contracts",
+  "position": 9,
+  "link": {
+    "type": "generated-index",
+    "description": "Internal and external API principles, contracts, errors, idempotency, events, rate limits, and versioning."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "label": "Security, Privacy and Compliance",
+  "position": 13,
+  "link": {
+    "type": "generated-index",
+    "description": "Security architecture, threats, access, secrets, encryption, auditing, privacy, compliance, and response."
+  }
+}

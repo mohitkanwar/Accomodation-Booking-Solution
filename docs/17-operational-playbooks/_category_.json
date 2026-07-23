@@ -1,0 +1,8 @@
+{
+  "label": "Operational Playbooks",
+  "position": 19,
+  "link": {
+    "type": "generated-index",
+    "description": "Response playbooks for booking, payment, inventory, reconciliation, supplier, security, performance, and recovery events."
+  }
+}

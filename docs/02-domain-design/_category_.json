@@ -1,0 +1,8 @@
+{
+  "label": "Domain Design",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Domain boundaries, entities, lifecycles, ownership, identifiers, and events."
+  }
+}

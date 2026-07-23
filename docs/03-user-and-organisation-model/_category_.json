@@ -1,0 +1,8 @@
+{
+  "label": "User and Organisation Model",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Users, organisational hierarchy, roles, permissions, authentication, and account controls."
+  }
+}

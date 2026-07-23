@@ -1,0 +1,8 @@
+{
+  "label": "Solution Architecture",
+  "position": 12,
+  "link": {
+    "type": "generated-index",
+    "description": "Architecture principles, context, containers, components, deployment, flows, standards, dependencies, and decisions."
+  }
+}

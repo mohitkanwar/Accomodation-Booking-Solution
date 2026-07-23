@@ -1,0 +1,8 @@
+{
+  "label": "Platform and Operations",
+  "position": 16,
+  "link": {
+    "type": "generated-index",
+    "description": "Environments, infrastructure, delivery automation, configuration, observability, incident response, and costs."
+  }
+}

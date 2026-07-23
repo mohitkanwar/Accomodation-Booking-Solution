@@ -1,0 +1,8 @@
+{
+  "label": "Integrations",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Supplier, identity, payment, finance, messaging, and partner-integration concerns."
+  }
+}

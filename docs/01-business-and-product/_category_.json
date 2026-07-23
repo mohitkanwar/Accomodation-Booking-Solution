@@ -1,0 +1,8 @@
+{
+  "label": "Business and Product",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Business model, users, journeys, capabilities, requirements, rules, and policies."
+  }
+}
