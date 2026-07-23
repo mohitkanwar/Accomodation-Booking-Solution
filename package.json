@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
+    "plantuml": "node scripts/generate-plantuml.mjs",
+    "prestart": "node scripts/generate-plantuml.mjs",
     "start": "docusaurus start",
+    "prebuild": "node scripts/generate-plantuml.mjs",
     "build": "docusaurus build",
     "serve": "docusaurus serve",
     "clear": "docusaurus clear"

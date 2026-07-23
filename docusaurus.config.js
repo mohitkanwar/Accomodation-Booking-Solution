@@ -42,6 +42,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
+          remarkPlugins: [require('./plugins/plantuml-images.js')],
         },
         blog: false,
         theme: {

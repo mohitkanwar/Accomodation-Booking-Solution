@@ -7,19 +7,8 @@ title: 4. High-Level API Flow
 
 ## Context
 
-```text
-React Accommodation Lego
-          │ authenticated B2C session
-          ▼
-B2C Gateway / Accommodation BFF
-          │
-          ▼
-Accommodation Domain Service
-├─ Policy and entitlement
-├─ Request / approval / booking workflow
-├─ Booking.com adapter ─────────► Booking.com Demand API
-├─ Data and audit
-└─ Notification outbox ─────────► Existing messaging services
+```plantuml-image
+./api-flow.puml | Employee search, request and operator booking sequence
 ```
 
 The browser must not call Booking.com directly. Demand API requests require an

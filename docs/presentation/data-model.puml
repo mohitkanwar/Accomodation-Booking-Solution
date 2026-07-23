@@ -1,0 +1,37 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor transparent
+skinparam shadowing false
+skinparam linetype ortho
+skinparam entity {
+  BackgroundColor #F7F9FC
+  BorderColor #4B5563
+  FontColor #111827
+}
+
+entity "Client" as Client
+entity "Employee Travel Profile" as Employee
+entity "Role Level" as Role
+entity "Destination Site" as Site
+entity "Travel Policy" as Policy
+entity "Booking Request" as Request
+entity "Approval" as Approval
+entity "Supplier Booking" as Booking
+entity "Audit Event" as Audit
+entity "Outbox Event" as Outbox
+
+Client ||--o{ Employee
+Client ||--o{ Role
+Client ||--o{ Site
+Client ||--o{ Policy
+Role ||--o{ Employee
+Role ||--o{ Policy
+Site ||--o{ Policy
+Employee ||--o{ Request : requester / traveller
+Site ||--o{ Request
+Policy ||..o{ Request : snapshot
+Request ||--o{ Approval
+Request ||--o| Booking
+Request ||--o{ Audit
+Request ||--o{ Outbox
+@enduml

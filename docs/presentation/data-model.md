@@ -30,18 +30,8 @@ database technology or require duplication of authoritative employee data.
 
 ## Relationships
 
-```text
-Client
-├─ Employee Travel Profile ─ Role Level
-├─ Destination Site
-└─ Travel Policy ─────────── Role Level + Destination
-
-Booking Request
-├─ selected Travel Policy snapshot
-├─ selected Booking.com offer snapshot
-├─ Approval(s)
-├─ Supplier Booking
-└─ Audit / Outbox Events
+```plantuml-image
+./data-model.puml | Conceptual B2C-side accommodation data model
 ```
 
 ## Modelling principles
