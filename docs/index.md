@@ -10,6 +10,9 @@ sidebar_position: 1
 This is a 60-minute initial-discovery presentation for business owners, product
 owners, operations, and technology teams.
 
+Use the [60-minute interview narration](./presentation/60-minute-interview-narration.md)
+for the complete timed, story-led speaker script and Q&A playbook.
+
 ## Purpose
 
 Build a shared understanding of Tetrapak's request, expose the decisions that

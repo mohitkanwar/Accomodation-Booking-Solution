@@ -6,6 +6,7 @@ const journeySidebarGroups = require('./docs/presentation/user-journeys/_generat
 const sidebars = {
   documentationSidebar: [
     'introduction',
+    'presentation/60-minute-interview-narration',
     {
       type: 'category',
       label: '1. Context and Understanding',
