@@ -4,12 +4,14 @@
 !include ../../../../plantuml/sodexo-c4-theme.puml
 
 title Sodexo B2C Frontend Application — UI Capability View
+header Sat, 25 Jul 2026 at 04:15:51 PM
 footer (c) Developed by <b>Mohit Kanwar</b>
 caption UI capability view · Client roles at the top · Blue = existing experience · Red = proposed accommodation experience
 
 skinparam linetype polyline
 skinparam nodesep 18
 skinparam ranksep 28
+
 
 AddElementTag("existing", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_INK, $borderColor=SODEXO_BLUE, $shadowing="false", $legendText="Existing capability")
 AddElementTag("new", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $legendText="New accommodation capability")
@@ -49,6 +51,11 @@ System_Boundary(b2cFrontend, "Sodexo B2C Frontend Application") {
     }
   }
 }
+
+Rel(traveller, hostShell, "Uses", "HTTPS")
+Rel(approver, hostShell, "Uses", "HTTPS")
+Rel(corporateAdmin, hostShell, "Uses", "HTTPS")
+Rel(bookingOperator, hostShell, "Uses", "HTTPS")
 
 Lay_R(traveller, approver)
 Lay_R(approver, corporateAdmin)

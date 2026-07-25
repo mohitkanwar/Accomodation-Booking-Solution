@@ -4,6 +4,7 @@
 !include ../../../../plantuml/sodexo-c4-theme.puml
 
 title Sodexo Employee Webapp — UI Capability View
+header Sat, 25 Jul 2026 at 04:15:51 PM
 footer (c) Developed by <b>Mohit Kanwar</b>
 caption UI capability view · Sodexo Administrator at the top · Blue = client administration · Red = supplier administration · Green = reporting and operations
 
@@ -46,6 +47,8 @@ System_Boundary(adminApp, "Sodexo Admin Application") {
     }
   }
 }
+
+Rel(sodexoAdmin, adminShell, "Uses", "HTTPS")
 
 Lay_D(sodexoUsers, adminApp)
 Lay_R(clientAdmin, supplierAdmin)
