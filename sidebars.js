@@ -15,7 +15,16 @@ const sidebars = {
       collapsed: false,
     },
     'presentation/discovery-questions',
-    'presentation/data-model',
+    {
+      type: 'category',
+      label: '3. Initial Data Model',
+      link: {
+        type: 'doc',
+        id: 'presentation/data-model',
+      },
+      items: ['presentation/domain-models'],
+      collapsed: false,
+    },
     {
       type: 'category',
       label: '4. High-Level API Flow',
