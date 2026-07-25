@@ -75,6 +75,29 @@ blocks cover reporting, monitoring, reconciliation, and controlled support
 investigation. As with the B2C view, these are logical UI capabilities rather
 than independently deployable containers.
 
+## Backend microservices container view
+
+```plantuml-image
+./diagrams/context-and-understanding/backend-microservices-container-diagram.puml | Accommodation booking backend microservices container diagram
+```
+
+The red containers are new accommodation-domain services. The blue containers
+are existing enterprise capabilities that the solution reuses rather than
+rebuilds. Green databases follow the database-per-service ownership principle;
+Redis and Kafka remain shared platform technologies, not authoritative stores.
+
+This view assumes modern **.NET 8** rather than legacy .NET Framework 4.8.
+Synchronous APIs use ASP.NET Core, persistence uses EF Core with SQL Server,
+background processing uses .NET Worker Services, outbound supplier calls use
+`IHttpClientFactory` with Polly resilience policies, Kafka clients use
+Confluent.Kafka, Redis access uses StackExchange.Redis, and telemetry follows
+OpenTelemetry conventions.
+
+The Accommodation Service, Booking Workflow Service and Booking.com Integration
+Service form the operational core. Reporting and reconciliation consume domain
+events so analytical or control workloads do not couple themselves to the
+transactional service databases.
+
 ## Interpreted business journey
 
 ```text

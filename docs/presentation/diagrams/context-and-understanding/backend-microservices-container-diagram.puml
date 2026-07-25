@@ -1,0 +1,105 @@
+@startuml
+!include ../../../../plantuml/vendor/c4-plantuml/C4_Container.puml
+!include ../../../../plantuml/sodexo-theme.puml
+!include ../../../../plantuml/sodexo-c4-theme.puml
+
+title Accommodation Booking Backend — Microservices Container View
+header Sat, 25 Jul 2026 at 04:29:30 PM
+footer (c) Developed by <b>Mohit Kanwar</b>
+caption C4 Level 2 · Red = new accommodation service · Blue = reused platform · Green = service-owned data · Amber = external supplier
+
+skinparam linetype polyline
+skinparam nodesep 24
+skinparam ranksep 34
+
+AddElementTag("newService", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $legendText="New accommodation service")
+AddElementTag("reused", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_INK, $borderColor=SODEXO_BLUE, $shadowing="false", $legendText="Reused platform capability")
+AddElementTag("ownedData", $bgColor=SODEXO_SUCCESS_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_SUCCESS, $shadowing="false", $legendText="New service-owned data store")
+AddElementTag("externalSupplier", $bgColor=SODEXO_WARNING_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_WARNING, $shadowing="false", $legendText="External supplier")
+AddBoundaryTag("newServicesGroup", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $borderStyle="dashed", $legendText="New accommodation services")
+AddBoundaryTag("reusedGroup", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BLUE, $shadowing="false", $borderStyle="dashed", $legendText="Reused platform foundation")
+AddBoundaryTag("dataGroup", $bgColor=SODEXO_SUCCESS_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_SUCCESS, $shadowing="false", $borderStyle="dashed", $legendText="Service-owned data stores")
+
+System_Ext(b2cFrontend, "B2C Accommodation Lego", "React micro frontend used by travellers, approvers, corporate administrators and booking operators")
+System_Ext(sodexoAdmin, "Sodexo Employee Webapp", "React administration experience for tenant, supplier and operational administration")
+System_Ext(bookingCom, "Booking.com Demand API", "External accommodation search, availability and reservation supplier", $tags="externalSupplier")
+
+Boundary(reusedPlatform, "REUSED ENTERPRISE PLATFORM", $tags="reusedGroup") {
+  Container_Ext(apiGateway, "API Gateway", "Existing gateway", "TLS termination, routing, throttling and JWT enforcement", $tags="reused")
+  Container_Ext(identity, "Authentication &\nAccess Control", "OIDC · OAuth 2.0 · JWT", "Existing identity, tenant and role claims", $tags="reused")
+  Container_Ext(runtimePlatform, "Service Discovery\n& Configuration", "Existing runtime platform", "Service registration, discovery, configuration and secrets references", $tags="reused")
+  ContainerQueue_Ext(kafka, "Event Platform", "Apache Kafka · Confluent.Kafka", "Durable accommodation domain events", $tags="reused")
+  ContainerDb_Ext(redis, "Distributed Cache", "Redis · StackExchange.Redis", "Short-lived search results, reference data and rate-control state", $tags="reused")
+  Container_Ext(esb, "Enterprise Service Bus", "Existing ESB", "Existing client, finance and legacy-system integrations", $tags="reused")
+  Container_Ext(notifications, "Push Notifications\n& Alerts", "Existing notification platform", "Delivers booking and approval status changes", $tags="reused")
+  Container_Ext(observability, "Observability Platform", "OpenTelemetry-compatible", "Central logs, metrics, traces and operational alerts", $tags="reused")
+}
+
+System_Boundary(accommodationBackend, "Accommodation Booking Backend") {
+  Boundary(newServices, "NEW .NET MICROSERVICES", $tags="newServicesGroup") {
+    Container(experienceApi, "Accommodation\nExperience API", "ASP.NET Core Web API · .NET 8", "Frontend BFF that aggregates UI-oriented accommodation responses", $tags="newService")
+    Container(accommodationService, "Accommodation\nService", "ASP.NET Core Web API · .NET 8 · EF Core 8", "Owns destinations, tenant configuration, policy evaluation and search orchestration", $tags="newService")
+    Container(bookingWorkflow, "Booking Workflow\nService", "ASP.NET Core Web API · .NET 8 · EF Core 8", "Owns requests, approvals, clarifications, reservations and idempotent workflow commands", $tags="newService")
+    Container(bookingConnector, "Booking.com\nIntegration Service", ".NET 8 Worker/API · HttpClientFactory · Polly", "Isolates Demand API contracts, credentials, resilience, rate limits and supplier error mapping", $tags="newService")
+    Container(reportingService, "Accommodation\nReporting Service", ".NET 8 Worker + ASP.NET Core query API", "Builds operational read models and exposes accommodation KPIs", $tags="newService")
+    Container(reconciliationService, "Accommodation\nReconciliation Service", ".NET 8 Worker Service", "Detects mismatches between requests, reservations, supplier charges and enterprise records", $tags="newService")
+  }
+
+  Boundary(serviceData, "NEW SERVICE-OWNED DATA STORES", $tags="dataGroup") {
+    ContainerDb(accommodationDb, "Accommodation DB", "SQL Server 2022 · EF Core 8", "Destinations, tenant configuration, policies and evaluation evidence", $tags="ownedData")
+    ContainerDb(workflowDb, "Booking Workflow DB", "SQL Server 2022 · EF Core 8", "Requests, decisions, reservations, idempotency keys and status history", $tags="ownedData")
+    ContainerDb(reportingDb, "Reporting DB", "SQL Server 2022", "Denormalized reporting projections and aggregates", $tags="ownedData")
+    ContainerDb(reconciliationDb, "Reconciliation DB", "SQL Server 2022 · EF Core 8", "Reconciliation cases, discrepancies and resolution evidence", $tags="ownedData")
+  }
+}
+
+Rel_D(b2cFrontend, apiGateway, "Accommodation APIs", "HTTPS / JSON")
+Rel_D(sodexoAdmin, apiGateway, "Administration APIs", "HTTPS / JSON")
+Rel(apiGateway, identity, "")
+Rel(apiGateway, experienceApi, "Routes", "HTTPS / JSON")
+
+Rel(experienceApi, accommodationService, "Search & policy")
+Rel(experienceApi, bookingWorkflow, "Booking workflow")
+Rel(experienceApi, reportingService, "KPIs")
+
+Rel(accommodationService, bookingConnector, "Search & look")
+Rel(bookingWorkflow, bookingConnector, "Book & manage")
+Rel(bookingConnector, bookingCom, "Demand API", "HTTPS / JSON")
+
+Rel(accommodationService, accommodationDb, "Owns")
+Rel(bookingWorkflow, workflowDb, "Owns")
+Rel(reportingService, reportingDb, "Owns")
+Rel(reconciliationService, reconciliationDb, "Owns")
+
+Rel(accommodationService, redis, "")
+Rel(bookingWorkflow, kafka, "")
+Rel(kafka, reportingService, "")
+Rel(kafka, reconciliationService, "")
+Rel(kafka, notifications, "")
+Rel(reconciliationService, esb, "")
+
+Lay_R(b2cFrontend, sodexoAdmin)
+
+Lay_R(apiGateway, identity)
+Lay_R(identity, runtimePlatform)
+Lay_R(runtimePlatform, kafka)
+Lay_R(kafka, redis)
+Lay_D(apiGateway, esb)
+Lay_R(esb, notifications)
+Lay_R(notifications, observability)
+
+Lay_R(experienceApi, accommodationService)
+Lay_R(accommodationService, bookingWorkflow)
+Lay_R(bookingWorkflow, bookingConnector)
+Lay_D(accommodationService, reportingService)
+Lay_R(reportingService, reconciliationService)
+
+Lay_D(newServices, serviceData)
+Lay_R(accommodationDb, workflowDb)
+Lay_R(workflowDb, reportingDb)
+Lay_R(reportingDb, reconciliationDb)
+
+Lay_D(reusedPlatform, accommodationBackend)
+Lay_R(bookingConnector, bookingCom)
+
+@enduml
