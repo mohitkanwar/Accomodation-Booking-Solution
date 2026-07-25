@@ -3,6 +3,47 @@
 These instructions apply to every automated agent and every task in this
 repository.
 
+## Repository structure
+
+This is a Docusaurus 3 site. Everything under `docs/` is published; nothing
+outside it is.
+
+```text
+.
+├── docs/                     Published content (Docusaurus docs plugin root)
+│   ├── index.md                Landing page ("introduction" doc, slug /)
+│   └── presentation/           Discovery-workshop pages + their .puml/.drawio sources
+├── archive/                  Unpublished docs, excluded from the site build
+│   ├── README.md                Explains what's archived and why
+│   └── docs/                    Full future-state doc set (00-executive-overview ... 99-appendices),
+│                                 plus workshop/, mirroring docs/ structure for later reuse
+├── config/
+│   └── navigation.json       Navbar items, consumed by docusaurus.config.js
+├── plantuml/                 Shared PlantUML theme + vendor C4-PlantUML include
+├── plugins/                  Custom Docusaurus remark plugin (renders plantuml-image blocks)
+├── scripts/                  Build-time Node scripts (version calc, PlantUML generation)
+├── src/                      Docusaurus swizzled theme, React components, and CSS
+├── static/                   Static assets copied verbatim to the build output
+├── sidebars.js               Sidebar structure for docs/
+├── docusaurus.config.js      Site config (reads config/navigation.json)
+└── versioning.json           Base version anchor for scripts/calculate-version.mjs
+```
+
+Rules for keeping this structure intact:
+
+- New active documentation pages go under `docs/presentation/` (or a new
+  `docs/` subfolder if the content isn't presentation material); reference
+  them in `sidebars.js`.
+- Keep a `.puml` diagram file beside the Markdown page that renders it (see
+  `README.md` for the `plantuml-image` embed syntax).
+- Content that is written but not yet part of the active workshop belongs
+  under `archive/docs/`, preserving the same relative path it would have
+  under `docs/` so it can be promoted later without renaming.
+- Do not add build output, caches, or generated diagrams to the repo — they
+  are git-ignored (`build/`, `.docusaurus/`, `.cache/`, `static/plantuml/`).
+- Navbar links go in `config/navigation.json`, not directly in
+  `docusaurus.config.js`.
+
 ## Isolate all task work
 
 - Create a uniquely named branch and a separate Git worktree before editing
