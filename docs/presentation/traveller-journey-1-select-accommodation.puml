@@ -4,11 +4,10 @@
 title Traveller Journey 1 · Select Accommodation
 footer (c) Developed by <b>Mohit Kanwar</b>
 
-start
-:Log in through the\nexisting Sodexo B2C application;
-:Search for available accommodation;
-:Select an option;
-:Submit for approval; <<#DDF2E9>>
-stop
+(*) -right-> "Log in through the\nexisting Sodexo B2C application"
+-right-> "Search for available\naccommodation"
+-right-> "Select an option"
+-right-> "Submit for approval" #DDF2E9
+-right-> (*)
 
 @enduml

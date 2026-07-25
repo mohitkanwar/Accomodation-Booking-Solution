@@ -4,11 +4,10 @@
 title Traveller Journey 3 · Edit a Submitted Request
 footer (c) Developed by <b>Mohit Kanwar</b>
 
-start
-:Open an existing request;
-:Select edit request;
-:Update destination, dates\nor requirements;
-:Resubmit for approval; <<#DDF2E9>>
-stop
+(*) -right-> "Open an existing request"
+-right-> "Select edit request"
+-right-> "Update destination, dates\nor requirements"
+-right-> "Resubmit for approval" #DDF2E9
+-right-> (*)
 
 @enduml

@@ -4,11 +4,10 @@
 title Traveller Journey 4 · View Requests
 footer (c) Developed by <b>Mohit Kanwar</b>
 
-start
-:Open my requests;
-:View the list of\nsubmitted requests;
-:Select a request;
-:View request status and details; <<#DDF2E9>>
-stop
+(*) -right-> "Open my requests"
+-right-> "View the list of\nsubmitted requests"
+-right-> "Select a request"
+-right-> "View request status\nand details" #DDF2E9
+-right-> (*)
 
 @enduml

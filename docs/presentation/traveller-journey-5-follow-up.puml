@@ -4,10 +4,9 @@
 title Traveller Journey 5 · Follow Up on an Unapproved Request
 footer (c) Developed by <b>Mohit Kanwar</b>
 
-start
-:Open a pending request;
-:Send a follow-up reminder;
-:Approver is notified; <<#DDF2E9>>
-stop
+(*) -right-> "Open a pending request"
+-right-> "Send a follow-up reminder"
+-right-> "Approver is notified" #DDF2E9
+-right-> (*)
 
 @enduml

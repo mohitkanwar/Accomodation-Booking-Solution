@@ -4,9 +4,8 @@
 title Traveller Journey 7 · View Accommodation Contact Details
 footer (c) Developed by <b>Mohit Kanwar</b>
 
-start
-:Open a confirmed booking;
-:View accommodation contact details; <<#DDF2E9>>
-stop
+(*) -right-> "Open a confirmed booking"
+-right-> "View accommodation\ncontact details" #DDF2E9
+-right-> (*)
 
 @enduml
