@@ -150,3 +150,23 @@ skinparam stereotype {
 }
 
 !endif
+
+' ---------------------------------------------------------------------------
+' User-journey / activity-diagram convention (swimlane + partition per phase)
+' ---------------------------------------------------------------------------
+' Reuse this palette for the remaining role journeys (Approver, Corporate
+' Administrator, Booking Operator, Sodexo Administrator):
+'
+'   Neutral / informational step   #F5F6FC or #DDE1F6 (alternate per phase)
+'   Decision / approval phase      #FFF4DD
+'   Rejected outcome                #FBDADD
+'   Failed / uncertain outcome     #FFF4DD
+'   Confirmed / success outcome    #DDF2E9
+'
+' Known PlantUML limitation: a partition's colour argument and an inline
+' activity colour prefix ("#TOKEN:label;") do NOT resolve !define theme
+' tokens (e.g. SODEXO_BLUE_PALE) — only skinparam blocks do. Use the literal
+' hex values above directly in partitions and activities, and prefer the
+' current (non-deprecated) inline colour syntax:
+'   :Some activity; <<#FFF4DD>>
+' See docs/presentation/traveller-journey.puml for a worked example.

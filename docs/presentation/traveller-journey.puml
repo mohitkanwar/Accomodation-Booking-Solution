@@ -1,0 +1,87 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Traveller User Journey — Search, Request and Outcome
+header Sat, 25 Jul 2026 at 10:09:56 AM
+footer (c) Developed by <b>Mohit Kanwar</b>
+caption Primary flow · Traveller role · docs/presentation/users.mdx
+
+skinparam ArrowFontSize 12
+skinparam ActivityDiamondFontSize 12
+
+' Partition and activity fill colours must be literal hex here: PlantUML does
+' not resolve !define theme tokens inside a partition's colour argument or an
+' inline "#TOKEN:label;" activity prefix, only inside skinparam blocks. The
+' literals below are the theme's own values, kept in step with
+' plantuml/sodexo-theme.puml:
+'   SODEXO_BLUE_PALE #F5F6FC   SODEXO_BLUE_LIGHT #DDE1F6
+'   SODEXO_WARNING_LIGHT #FFF4DD   SODEXO_RED_LIGHT #FBDADD
+'   SODEXO_SUCCESS_LIGHT #DDF2E9
+
+|Traveller|
+start
+
+partition "1 · Sign In" #F5F6FC {
+  :Sign in through the existing\nSodexo B2C application;
+}
+
+|Accommodation Lego|
+:Resolve trusted client,\nemployee and role context;
+
+partition "2 · Discover & Compare" #DDE1F6 {
+  |Traveller|
+  :Select a permitted office destination,\ndates and accommodation requirements;
+  |Policy & Workflow|
+  :Resolve eligible destinations\nand policy price range;
+  |Booking.com|
+  :Return candidate properties,\navailability and price;
+  |Traveller|
+  :Search, filter and compare\npolicy-evaluated proposals;
+  :Review price, cancellation conditions\nand policy explanation;
+}
+
+partition "3 · Submit Request" #F5F6FC {
+  :Select an option and submit\nan accommodation request;
+  |Policy & Workflow|
+  :Snapshot the offer and policy;\nnotify the eligible approver;
+}
+
+|Approver|
+partition "4 · Approval Decision" #FFF4DD {
+  if (Business purpose and evidence\ncomplete?) then (yes)
+  else (no)
+    :Request clarification;
+    |Traveller|
+    :Respond to the\nclarification request; <<#FFF4DD>>
+    |Approver|
+  endif
+  if (Approve the request?) then (approve)
+    :Approve the request;
+  else (reject)
+    :Reject with a reason;
+    |Traveller|
+    :Receive a clear\nrejection outcome; <<#FBDADD>>
+    stop
+  endif
+}
+
+|Policy & Workflow|
+partition "5 · Booking Orchestration" #DDE1F6 {
+  :Recheck live price\nand availability;
+  :Preview and create the\nreservation via Booking.com;
+  if (Reservation created?) then (yes)
+  else (no)
+    |Traveller|
+    :Receive a clear\nbooking failure outcome; <<#FFF4DD>>
+    stop
+  endif
+}
+
+|Traveller|
+partition "6 · Confirmed Outcome" #DDF2E9 {
+  :Track approval and\nbooking status;
+  :Receive the confirmed\nreservation; <<#DDF2E9>>
+}
+stop
+
+@enduml
