@@ -1,0 +1,114 @@
+---
+id: users
+title: Users
+---
+
+import ExpandableRoleCard from '@site/src/components/ExpandableRoleCard';
+
+# Users
+
+The accommodation capability serves five user roles within a corporate travel
+programme. Expand a role to review its associated user journey.
+
+:::info Corporate policy context
+
+A corporate is the client organisation rather than a user. It owns a travel
+policy that defines role eligibility, permitted destinations, and price ranges
+for its travellers, approvers, administrators, and booking operators.
+
+:::
+
+## User roles
+
+<ExpandableRoleCard
+  index="01"
+  name="Traveller"
+  description="A corporate employee who searches for accommodation, submits requests, and tracks their outcome."
+>
+
+1. Sign in through the existing Sodexo B2C application.
+2. Select a permitted office destination, dates, and accommodation requirements.
+3. Search, filter, and compare policy-evaluated Booking.com proposals.
+4. Review the price, cancellation conditions, and policy explanation.
+5. Select an option and submit an accommodation request.
+6. Respond to clarification requests and track approval and booking statuses.
+7. Receive the confirmed reservation or a clear rejection or failure outcome.
+
+</ExpandableRoleCard>
+
+<ExpandableRoleCard
+  index="02"
+  name="Approver"
+  description="A traveller with additional authority to approve or reject requests from eligible subordinates."
+>
+
+1. Complete the traveller journey when booking accommodation for their own trip.
+2. Open the queue of requests submitted by authorised subordinates.
+3. Review the traveller, destination, dates, selected offer, price, and applicable policy.
+4. Request clarification when the business purpose or exception evidence is incomplete.
+5. Approve or reject the request with a reason.
+6. Follow the downstream booking status without being able to approve their own request.
+7. Retain a traceable record of the decision and supporting information.
+
+</ExpandableRoleCard>
+
+<ExpandableRoleCard
+  index="03"
+  name="Corporate Administrator"
+  description="A client-side administrator who maintains travel policies, destinations, role levels, and price ranges."
+>
+
+1. Open the administration area within their authorised corporate scope.
+2. Maintain corporate sites and the destinations available to travellers.
+3. Define employee role levels and their destination-specific nightly price ranges.
+4. Configure eligibility, exception, and approval rules.
+5. Review the effective policy before publishing a new version.
+6. Activate the policy from an agreed date without rewriting historical requests.
+7. Review configuration history and correct or retire outdated rules.
+
+</ExpandableRoleCard>
+
+<ExpandableRoleCard
+  index="04"
+  name="Booking Operator"
+  description="A service user who reviews approved requests and creates the real accommodation reservation."
+>
+
+1. Open the queue of requests assigned to the operator's corporate or destination scope.
+2. Validate the request, approval evidence, traveller details, and policy outcome.
+3. Recheck live Booking.com price, availability, and cancellation conditions.
+4. Return the request for renewed approval if a material condition has changed.
+5. Preview and create the Booking.com order through the controlled server-side workflow.
+6. Record the supplier reference and confirm the reservation to the traveller.
+7. Investigate failed or uncertain outcomes before retrying to avoid duplicate bookings.
+
+The operator may also create a request on behalf of an authorised traveller,
+with the delegated action recorded in the audit history.
+
+</ExpandableRoleCard>
+
+<ExpandableRoleCard
+  index="05"
+  name="Sodexo Administrator"
+  description="A platform administrator who manages corporates, users, system configuration, and operational reporting."
+>
+
+1. Onboard or update a corporate tenant and its core configuration.
+2. Assign appropriately scoped corporate, operator, and Sodexo administrative access.
+3. Maintain platform-level integration endpoints and non-secret configuration.
+4. Monitor configuration health, failed workflows, and reconciliation exceptions.
+5. Generate operational, adoption, policy-compliance, and audit reports.
+6. Support controlled investigation without silently impersonating business users.
+7. Record every privileged change and administrative action for audit.
+
+</ExpandableRoleCard>
+
+## Cross-role controls
+
+- Corporate and assignment scope must come from trusted server-side identity
+  context, not editable browser fields.
+- Approvers cannot approve their own requests.
+- Policy and approval decisions must be preserved as immutable snapshots.
+- On-behalf-of actions must identify both the actor and the traveller.
+- Privileged configuration, decisions, and booking actions require audit
+  evidence.
