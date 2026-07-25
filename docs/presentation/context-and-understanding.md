@@ -43,9 +43,10 @@ employee context from the host and calls only the server-side Accommodation
 Booking BFF.
 
 The blue blocks expand the host's existing shared functionality. The red blocks
-show the proposed employee accommodation journey inside the new Lego. These are
-logical UI capabilities rather than independently deployable containers. Their
-placement is a capability map, not a prescribed screen sequence; detailed
+show the proposed employee accommodation journey and role-based workspaces for
+the Traveller, Approver, Corporate Administrator and Booking Operator. These
+are logical UI capabilities rather than independently deployable containers.
+Their placement is a capability map, not a prescribed screen sequence; detailed
 interaction flows belong in the UX journey design.
 
 The map provider and its browser-versus-server access model remain an

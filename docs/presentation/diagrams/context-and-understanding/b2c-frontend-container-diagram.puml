@@ -5,7 +5,7 @@
 
 title Sodexo B2C Frontend Application — UI Capability View
 footer (c) Developed by <b>Mohit Kanwar</b>
-caption UI capability view · Blue = existing experience · Red = proposed accommodation experience · Amber = decision required
+caption UI capability view · Client roles at the top · Blue = existing experience · Red = proposed accommodation experience · Amber = decision required
 
 !pragma layout smetana
 skinparam linetype polyline
@@ -17,9 +17,14 @@ AddElementTag("new", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderCo
 AddElementTag("decision", $bgColor=SODEXO_WARNING_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_WARNING, $shadowing="false", $legendText="Architecture decision required")
 AddBoundaryTag("existingGroup", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BLUE, $shadowing="false", $borderStyle="dashed", $legendText="Existing functional area")
 AddBoundaryTag("newGroup", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $borderStyle="dashed", $legendText="Proposed functional area")
+AddBoundaryTag("userGroup", $bgColor=SODEXO_WHITE, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BLUE, $shadowing="false", $borderStyle="dashed", $legendText="Client user group")
 
-Person(employee, "Employee Traveller", "Uses the Sodexo B2C application to request accommodation")
-Person_Ext(bookingTeam, "Client Booking Team", "Receives and processes employee booking requests")
+Boundary(clientUsers, "ACCOMMODATION SEEKER CORP USERS", $tags="userGroup") {
+  Person(traveller, "Traveller", "Searches for accommodation and submits a booking request")
+  Person(approver, "Approver", "Reviews requests and approves, rejects or seeks clarification")
+  Person(corporateAdmin, "Corporate Administrator", "Manages travel policies, roles, destinations and price limits")
+  Person(bookingOperator, "Booking Operator", "Validates approved requests and creates the real reservation")
+}
 
 System_Boundary(b2cFrontend, "Sodexo B2C Frontend Application") {
   Container_Boundary(hostShell, "B2C Host Shell · React SPA") {
@@ -38,6 +43,12 @@ System_Boundary(b2cFrontend, "Sodexo B2C Frontend Application") {
       Container(mapView, "Map\nExploration", "Proposed UI/UX", "Explore available stays geographically without losing search context", $tags="new")
       Container(request, "Review &\nSubmit Request", "Proposed UI/UX", "Review the selected stay, confirm details and submit the request", $tags="new")
     }
+
+    Boundary(roleWorkspaces, "PROPOSED ROLE-BASED WORKSPACES", $tags="newGroup") {
+      Container(approvalWorkspace, "Approval Inbox\n& Decision", "Proposed UI/UX", "Review the request, see policy indicators and approve, reject or request clarification", $tags="new")
+      Container(corporateAdminWorkspace, "Corporate Policy\nAdministration", "Proposed UI/UX", "Manage roles, policies, destinations, price ranges, billing validation and payments", $tags="new")
+      Container(bookingWorkspace, "Booking\nOperations", "Proposed UI/UX", "Manage the queue, validate approved requests and create or resolve reservations", $tags="new")
+    }
   }
 }
 
@@ -45,11 +56,14 @@ System_Ext(existingPlatform, "Existing B2C Platform Services", "Identity and acc
 System_Ext(accommodationBff, "Accommodation Booking BFF", "New server-side APIs for destinations, policy-aware search, proposals and booking requests", $tags="new")
 System_Ext(mapPlatform, "Map Platform", "Map tiles and rendering integration; provider and access model to be confirmed", $tags="decision")
 
-Rel_D(employee, hostShell, "Uses", "HTTPS")
+Rel_D(clientUsers, hostShell, "")
 Rel_D(existingFunctions, existingPlatform, "")
 Rel_D(proposedFunctions, accommodationBff, "")
 Rel_D(proposedFunctions, mapPlatform, "")
-Rel_R(accommodationBff, bookingTeam, "")
+
+Lay_R(traveller, approver)
+Lay_R(approver, corporateAdmin)
+Lay_R(corporateAdmin, bookingOperator)
 
 Lay_R(auth, session)
 Lay_R(session, push)
@@ -61,11 +75,14 @@ Lay_R(searchForm, proposals)
 Lay_R(proposals, mapView)
 Lay_R(mapView, request)
 
-Lay_D(employee, hostShell)
+Lay_R(approvalWorkspace, corporateAdminWorkspace)
+Lay_R(corporateAdminWorkspace, bookingWorkspace)
+
+Lay_D(clientUsers, hostShell)
 Lay_D(existingFunctions, proposedFunctions)
+Lay_D(proposedFunctions, roleWorkspaces)
 Lay_D(hostShell, existingPlatform)
 Lay_R(existingPlatform, accommodationBff)
 Lay_R(accommodationBff, mapPlatform)
-Lay_R(accommodationBff, bookingTeam)
 
 @enduml
