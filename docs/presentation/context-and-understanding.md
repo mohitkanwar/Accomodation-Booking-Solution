@@ -44,7 +44,9 @@ Booking BFF.
 
 The blue blocks expand the host's existing shared functionality. The red blocks
 show the proposed employee accommodation journey inside the new Lego. These are
-logical functional blocks rather than independently deployable containers.
+logical UI capabilities rather than independently deployable containers. Their
+placement is a capability map, not a prescribed screen sequence; detailed
+interaction flows belong in the UX journey design.
 
 The map provider and its browser-versus-server access model remain an
 architecture decision. Booking.com credentials and Demand API calls remain
