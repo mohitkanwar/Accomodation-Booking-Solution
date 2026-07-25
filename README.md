@@ -73,13 +73,14 @@ Java runtime, failed download, or checksum mismatch stops the build.
 
 ### Sodexo diagram theme
 
-The reusable theme is stored at `plantuml/sodexo-theme.puml`. The repository
-root is configured as PlantUML's include path, so the same include works in
-every diagram regardless of its topic folder:
+The reusable theme is stored at `plantuml/sodexo-theme.puml`. Write includes
+relative to the `.puml` source file so both the build and IntelliJ's PlantUML
+preview can resolve them without IDE-specific include-path configuration. For
+a source under `docs/presentation/diagrams/<topic>/`, use:
 
 ```plantuml
 @startuml
-!include plantuml/sodexo-theme.puml
+!include ../../../../plantuml/sodexo-theme.puml
 
 title Accommodation Booking Context
 actor Employee
@@ -87,6 +88,10 @@ component "Accommodation Lego" as Lego
 Employee --> Lego
 @enduml
 ```
+
+Deeper folders need one additional `../` per level. Before committing a moved
+diagram, render the file directly from its own directory without setting
+`plantuml.include.path`; this matches IntelliJ's resolution model.
 
 The theme uses Sodexo blue for structure and hierarchy, red for selective
 emphasis, and accessible pale surfaces for identity, configuration, workflow,

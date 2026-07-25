@@ -1,7 +1,7 @@
 @startuml
-!include plantuml/vendor/c4-plantuml/C4_Container.puml
-!include plantuml/sodexo-theme.puml
-!include plantuml/sodexo-c4-theme.puml
+!include ../../../../plantuml/vendor/c4-plantuml/C4_Container.puml
+!include ../../../../plantuml/sodexo-theme.puml
+!include ../../../../plantuml/sodexo-c4-theme.puml
 
 title Sodexo B2C Frontend Application — UI Capability View
 footer (c) Developed by <b>Mohit Kanwar</b>
