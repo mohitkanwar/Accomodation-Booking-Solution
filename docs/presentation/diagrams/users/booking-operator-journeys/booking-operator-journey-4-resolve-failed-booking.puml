@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Resolve a Failed or Uncertain Booking
+header Sat, 25 Jul 2026 at 12:47:43 PM
+
+
+(*) -right-> "Record the request and\nidempotency details"
+-right-> "Query the supplier\norder status"
+-right-> "Confirm success or\nretry safely"
+-right-> "Escalate an unresolved outcome" #DDF2E9
+-right-> (*)
+
+@enduml

@@ -19,29 +19,45 @@ The build generates PlantUML diagrams before Docusaurus compiles the pages.
 Java 21 or later must be available locally. The pinned PlantUML JAR is
 downloaded once, checksum-verified, and cached under `.cache/plantuml`.
 
-## PlantUML diagrams
+## Diagram sources
 
-Keep the PlantUML source beside the Markdown page that uses it:
+Keep editable diagram sources under `docs/presentation/diagrams/`, grouped by
+the page or topic that uses them:
 
 ```text
 docs/presentation/
 ├── api-flow.md
-└── api-flow.puml
+└── diagrams/
+    ├── api-flow/
+    │   └── api-flow.puml
+    ├── context-and-understanding/
+    │   └── context-diagram.puml
+    ├── data-model/
+    │   └── data-model.puml
+    └── users/
+        ├── corporate-user-landscape.drawio
+        ├── corporate-user-landscape.drawio.svg
+        └── traveller-journeys/
+            └── traveller-journey-1-select-accommodation.puml
 ```
 
 Insert the diagram with this placeholder:
 
 ````markdown
 ```plantuml-image
-./api-flow.puml | High-level API flow
+./diagrams/api-flow/api-flow.puml | High-level API flow
 ```
 ````
 
 During `pnpm start` or `pnpm build`, the source is rendered under the ignored
 `static/plantuml/` directory and the page receives a base-URL-aware SVG image at
 the placeholder's position. Text after `|` becomes the image's accessible
-alternative text. The `.puml` source remains the only diagram file that needs
-to be edited or committed.
+alternative text. For PlantUML, the `.puml` source is the only diagram file
+that needs to be edited or committed.
+
+Draw.io diagrams keep both the editable `.drawio` source and the exported SVG
+used by the page in the same topic folder. Re-export the SVG after editing the
+source.
 
 Run generation directly when needed:
 
@@ -57,8 +73,9 @@ Java runtime, failed download, or checksum mismatch stops the build.
 
 ### Sodexo diagram theme
 
-The reusable theme is stored at `plantuml/sodexo-theme.puml`. The generator
-runs from the repository root, so the same include works in every diagram:
+The reusable theme is stored at `plantuml/sodexo-theme.puml`. The repository
+root is configured as PlantUML's include path, so the same include works in
+every diagram regardless of its topic folder:
 
 ```plantuml
 @startuml

@@ -169,4 +169,4 @@ skinparam stereotype {
 ' hex values above directly in partitions and activities, and prefer the
 ' current (non-deprecated) inline colour syntax:
 '   :Some activity; <<#FFF4DD>>
-' See docs/presentation/traveller-journey.puml for a worked example.
+' See docs/presentation/diagrams/users/traveller-journeys/ for examples.

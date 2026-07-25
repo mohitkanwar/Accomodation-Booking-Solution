@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Investigate a Booking Issue
+header Sat, 25 Jul 2026 at 12:48:28 PM
+
+
+(*) -right-> "Locate the booking\nand review its history"
+-right-> "Classify the issue"
+-right-> "Coordinate with the provider\nor support team"
+-right-> "Record the resolution and\nnotify the traveller" #DDF2E9
+-right-> (*)
+
+@enduml

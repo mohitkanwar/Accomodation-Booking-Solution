@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Manage Platform Roles and Access
+header Sat, 25 Jul 2026 at 12:48:58 PM
+
+
+(*) -right-> "Review users and\nrole assignments"
+-right-> "Grant, modify, or\nrevoke access"
+-right-> "Enforce segregation\nof duties"
+-right-> "Review dormant and\nhigh-risk access" #DDF2E9
+-right-> (*)
+
+@enduml

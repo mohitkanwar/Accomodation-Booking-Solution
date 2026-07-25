@@ -31,7 +31,7 @@ database technology or require duplication of authoritative employee data.
 ## Relationships
 
 ```plantuml-image
-./data-model.puml | Conceptual B2C-side accommodation data model
+./diagrams/data-model/data-model.puml | Conceptual B2C-side accommodation data model
 ```
 
 ## Modelling principles

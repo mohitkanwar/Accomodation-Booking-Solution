@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Manage Accommodation Configuration
+header Sat, 25 Jul 2026 at 12:50:28 PM
+
+
+(*) -right-> "Maintain property and\nroom type details"
+-right-> "Configure rates, taxes\nand cancellation terms"
+-right-> "Update availability"
+-right-> "Publish the configuration" #DDF2E9
+-right-> (*)
+
+@enduml

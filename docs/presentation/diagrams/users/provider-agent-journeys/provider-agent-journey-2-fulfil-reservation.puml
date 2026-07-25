@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Receive and Fulfil a Reservation
+header Sat, 25 Jul 2026 at 12:50:43 PM
+
+
+(*) -right-> "Receive the reservation\nthrough Booking.com"
+-right-> "Validate the stay,\nguest and payment details"
+-right-> "Confirm fulfilment"
+-right-> "Notify the connected\nbooking workflow" #DDF2E9
+-right-> (*)
+
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Resolve Reconciliation Exceptions
+header Sat, 25 Jul 2026 at 12:49:43 PM
+
+
+(*) -right-> "Open unmatched or\nmismatched reconciliation items"
+-right-> "Compare internal and\nsupplier records"
+-right-> "Classify the discrepancy"
+-right-> "Close the exception\nwith evidence" #DDF2E9
+-right-> (*)
+
+@enduml

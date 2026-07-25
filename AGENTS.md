@@ -12,7 +12,8 @@ outside it is.
 .
 ├── docs/                     Published content (Docusaurus docs plugin root)
 │   ├── index.md                Landing page ("introduction" doc, slug /)
-│   └── presentation/           Discovery-workshop pages + their .puml/.drawio sources
+│   └── presentation/           Discovery-workshop pages
+│       └── diagrams/             Editable diagram sources, grouped by page/topic
 ├── archive/                  Unpublished docs, excluded from the site build
 │   ├── README.md                Explains what's archived and why
 │   └── docs/                    Full future-state doc set (00-executive-overview ... 99-appendices),
@@ -34,8 +35,12 @@ Rules for keeping this structure intact:
 - New active documentation pages go under `docs/presentation/` (or a new
   `docs/` subfolder if the content isn't presentation material); reference
   them in `sidebars.js`.
-- Keep a `.puml` diagram file beside the Markdown page that renders it (see
-  `README.md` for the `plantuml-image` embed syntax).
+- Keep editable diagram sources under `docs/presentation/diagrams/`, grouped
+  by the page or topic that uses them (see `README.md` for the
+  `plantuml-image` embed syntax).
+- Put user-journey diagrams under
+  `docs/presentation/diagrams/users/<role>-journeys/`; do not place diagram
+  sources directly in `docs/presentation/`.
 - Content that is written but not yet part of the active workshop belongs
   under `archive/docs/`, preserving the same relative path it would have
   under `docs/` so it can be promoted later without renaming.

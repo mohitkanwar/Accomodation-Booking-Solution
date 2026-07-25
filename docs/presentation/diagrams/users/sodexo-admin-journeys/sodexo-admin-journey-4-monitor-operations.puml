@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Monitor Booking and Approval Operations
+header Sat, 25 Jul 2026 at 12:49:28 PM
+
+
+(*) -right-> "Review platform health\nand queue depth"
+-right-> "Drill into failed workflows"
+-right-> "Correlate related events"
+-right-> "Trigger a retry\nor escalation" #DDF2E9
+-right-> (*)
+
+@enduml

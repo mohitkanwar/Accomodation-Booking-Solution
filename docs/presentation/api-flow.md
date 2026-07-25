@@ -8,7 +8,7 @@ title: 4. High-Level API Flow
 ## Context
 
 ```plantuml-image
-./api-flow.puml | Employee search, request and operator booking sequence
+./diagrams/api-flow/api-flow.puml | Employee search, request and operator booking sequence
 ```
 
 The browser must not call Booking.com directly. Demand API requests require an

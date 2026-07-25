@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Onboard and Maintain a Corporate Tenant
+header Sat, 25 Jul 2026 at 12:48:43 PM
+
+
+(*) -right-> "Create the corporate tenant"
+-right-> "Configure identity and\nlocalisation settings"
+-right-> "Assign the initial\ncorporate administrators"
+-right-> "Activate the tenant" #DDF2E9
+-right-> (*)
+
+@enduml

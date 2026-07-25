@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Review Spend, Compliance, and Audit Reports
+header Sat, 25 Jul 2026 at 12:46:43 PM
+
+
+(*) -right-> "Select the reporting period\nand organisation scope"
+-right-> "Review spend, exceptions\nand approval trends"
+-right-> "Export authorised reports"
+-right-> "Review the audit trail" #DDF2E9
+-right-> (*)
+
+@enduml

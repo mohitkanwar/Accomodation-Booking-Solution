@@ -20,7 +20,9 @@ accommodation inside the existing Sodexo B2C application.
 
 ## System context
 
-![context-diagram-Employee_Accommodation_Booking__System_Context.png](context-diagram-Employee_Accommodation_Booking__System_Context.png)
+```plantuml-image
+./diagrams/context-and-understanding/context-diagram.puml | Employee accommodation booking system context
+```
 
 The accommodation booking capability is the system in scope. The existing B2C
 application hosts its React Lego, while trusted identity context, Booking.com,

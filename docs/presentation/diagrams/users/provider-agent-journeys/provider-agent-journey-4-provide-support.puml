@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Provide Booking Support
+header Sat, 25 Jul 2026 at 12:51:13 PM
+
+
+(*) -right-> "Review the issue category\nand evidence"
+-right-> "Validate the reservation state"
+-right-> "Coordinate with the property\nor support team"
+-right-> "Record the resolution" #DDF2E9
+-right-> (*)
+
+@enduml

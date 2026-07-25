@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Approve a Request
+header Sat, 25 Jul 2026 at 12:44:13 PM
+
+
+(*) -right-> "Confirm the request is\ncomplete and within policy"
+-right-> "Add an optional decision note"
+-right-> "Approve the request"
+-right-> "Notify the traveller and route\nto the booking-operator queue" #DDF2E9
+-right-> (*)
+
+@enduml

@@ -8,7 +8,7 @@ const path = require('node:path');
  *
  * Example:
  *   ```plantuml-image
- *   ./api-flow.puml | Booking API flow
+ *   ./diagrams/api-flow/api-flow.puml | Booking API flow
  *   ```
  */
 module.exports = function plantumlImages({baseUrl = '/'} = {}) {

@@ -1,0 +1,14 @@
+@startuml
+!include plantuml/sodexo-theme.puml
+
+title Approve and Make Payments
+header Sat, 25 Jul 2026 at 12:46:28 PM
+
+
+(*) -right-> "Review the validated bill\nand payment terms"
+-right-> "Approve the payable amount"
+-right-> "Submit the payment\ninstruction to finance"
+-right-> "Track the settlement outcome" #DDF2E9
+-right-> (*)
+
+@enduml
