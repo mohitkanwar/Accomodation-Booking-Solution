@@ -1,0 +1,671 @@
+{
+  "info": {
+    "_postman_id": "fa1e2137-cb2c-4778-b7bb-150fe8ca277b",
+    "name": "Booking.com Demand API v3.2 — Accommodation Journey",
+    "description": "Booking.com Demand API v3.2 requests arranged as executable accommodation business flows: validate access, build reference data, search and look, preview and book, post-booking operations, and reconciliation. The collection defaults to the sandbox environment. Order creation, modification, and cancellation have explicit safety switches.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{booking_api_key}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const required = ['booking_api_key', 'affiliate_id'];",
+          "const missing = required.filter((key) => !pm.environment.get(key));",
+          "if (missing.length) {",
+          "  throw new Error(`Set the following environment variables before sending requests: ${missing.join(', ')}`);",
+          "}",
+          "",
+          "pm.request.headers.upsert({ key: 'X-Affiliate-Id', value: pm.environment.get('affiliate_id') });",
+          "pm.request.headers.upsert({ key: 'Content-Type', value: 'application/json' });",
+          "",
+          "const dateOnly = (date) => date.toISOString().slice(0, 10);",
+          "const addDays = (date, days) => {",
+          "  const copy = new Date(date);",
+          "  copy.setUTCDate(copy.getUTCDate() + days);",
+          "  return copy;",
+          "};",
+          "const now = new Date();",
+          "if (!pm.environment.get('checkin')) pm.environment.set('checkin', dateOnly(addDays(now, 30)));",
+          "if (!pm.environment.get('checkout')) pm.environment.set('checkout', dateOnly(addDays(now, 32)));",
+          "if (!pm.environment.get('modified_checkin')) pm.environment.set('modified_checkin', dateOnly(addDays(now, 31)));",
+          "if (!pm.environment.get('modified_checkout')) pm.environment.set('modified_checkout', dateOnly(addDays(now, 33)));",
+          "if (!pm.environment.get('reconciliation_from')) pm.environment.set('reconciliation_from', addDays(now, -1).toISOString());",
+          "if (!pm.environment.get('reconciliation_to')) pm.environment.set('reconciliation_to', now.toISOString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('Demand API returned a successful HTTP status', () => {",
+          "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+          "});",
+          "",
+          "let response;",
+          "try { response = pm.response.json(); } catch (_) { response = null; }",
+          "if (response && response.request_id) {",
+          "  pm.environment.set('last_request_id', response.request_id);",
+          "  console.log('Booking.com request_id:', response.request_id);",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "00 — Validate access",
+      "description": "Run these requests first to verify the API key and affiliate ID against the sandbox.",
+      "item": [
+        {
+          "name": "01 — Retrieve supported languages",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/common/languages",
+              "host": ["{{base_url}}"],
+              "path": ["common", "languages"]
+            },
+            "description": "Low-risk authentication smoke test. Returns supported IETF language tags."
+          }
+        },
+        {
+          "name": "02 — Retrieve supported currencies",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"languages\": [\"{{language}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/common/payments/currencies",
+              "host": ["{{base_url}}"],
+              "path": ["common", "payments", "currencies"]
+            },
+            "description": "Returns supported currency identifiers used by search, preview, and order requests."
+          }
+        },
+        {
+          "name": "03 — Retrieve supported payment cards",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/common/payments/cards",
+              "host": ["{{base_url}}"],
+              "path": ["common", "payments", "cards"]
+            },
+            "description": "Returns card identifiers and metadata used when evaluating payment methods from order preview."
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 — Build reference-data cache",
+      "description": "Static and slowly changing data used to enrich search results. Store these responses locally in production.",
+      "item": [
+        {
+          "name": "01 — Retrieve countries",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"languages\": [\"{{language}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/common/locations/countries",
+              "host": ["{{base_url}}"],
+              "path": ["common", "locations", "countries"]
+            },
+            "description": "Returns Booking.com country codes and localized names."
+          }
+        },
+        {
+          "name": "02 — Retrieve cities for a country",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"country\": \"{{booker_country}}\",\n  \"languages\": [\"{{language}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/common/locations/cities",
+              "host": ["{{base_url}}"],
+              "path": ["common", "locations", "cities"]
+            },
+            "description": "Returns city identifiers. Copy the required city ID into city_id when testing another destination."
+          }
+        },
+        {
+          "name": "03 — Retrieve accommodation constants",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"languages\": [\"{{language}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accommodations/constants",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "constants"]
+            },
+            "description": "Returns accommodation types, facilities, room facilities, charges, and other reference constants."
+          }
+        },
+        {
+          "name": "04 — Retrieve accommodation chains",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/accommodations/chains",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "chains"]
+            },
+            "description": "Returns accommodation chain identifiers and names."
+          }
+        },
+        {
+          "name": "05 — Retrieve property content",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodations\": [{{accommodation_id}}],\n  \"extras\": [\n    \"bundles\",\n    \"description\",\n    \"facilities\",\n    \"payment\",\n    \"photos\",\n    \"policies\",\n    \"rooms\"\n  ],\n  \"languages\": [\"{{language}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accommodations/details",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "details"]
+            },
+            "description": "Returns content for one or more properties. Cache content separately from live price and availability."
+          }
+        },
+        {
+          "name": "06 — Retrieve property-content changes",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"last_change\": \"{{reconciliation_from}}\",\n  \"filters\": {\n    \"countries\": [\"{{booker_country}}\"]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accommodations/details/changes",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "details", "changes"]
+            },
+            "description": "Supports incremental refresh of cached property content."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 — Search and look",
+      "description": "The customer-facing search flow. Search captures accommodation_id and product_id; availability rechecks live inventory before preview.",
+      "item": [
+        {
+          "name": "01 — Search destination inventory",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "const accommodation = body.data && body.data[0];",
+                  "pm.test('Search returned at least one accommodation', () => pm.expect(accommodation).to.exist);",
+                  "if (accommodation) {",
+                  "  pm.environment.set('accommodation_id', String(accommodation.id));",
+                  "  if (accommodation.products && accommodation.products[0]) {",
+                  "    pm.environment.set('product_id', accommodation.products[0].id);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"booker\": {\n    \"country\": \"{{booker_country}}\",\n    \"platform\": \"{{booker_platform}}\",\n    \"travel_purpose\": \"business\",\n    \"user_groups\": [\"authenticated\"]\n  },\n  \"checkin\": \"{{checkin}}\",\n  \"checkout\": \"{{checkout}}\",\n  \"city\": {{city_id}},\n  \"extras\": [\"products\"],\n  \"guests\": {\n    \"number_of_adults\": 1,\n    \"number_of_rooms\": 1\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accommodations/search",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "search"]
+            },
+            "description": "Finds available accommodations for the destination and stay. The test script captures the first accommodation and product identifiers."
+          }
+        },
+        {
+          "name": "02 — Recheck availability and price",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "const accommodation = body.data && body.data[0];",
+                  "pm.test('Availability returned the selected accommodation', () => pm.expect(accommodation).to.exist);",
+                  "if (accommodation) {",
+                  "  const recommended = accommodation.recommendation && accommodation.recommendation.products && accommodation.recommendation.products[0];",
+                  "  const available = accommodation.products && accommodation.products[0];",
+                  "  const selected = recommended || available;",
+                  "  if (selected) pm.environment.set('product_id', selected.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodations\": [{{accommodation_id}}],\n  \"booker\": {\n    \"country\": \"{{booker_country}}\",\n    \"platform\": \"{{booker_platform}}\",\n    \"travel_purpose\": \"business\",\n    \"user_groups\": [\"authenticated\"]\n  },\n  \"checkin\": \"{{checkin}}\",\n  \"checkout\": \"{{checkout}}\",\n  \"extras\": [\"products\"],\n  \"guests\": {\n    \"number_of_adults\": 1,\n    \"number_of_rooms\": 1\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accommodations/availability",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "availability"]
+            },
+            "description": "Rechecks live products, price, policies, and inventory. The test script refreshes product_id from the recommendation or first available product."
+          }
+        },
+        {
+          "name": "03 — Retrieve selected property details",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodations\": [{{accommodation_id}}],\n  \"extras\": [\n    \"description\",\n    \"facilities\",\n    \"payment\",\n    \"photos\",\n    \"policies\",\n    \"rooms\"\n  ],\n  \"languages\": [\"{{language}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accommodations/details",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "details"]
+            },
+            "description": "Builds the property detail page for the selected accommodation."
+          }
+        },
+        {
+          "name": "04 — Retrieve review scores",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodations\": [{{accommodation_id}}],\n  \"languages\": [\"{{language}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accommodations/reviews/scores",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "reviews", "scores"]
+            },
+            "description": "Returns aggregated review scores for display alongside the selected property."
+          }
+        },
+        {
+          "name": "05 — Retrieve guest reviews",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodations\": [{{accommodation_id}}],\n  \"languages\": [\"{{language}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/accommodations/reviews",
+              "host": ["{{base_url}}"],
+              "path": ["accommodations", "reviews"]
+            },
+            "description": "Returns paginated guest-review content for the selected accommodation."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 — Preview and book",
+      "description": "Preview is safe and produces a short-lived order token. Create is guarded and remains disabled until allow_order_create is true.",
+      "item": [
+        {
+          "name": "01 — Preview selected product",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.environment.get('product_id')) {",
+                  "  throw new Error('Run Search and Availability first so product_id contains a live product.');",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Preview returned an order token', () => pm.expect(body.data && body.data.order_token).to.exist);",
+                  "if (body.data && body.data.order_token) pm.environment.set('order_token', body.data.order_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currency\": \"{{currency}}\",\n  \"accommodation\": {\n    \"id\": {{accommodation_id}},\n    \"booker\": {\n      \"country\": \"{{booker_country}}\",\n      \"platform\": \"{{booker_platform}}\",\n      \"travel_purpose\": \"business\",\n      \"user_groups\": [\"authenticated\"]\n    },\n    \"checkin\": \"{{checkin}}\",\n    \"checkout\": \"{{checkout}}\",\n    \"products\": [\n      {\n        \"id\": \"{{product_id}}\",\n        \"allocation\": {\n          \"number_of_adults\": 1,\n          \"children\": []\n        }\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/preview",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "preview"]
+            },
+            "description": "Returns final pricing disclosure, payment and cancellation policies, and a short-lived order_token."
+          }
+        },
+        {
+          "name": "02 — Create accommodation order [GUARDED]",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.environment.get('allow_order_create') !== 'true') {",
+                  "  throw new Error('Order creation is blocked. Set allow_order_create=true only when you intend to create a sandbox order.');",
+                  "}",
+                  "const required = ['order_token', 'payment_card_number', 'payment_card_cvc', 'payment_card_expiry'];",
+                  "const missing = required.filter((key) => !pm.environment.get(key));",
+                  "if (missing.length) throw new Error(`Order creation requires: ${missing.join(', ')}`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "if (body.order) pm.environment.set('order_id', body.order);",
+                  "if (body.data && body.data.accommodation && body.data.accommodation.reservation) {",
+                  "  pm.environment.set('reservation_id', body.data.accommodation.reservation);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accommodation\": {\n    \"label\": \"sodexo-b2c-workshop\",\n    \"products\": [\n      {\n        \"id\": \"{{product_id}}\",\n        \"guests\": [\n          {\n            \"email\": \"{{booker_email}}\",\n            \"name\": \"{{booker_first_name}} {{booker_last_name}}\"\n          }\n        ]\n      }\n    ],\n    \"remarks\": {\n      \"estimated_arrival_time\": {\n        \"hour\": 18\n      },\n      \"special_requests\": \"Business traveller accommodation request.\"\n    }\n  },\n  \"booker\": {\n    \"address\": {\n      \"address_line\": \"Sandbox test address\",\n      \"city\": \"Amsterdam\",\n      \"country\": \"{{booker_country}}\",\n      \"post_code\": \"11111\"\n    },\n    \"company\": \"Sodexo\",\n    \"email\": \"{{booker_email}}\",\n    \"language\": \"{{language}}\",\n    \"name\": {\n      \"first_name\": \"{{booker_first_name}}\",\n      \"last_name\": \"{{booker_last_name}}\"\n    },\n    \"telephone\": \"{{booker_telephone}}\"\n  },\n  \"order_token\": \"{{order_token}}\",\n  \"payment\": {\n    \"card\": {\n      \"cardholder\": \"{{booker_first_name}} {{booker_last_name}}\",\n      \"cvc\": \"{{payment_card_cvc}}\",\n      \"expiry_date\": \"{{payment_card_expiry}}\",\n      \"number\": \"{{payment_card_number}}\"\n    },\n    \"include_receipt\": true,\n    \"method\": \"card\",\n    \"timing\": \"pay_at_the_property\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/create",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "create"]
+            },
+            "description": "Creates the real accommodation order in the selected environment. Disabled by default and requires explicit safety switch plus payment variables."
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 — Post-booking operations",
+      "description": "Retrieve, modify, or cancel an existing accommodation order. Mutating operations are guarded.",
+      "item": [
+        {
+          "name": "01 — Retrieve order summary",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": [\"{{order_id}}\"],\n  \"currency\": \"{{currency}}\",\n  \"extras\": [\"payment\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/details",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "details"]
+            },
+            "description": "Retrieves the current status, price, commission, dates, and service summary for a known order."
+          }
+        },
+        {
+          "name": "02 — Retrieve accommodation reservation details",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orders\": [\"{{order_id}}\"],\n  \"currency\": \"{{currency}}\",\n  \"extras\": [\"policies\", \"extra_charges\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/details/accommodations",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "details", "accommodations"]
+            },
+            "description": "Retrieves accommodation-specific reservation, guest, room, policy, and charge information."
+          }
+        },
+        {
+          "name": "03 — Modify stay dates [GUARDED]",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.environment.get('allow_destructive_operations') !== 'true') {",
+                  "  throw new Error('Modification is blocked. Set allow_destructive_operations=true only when you intend to modify this reservation.');",
+                  "}",
+                  "if (!pm.environment.get('order_id') || !pm.environment.get('reservation_id')) {",
+                  "  throw new Error('order_id and reservation_id are required.');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": \"{{order_id}}\",\n  \"modification\": {\n    \"accommodation\": {\n      \"reservation\": \"{{reservation_id}}\",\n      \"type\": \"dates\",\n      \"change\": {\n        \"checkin\": \"{{modified_checkin}}\",\n        \"checkout\": \"{{modified_checkout}}\"\n      }\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/modify",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "modify"]
+            },
+            "description": "Attempts to modify accommodation dates for an existing reservation. Guarded because it changes supplier state."
+          }
+        },
+        {
+          "name": "04 — Cancel accommodation reservation [GUARDED]",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.environment.get('allow_destructive_operations') !== 'true') {",
+                  "  throw new Error('Cancellation is blocked. Set allow_destructive_operations=true only when you intend to cancel this reservation.');",
+                  "}",
+                  "if (!pm.environment.get('order_id') || !pm.environment.get('reservation_id')) {",
+                  "  throw new Error('order_id and reservation_id are required.');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"order\": \"{{order_id}}\",\n  \"accommodation\": {\n    \"reservation\": \"{{reservation_id}}\",\n    \"reason\": \"Corporate travel plans changed.\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/cancel",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "cancel"]
+            },
+            "description": "Cancels an accommodation reservation. Guarded because it is destructive and cancellation charges may apply."
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 — Reconciliation and reporting",
+      "description": "Incremental order retrieval for operational reporting and reconciliation.",
+      "item": [
+        {
+          "name": "01 — Retrieve orders updated in a time window",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"updated\": {\n    \"from\": \"{{reconciliation_from}}\",\n    \"to\": \"{{reconciliation_to}}\"\n  },\n  \"currency\": \"{{currency}}\",\n  \"maximum_results\": 20,\n  \"sort\": {\n    \"by\": \"updated\",\n    \"direction\": \"ascending\"\n  },\n  \"extras\": [\"payment\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/details",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "details"]
+            },
+            "description": "Returns orders changed during a controlled watermark window. Follow metadata.next_page before advancing the reconciliation watermark."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "official_openapi",
+      "value": "https://developers.booking.com/demand/docs/open-api/3.2/demand-api",
+      "type": "string"
+    }
+  ]
+}
