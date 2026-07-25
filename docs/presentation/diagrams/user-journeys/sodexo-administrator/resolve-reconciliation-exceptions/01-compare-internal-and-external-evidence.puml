@@ -1,0 +1,60 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Resolve reconciliation exceptions — Compare internal and external evidence
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Sodexo Administrator" as Actor
+participant "Sodexo Employee Webapp" as Surface
+participant "API Gateway" as Gateway
+participant "Administration API" as Edge
+participant "Accommodation Reconciliation Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+participant "Existing ESB / enterprise system" as Enterprise #DDE1F6
+
+group 1. List unmatched, duplicate, and value-mismatch cases.
+  Actor -> Surface: List unmatched, duplicate, and value-mismatch cases
+  Surface -> Gateway: GET /api/v1/reconciliation/cases
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: List unmatched, duplicate, and value-mismatch cases.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Accommodation Reconciliation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Compare internal events, supplier orders, invoices, and payments.
+  Actor -> Surface: Compare internal events, supplier orders, invoices, and payments
+  Surface -> Gateway: GET /api/v1/reconciliation/cases/{caseId}/evidence
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Compare internal events, supplier orders, invoices, and payments.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> BookingCom: orders/details and existing finance integrations
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

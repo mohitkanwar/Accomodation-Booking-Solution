@@ -1,0 +1,43 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Manage accommodation configuration — End-to-end interaction
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Accommodation Provider Agent" as Actor
+participant "Provider Portal / PMS" as Surface
+participant "API Gateway" as Gateway
+participant "Provider Integration Adapter" as Edge
+participant "Provider PMS / Channel Manager" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+
+
+group 1. Publish property, room, rate, policy, and availability configuration.
+  Actor -> Surface: Publish property, room, rate, policy, and availability configuration
+  Surface -> Gateway: PUT /provider-api/v1/properties/{propertyId}
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Publish property, room, rate, policy, and availability configuration.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> BookingCom: provider distribution channel
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

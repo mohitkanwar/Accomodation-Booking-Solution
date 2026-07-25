@@ -1,0 +1,59 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Download or email the confirmation letter — Authorise and generate confirmation
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Traveller" as Actor
+participant "Sodexo B2C Accommodation Lego" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Booking Workflow Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. Retrieve a confirmed booking using tenant and user scope.
+  Actor -> Surface: Retrieve a confirmed booking using tenant and user scope
+  Surface -> Gateway: GET /api/v1/bookings/{bookingId}
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Retrieve a confirmed booking using tenant and user scope.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Booking Workflow Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Generate or retrieve the authorised confirmation document.
+  Actor -> Surface: Generate or retrieve the authorised confirmation document
+  Surface -> Gateway: GET /api/v1/bookings/{bookingId}/confirmation
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Generate or retrieve the authorised confirmation document.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Booking Workflow Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

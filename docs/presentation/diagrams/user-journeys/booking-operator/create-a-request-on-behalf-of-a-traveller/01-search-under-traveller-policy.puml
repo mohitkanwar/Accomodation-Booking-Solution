@@ -1,0 +1,60 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Create a request on behalf of a traveller — Search under traveller policy
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Booking Operator" as Actor
+participant "Booking Operations Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Accommodation Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+
+
+group 1. Return corporate sites and destinations allowed by the effective policy.
+  Actor -> Surface: Return corporate sites and destinations allowed by the effective policy
+  Surface -> Gateway: GET /api/v1/destinations?eligibleFor=me
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Return corporate sites and destinations allowed by the effective policy.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Accommodation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Search policy-aware accommodation inventory for a destination and stay.
+  Actor -> Surface: Search policy-aware accommodation inventory for a destination and stay
+  Surface -> Gateway: POST /api/v1/accommodations/search
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Search policy-aware accommodation inventory for a destination and stay.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> BookingCom: POST /3.2/accommodations/search
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

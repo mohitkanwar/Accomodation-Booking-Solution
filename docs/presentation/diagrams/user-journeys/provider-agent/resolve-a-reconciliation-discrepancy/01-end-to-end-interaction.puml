@@ -1,0 +1,62 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Resolve a reconciliation discrepancy — End-to-end interaction
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Accommodation Provider Agent" as Actor
+participant "Provider Portal / PMS" as Surface
+participant "API Gateway" as Gateway
+participant "Provider Integration Adapter" as Edge
+participant "Accommodation Reconciliation Service" as Service1
+participant "Provider Billing Service" as Service2
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+participant "Existing ESB / enterprise system" as Enterprise #DDE1F6
+
+group 1. Compare internal events, supplier orders, invoices, and payments.
+  Actor -> Surface: Compare internal events, supplier orders, invoices, and payments
+  Surface -> Gateway: GET /api/v1/reconciliation/cases/{caseId}/evidence
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Compare internal events, supplier orders, invoices, and payments.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> BookingCom: orders/details and existing finance integrations
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Supply correction or evidence for a reconciliation discrepancy.
+  Actor -> Surface: Supply correction or evidence for a reconciliation discrepancy
+  Surface -> Gateway: POST /provider-api/v1/reconciliation/{caseId}/responses
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service2: Supply correction or evidence for a reconciliation discrepancy.
+  alt authorised and valid
+  Service2 -> Service2: Validate transition and persist
+  Service2 -> Data: Read or commit Provider Billing Service data
+  Service2 -> Events: Publish committed domain event
+  Service2 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service2 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

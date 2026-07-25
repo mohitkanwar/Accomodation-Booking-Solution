@@ -1,5 +1,7 @@
 // @ts-check
 
+const journeySidebarGroups = require('./docs/presentation/user-journeys/_generated-sidebar.json');
+
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   documentationSidebar: [
@@ -11,7 +13,23 @@ const sidebars = {
         type: 'doc',
         id: 'presentation/context-and-understanding',
       },
-      items: ['presentation/users'],
+      items: [
+        {
+          type: 'category',
+          label: 'Entities and Users',
+          link: {
+            type: 'doc',
+            id: 'presentation/users',
+          },
+          items: journeySidebarGroups.map((group) => ({
+            type: 'category',
+            label: group.label,
+            items: group.items,
+            collapsed: true,
+          })),
+          collapsed: true,
+        },
+      ],
       collapsed: false,
     },
     'presentation/discovery-questions',

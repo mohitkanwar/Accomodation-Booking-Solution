@@ -1,0 +1,42 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Onboard and maintain a corporate tenant — Activate validated tenant
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Sodexo Administrator" as Actor
+participant "Sodexo Employee Webapp" as Surface
+participant "API Gateway" as Gateway
+participant "Administration API" as Edge
+participant "Tenant Administration Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. Activate a fully validated tenant.
+  Actor -> Surface: Activate a fully validated tenant
+  Surface -> Gateway: POST /api/v1/platform/tenants/{tenantId}/activate
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Activate a fully validated tenant.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> Data: Read or commit Tenant Administration Service data
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

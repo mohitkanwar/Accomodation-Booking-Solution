@@ -1,0 +1,62 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Resolve a failed or uncertain booking — End-to-end interaction
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Booking Operator" as Actor
+participant "Booking Operations Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Booking.com Integration Service" as Service1
+participant "Booking Workflow Service" as Service2
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+
+
+group 1. Query supplier state before deciding whether a retry is safe.
+  Actor -> Surface: Query supplier state before deciding whether a retry is safe
+  Surface -> Gateway: POST /api/v1/supplier-orders/details
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Query supplier state before deciding whether a retry is safe.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> BookingCom: POST /3.2/orders/details
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Retry only after a conclusive absent result or an idempotent outcome.
+  Actor -> Surface: Retry only after a conclusive absent result or an idempotent outcome
+  Surface -> Gateway: POST /api/v1/booking-work-items/{workItemId}/retry
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service2: Retry only after a conclusive absent result or an idempotent outcome.
+  alt authorised and valid
+  Service2 -> Service2: Validate transition and persist
+  Service2 -> Data: Read or commit Booking Workflow Service data
+  Service2 -> Events: Publish committed domain event
+  Service2 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service2 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

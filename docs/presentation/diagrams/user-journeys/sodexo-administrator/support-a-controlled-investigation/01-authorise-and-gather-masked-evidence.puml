@@ -1,0 +1,59 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Support a controlled investigation — Authorise and gather masked evidence
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Sodexo Administrator" as Actor
+participant "Sodexo Employee Webapp" as Surface
+participant "API Gateway" as Gateway
+participant "Administration API" as Edge
+participant "Support Investigation Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. Return authorised, masked business and technical context.
+  Actor -> Surface: Return authorised, masked business and technical context
+  Surface -> Gateway: GET /api/v1/platform/support-cases/{caseId}
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Return authorised, masked business and technical context.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Support Investigation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Query logs, events, and configuration with purpose-based controls.
+  Actor -> Surface: Query logs, events, and configuration with purpose-based controls
+  Surface -> Gateway: POST /api/v1/platform/support-cases/{caseId}/evidence-query
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Query logs, events, and configuration with purpose-based controls.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Support Investigation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

@@ -1,0 +1,59 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Monitor booking and approval operations — Detect and diagnose failure
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Sodexo Administrator" as Actor
+participant "Sodexo Employee Webapp" as Surface
+participant "API Gateway" as Gateway
+participant "Administration API" as Edge
+participant "Operational Monitoring Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. Return service health, latency, errors, queues, and supplier indicators.
+  Actor -> Surface: Return service health, latency, errors, queues, and supplier indicators
+  Surface -> Gateway: GET /api/v1/platform/operations/health
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Return service health, latency, errors, queues, and supplier indicators.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Operational Monitoring Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Return correlated workflow, trace, event, and dependency evidence.
+  Actor -> Surface: Return correlated workflow, trace, event, and dependency evidence
+  Surface -> Gateway: GET /api/v1/platform/operations/failures/{failureId}
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Return correlated workflow, trace, event, and dependency evidence.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Operational Monitoring Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

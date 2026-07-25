@@ -1,0 +1,43 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Provide invoices and settlement information — End-to-end interaction
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Accommodation Provider Agent" as Actor
+participant "Provider Portal / PMS" as Surface
+participant "API Gateway" as Gateway
+participant "Provider Integration Adapter" as Edge
+participant "Provider Billing Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+participant "Existing ESB / enterprise system" as Enterprise #DDE1F6
+
+group 1. Submit invoice, tax, fee, credit, and settlement information.
+  Actor -> Surface: Submit invoice, tax, fee, credit, and settlement information
+  Surface -> Gateway: POST /provider-api/v1/invoices
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Submit invoice, tax, fee, credit, and settlement information.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> Enterprise: Existing commercial integration / ESB
+  Enterprise --> Service1: Accepted / rejected
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

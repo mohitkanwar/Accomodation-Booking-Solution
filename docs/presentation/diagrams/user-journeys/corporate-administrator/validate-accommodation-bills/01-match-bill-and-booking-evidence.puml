@@ -1,0 +1,59 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Validate accommodation bills — Match bill and booking evidence
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Corporate Administrator" as Actor
+participant "Corporate Administration Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Accommodation Reconciliation Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. List bills and charge lines awaiting corporate validation.
+  Actor -> Surface: List bills and charge lines awaiting corporate validation
+  Surface -> Gateway: GET /api/v1/billing/bills?status=awaiting-validation
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: List bills and charge lines awaiting corporate validation.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Accommodation Reconciliation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Return booking, invoice, tax, credit, and settlement evidence.
+  Actor -> Surface: Return booking, invoice, tax, credit, and settlement evidence
+  Surface -> Gateway: GET /api/v1/billing/bills/{billId}/evidence
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Return booking, invoice, tax, credit, and settlement evidence.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Accommodation Reconciliation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

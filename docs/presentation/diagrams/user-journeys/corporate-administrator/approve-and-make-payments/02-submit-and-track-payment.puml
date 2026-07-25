@@ -1,0 +1,61 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Approve and make payments — Submit and track payment
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Corporate Administrator" as Actor
+participant "Corporate Administration Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Payment Orchestration Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+participant "Existing ESB / enterprise system" as Enterprise #DDE1F6
+
+group 1. Submit or export a payment instruction to the enterprise finance system.
+  Actor -> Surface: Submit or export a payment instruction to the enterprise finance system
+  Surface -> Gateway: POST /api/v1/payments/payables/{payableId}/instructions
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Submit or export a payment instruction to the enterprise finance system.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> Enterprise: Existing ESB / finance system
+  Enterprise --> Service1: Accepted / rejected
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Return pending, settled, failed, partially paid, or reversed status.
+  Actor -> Surface: Return pending, settled, failed, partially paid, or reversed status
+  Surface -> Gateway: GET /api/v1/payments/instructions/{instructionId}
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Return pending, settled, failed, partially paid, or reversed status.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Payment Orchestration Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

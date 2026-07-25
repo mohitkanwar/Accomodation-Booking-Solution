@@ -1,0 +1,62 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Create a request on behalf of a traveller — Recheck and submit delegated request
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Booking Operator" as Actor
+participant "Booking Operations Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Accommodation Service" as Service1
+participant "Booking Workflow Service" as Service2
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+
+
+group 1. Recheck current products, prices, inventory, and policies.
+  Actor -> Surface: Recheck current products, prices, inventory, and policies
+  Surface -> Gateway: POST /api/v1/accommodations/availability
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Recheck current products, prices, inventory, and policies.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> BookingCom: POST /3.2/accommodations/availability
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Create a request while preserving actor and represented traveller identities.
+  Actor -> Surface: Create a request while preserving actor and represented traveller identities
+  Surface -> Gateway: POST /api/v1/booking-requests/on-behalf-of/{travellerId}
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service2: Create a request while preserving actor and represented traveller identities.
+  alt authorised and valid
+  Service2 -> Service2: Validate transition and persist
+  Service2 -> Data: Read or commit Booking Workflow Service data
+  Service2 -> Events: Publish committed domain event
+  Service2 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service2 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

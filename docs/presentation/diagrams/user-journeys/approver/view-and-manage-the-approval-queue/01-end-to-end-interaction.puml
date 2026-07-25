@@ -1,0 +1,59 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title View and manage the approval queue — End-to-end interaction
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Approver" as Actor
+participant "Approval Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Booking Workflow Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. List actionable requests within the approver’s organisational scope.
+  Actor -> Surface: List actionable requests within the approver’s organisational scope
+  Surface -> Gateway: GET /api/v1/approvals?status=pending
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: List actionable requests within the approver’s organisational scope.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Booking Workflow Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Return request, offer, policy, conversation, and authority evidence.
+  Actor -> Surface: Return request, offer, policy, conversation, and authority evidence
+  Surface -> Gateway: GET /api/v1/approvals/{approvalId}/context
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Return request, offer, policy, conversation, and authority evidence.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Booking Workflow Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

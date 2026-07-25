@@ -1,0 +1,60 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Manage the booking work queue — Prioritise and claim work
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Booking Operator" as Actor
+participant "Booking Operations Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Booking Workflow Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. List booking, clarification, and exception work assigned to an operator scope.
+  Actor -> Surface: List booking, clarification, and exception work assigned to an operator scope
+  Surface -> Gateway: GET /api/v1/booking-work-items
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: List booking, clarification, and exception work assigned to an operator scope.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Booking Workflow Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Atomically claim or assign a work item and prevent duplicate handling.
+  Actor -> Surface: Atomically claim or assign a work item and prevent duplicate handling
+  Surface -> Gateway: POST /api/v1/booking-work-items/{workItemId}/claim
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Atomically claim or assign a work item and prevent duplicate handling.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> Data: Read or commit Booking Workflow Service data
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

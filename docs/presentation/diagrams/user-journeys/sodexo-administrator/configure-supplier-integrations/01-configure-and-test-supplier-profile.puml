@@ -1,0 +1,60 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Configure supplier integrations — Configure and test supplier profile
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Sodexo Administrator" as Actor
+participant "Sodexo Employee Webapp" as Surface
+participant "API Gateway" as Gateway
+participant "Administration API" as Edge
+participant "Integration Configuration Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+
+
+group 1. Return endpoint, feature, resilience, and secret-reference configuration.
+  Actor -> Surface: Return endpoint, feature, resilience, and secret-reference configuration
+  Surface -> Gateway: GET /api/v1/platform/integrations/{integrationId}
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Return endpoint, feature, resilience, and secret-reference configuration.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Integration Configuration Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Run a non-destructive connectivity and capability test.
+  Actor -> Surface: Run a non-destructive connectivity and capability test
+  Surface -> Gateway: POST /api/v1/platform/integrations/{integrationId}/tests
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Run a non-destructive connectivity and capability test.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> BookingCom: sandbox health/reference request
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

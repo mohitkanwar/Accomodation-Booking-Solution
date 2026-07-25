@@ -1,0 +1,60 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Manage destinations and corporate sites — Maintain destination configuration
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Corporate Administrator" as Actor
+participant "Corporate Administration Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Accommodation Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. List destination and site configuration with effective status.
+  Actor -> Surface: List destination and site configuration with effective status
+  Surface -> Gateway: GET /api/v1/admin/destinations
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: List destination and site configuration with effective status.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Accommodation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Create or update a corporate destination and site mapping.
+  Actor -> Surface: Create or update a corporate destination and site mapping
+  Surface -> Gateway: PUT /api/v1/admin/destinations/{destinationId}
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Create or update a corporate destination and site mapping.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> Data: Read or commit Accommodation Service data
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

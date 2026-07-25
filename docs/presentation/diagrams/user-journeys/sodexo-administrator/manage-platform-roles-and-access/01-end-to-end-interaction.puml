@@ -1,0 +1,60 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Manage platform roles and access — End-to-end interaction
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Sodexo Administrator" as Actor
+participant "Sodexo Employee Webapp" as Surface
+participant "API Gateway" as Gateway
+participant "Administration API" as Edge
+participant "Access Control Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. List privileged users, service accounts, roles, and scopes.
+  Actor -> Surface: List privileged users, service accounts, roles, and scopes
+  Surface -> Gateway: GET /api/v1/platform/access-assignments
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: List privileged users, service accounts, roles, and scopes.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Access Control Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Grant, modify, expire, or revoke privileged access.
+  Actor -> Surface: Grant, modify, expire, or revoke privileged access
+  Surface -> Gateway: POST /api/v1/platform/access-assignments/commands
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Grant, modify, expire, or revoke privileged access.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> Data: Read or commit Access Control Service data
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

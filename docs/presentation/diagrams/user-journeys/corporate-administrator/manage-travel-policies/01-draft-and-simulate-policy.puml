@@ -1,0 +1,78 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Manage travel policies — Draft and simulate policy
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Corporate Administrator" as Actor
+participant "Corporate Administration Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Accommodation Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+
+
+
+group 1. List effective, draft, scheduled, and retired corporate policy versions.
+  Actor -> Surface: List effective, draft, scheduled, and retired corporate policy versions
+  Surface -> Gateway: GET /api/v1/admin/policies
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: List effective, draft, scheduled, and retired corporate policy versions.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Accommodation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Create a new immutable draft derived from an effective version.
+  Actor -> Surface: Create a new immutable draft derived from an effective version
+  Surface -> Gateway: POST /api/v1/admin/policies
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Create a new immutable draft derived from an effective version.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> Data: Read or commit Accommodation Service data
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 3. Evaluate representative scenarios without publishing the draft.
+  Actor -> Surface: Evaluate representative scenarios without publishing the draft
+  Surface -> Gateway: POST /api/v1/admin/policies/{policyId}/preview
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Evaluate representative scenarios without publishing the draft.
+  alt authorised and valid
+  Service1 -> Service1: Authorise and query
+  Service1 -> Data: Read or commit Accommodation Service data
+  Service1 --> Edge: Scoped result
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

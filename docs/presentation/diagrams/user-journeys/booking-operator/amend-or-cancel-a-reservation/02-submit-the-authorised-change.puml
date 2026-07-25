@@ -1,0 +1,63 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Amend or cancel a reservation — Submit the authorised change
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Booking Operator" as Actor
+participant "Booking Operations Workspace" as Surface
+participant "API Gateway" as Gateway
+participant "Accommodation Experience API" as Edge
+participant "Booking.com Integration Service" as Service1
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+
+
+group 1. Submit an authorised accommodation modification.
+  Actor -> Surface: Submit an authorised accommodation modification
+  Surface -> Gateway: POST /api/v1/bookings/{bookingId}/modifications
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Submit an authorised accommodation modification.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> BookingCom: POST /3.2/orders/modify
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Submit an authorised cancellation with fee acknowledgement.
+  Actor -> Surface: Submit an authorised cancellation with fee acknowledgement
+  Surface -> Gateway: POST /api/v1/bookings/{bookingId}/cancellations
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Submit an authorised cancellation with fee acknowledgement.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> BookingCom: POST /3.2/orders/cancel
+  BookingCom --> Service1: Supplier response + request_id
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml

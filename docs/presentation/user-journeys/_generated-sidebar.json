@@ -1,0 +1,73 @@
+[
+  {
+    "label": "Traveller",
+    "items": [
+      "presentation/user-journeys/traveller/select-accommodation",
+      "presentation/user-journeys/traveller/cancel-a-submitted-request",
+      "presentation/user-journeys/traveller/edit-a-submitted-request",
+      "presentation/user-journeys/traveller/view-submitted-requests",
+      "presentation/user-journeys/traveller/follow-up-on-a-request-awaiting-approval",
+      "presentation/user-journeys/traveller/download-or-email-the-confirmation-letter",
+      "presentation/user-journeys/traveller/view-accommodation-contact-details",
+      "presentation/user-journeys/traveller/raise-a-booking-issue"
+    ]
+  },
+  {
+    "label": "Approver",
+    "items": [
+      "presentation/user-journeys/approver/view-and-manage-the-approval-queue",
+      "presentation/user-journeys/approver/review-an-accommodation-request",
+      "presentation/user-journeys/approver/approve-a-request",
+      "presentation/user-journeys/approver/reject-a-request",
+      "presentation/user-journeys/approver/seek-clarification-and-resume-the-decision",
+      "presentation/user-journeys/approver/reassess-a-materially-changed-offer"
+    ]
+  },
+  {
+    "label": "Corporate Administrator",
+    "items": [
+      "presentation/user-journeys/corporate-administrator/manage-travel-policies",
+      "presentation/user-journeys/corporate-administrator/manage-corporate-roles-and-assignments",
+      "presentation/user-journeys/corporate-administrator/manage-destinations-and-corporate-sites",
+      "presentation/user-journeys/corporate-administrator/manage-price-ranges-and-exceptions",
+      "presentation/user-journeys/corporate-administrator/validate-accommodation-bills",
+      "presentation/user-journeys/corporate-administrator/approve-and-make-payments",
+      "presentation/user-journeys/corporate-administrator/review-spend-compliance-and-audit-reports"
+    ]
+  },
+  {
+    "label": "Booking Operator",
+    "items": [
+      "presentation/user-journeys/booking-operator/manage-the-booking-work-queue",
+      "presentation/user-journeys/booking-operator/validate-and-create-a-booking",
+      "presentation/user-journeys/booking-operator/handle-a-changed-price-or-unavailable-offer",
+      "presentation/user-journeys/booking-operator/resolve-a-failed-or-uncertain-booking",
+      "presentation/user-journeys/booking-operator/amend-or-cancel-a-reservation",
+      "presentation/user-journeys/booking-operator/create-a-request-on-behalf-of-a-traveller",
+      "presentation/user-journeys/booking-operator/investigate-a-booking-issue"
+    ]
+  },
+  {
+    "label": "Sodexo Administrator",
+    "items": [
+      "presentation/user-journeys/sodexo-administrator/onboard-and-maintain-a-corporate-tenant",
+      "presentation/user-journeys/sodexo-administrator/manage-platform-roles-and-access",
+      "presentation/user-journeys/sodexo-administrator/configure-supplier-integrations",
+      "presentation/user-journeys/sodexo-administrator/monitor-booking-and-approval-operations",
+      "presentation/user-journeys/sodexo-administrator/resolve-reconciliation-exceptions",
+      "presentation/user-journeys/sodexo-administrator/generate-operational-and-audit-reports",
+      "presentation/user-journeys/sodexo-administrator/support-a-controlled-investigation"
+    ]
+  },
+  {
+    "label": "Accommodation Provider Agent",
+    "items": [
+      "presentation/user-journeys/provider-agent/manage-accommodation-configuration",
+      "presentation/user-journeys/provider-agent/receive-and-fulfil-a-reservation",
+      "presentation/user-journeys/provider-agent/process-an-amendment-or-cancellation",
+      "presentation/user-journeys/provider-agent/provide-booking-support",
+      "presentation/user-journeys/provider-agent/provide-invoices-and-settlement-information",
+      "presentation/user-journeys/provider-agent/resolve-a-reconciliation-discrepancy"
+    ]
+  }
+]

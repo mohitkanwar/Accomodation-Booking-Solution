@@ -1,0 +1,63 @@
+@startuml
+!include ../../../../../../plantuml/sodexo-theme.puml
+
+title Receive and fulfil a reservation — End-to-end interaction
+header Sat, 25 Jul 2026 · End-to-end discovery sequence
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+hide footbox
+autonumber
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 90
+
+actor "Accommodation Provider Agent" as Actor
+participant "Provider Portal / PMS" as Surface
+participant "API Gateway" as Gateway
+participant "Provider Integration Adapter" as Edge
+participant "Booking.com Distribution Channel" as Service1
+participant "Provider PMS / Channel Manager" as Service2
+database "Service-owned data" as Data
+queue "Kafka event platform" as Events
+participant "Booking.com Demand API" as BookingCom #FBDADD
+
+
+group 1. Deliver a confirmed supplier reservation into the provider channel.
+  Actor -> Surface: Deliver a confirmed supplier reservation into the provider channel
+  Surface -> Gateway: EVENT booking.reservation.created.v1
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service1: Deliver a confirmed supplier reservation into the provider channel.
+  alt authorised and valid
+  Service1 -> Service1: Validate transition and persist
+  Service1 -> Data: Read or commit Booking.com Distribution Channel data
+  Service1 -> Events: Publish committed domain event
+  Service1 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service1 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+group 2. Confirm fulfilment or raise a provider exception.
+  Actor -> Surface: Confirm fulfilment or raise a provider exception
+  Surface -> Gateway: POST /provider-api/v1/reservations/{reservationId}/fulfilment
+  Gateway -> Edge: JWT, tenant scope, correlation ID
+  Edge -> Service2: Confirm fulfilment or raise a provider exception.
+  alt authorised and valid
+  Service2 -> Service2: Validate transition and persist
+  Service2 -> BookingCom: distribution status update
+  BookingCom --> Service2: Supplier response + request_id
+  Service2 -> Events: Publish committed domain event
+  Service2 --> Edge: Accepted state and next actions
+  Edge --> Surface: Response envelope
+  Surface --> Actor: Updated journey state
+else validation, state, or dependency failure
+  Service2 --> Edge: Problem details + retryability
+  Edge --> Surface: Safe error and next action
+  Surface --> Actor: Correct, retry later, or escalate
+end
+end
+
+@enduml
