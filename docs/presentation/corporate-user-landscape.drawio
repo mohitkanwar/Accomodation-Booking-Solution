@@ -1,0 +1,184 @@
+<mxfile host="Electron" modified="2026-07-25T07:00:00.000Z" agent="Codex" version="29.5.2" type="device">
+  <diagram id="corporate-user-landscape" name="Corporate user landscape">
+    <mxGraphModel dx="1180" dy="640" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1180" pageHeight="640" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="canvas" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C9CEE8;strokeWidth=2;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="10" y="10" width="1160" height="620" as="geometry"/>
+        </mxCell>
+        <mxCell id="accent" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ED1C24;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="39" width="7" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="title" value="Accommodation ecosystem" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=25;fontStyle=1;fontColor=#202A78;" vertex="1" parent="1">
+          <mxGeometry x="60" y="32" width="600" height="34" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="Multiple corporations · users remain inside their organisation boundary" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=13;fontColor=#5F6685;" vertex="1" parent="1">
+          <mxGeometry x="60" y="65" width="640" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="scale-pill" value="1 … N on both sides" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F6FC;strokeColor=#C9CEE8;fontFamily=Arial;fontSize=12;fontStyle=1;fontColor=#2B3797;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="954" y="44" width="170" height="32" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="seekers-body" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F6FC;strokeColor=#C9CEE8;strokeWidth=2;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="35" y="115" width="335" height="425" as="geometry"/>
+        </mxCell>
+        <mxCell id="seekers-header" value="&lt;b&gt;ACCOMMODATION SEEKERS&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;1 … N client corporations&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2B3797;strokeColor=#2B3797;fontFamily=Arial;fontSize=16;fontColor=#FFFFFF;align=left;spacingLeft=62;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="35" y="115" width="335" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="seekers-icon" value="S" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;strokeColor=#FFFFFF;fontFamily=Arial;fontSize=17;fontStyle=1;fontColor=#2B3797;" vertex="1" parent="1">
+          <mxGeometry x="54" y="131" width="38" height="38" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="seeker-a" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C9CEE8;strokeWidth=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="55" y="205" width="295" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="seeker-a-name" value="Seeker Corp A" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=1;fontColor=#1A2040;" vertex="1" parent="1">
+          <mxGeometry x="75" y="218" width="180" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="seeker-a-tag" value="CLIENT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDE1F6;strokeColor=none;fontFamily=Arial;fontSize=10;fontStyle=1;fontColor=#2B3797;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="276" y="219" width="56" height="23" as="geometry"/>
+        </mxCell>
+        <mxCell id="seeker-a-user-icon" value="" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#DDE1F6;strokeColor=#2B3797;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="76" y="262" width="31" height="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="seeker-a-users" value="&lt;b&gt;Travellers&lt;/b&gt;&lt;br&gt;Approvers&lt;br&gt;Corporate Administrators" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=13;fontColor=#1A2040;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="252" width="205" height="68" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="seeker-many" value="•••" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDE1F6;strokeColor=#C9CEE8;fontFamily=Arial;fontSize=17;fontStyle=1;fontColor=#2B3797;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="158" y="351" width="88" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="seeker-n" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C9CEE8;strokeWidth=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="55" y="392" width="295" height="128" as="geometry"/>
+        </mxCell>
+        <mxCell id="seeker-n-name" value="Seeker Corp N" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=1;fontColor=#1A2040;" vertex="1" parent="1">
+          <mxGeometry x="75" y="404" width="180" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="seeker-n-tag" value="CLIENT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDE1F6;strokeColor=none;fontFamily=Arial;fontSize=10;fontStyle=1;fontColor=#2B3797;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="276" y="405" width="56" height="23" as="geometry"/>
+        </mxCell>
+        <mxCell id="seeker-n-user-icon" value="" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#DDE1F6;strokeColor=#2B3797;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="76" y="445" width="31" height="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="seeker-n-users" value="&lt;b&gt;Travellers&lt;/b&gt;&lt;br&gt;Approvers&lt;br&gt;Corporate Administrators" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=13;fontColor=#1A2040;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="120" y="438" width="205" height="68" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="sodexo-body" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#202A78;strokeColor=#202A78;strokeWidth=2;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="420" y="115" width="340" height="425" as="geometry"/>
+        </mxCell>
+        <mxCell id="sodexo-accent" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ED1C24;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="420" y="115" width="340" height="8" as="geometry"/>
+        </mxCell>
+        <mxCell id="sodexo-title" value="SODEXO" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=23;fontStyle=1;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="460" y="137" width="260" height="34" as="geometry"/>
+        </mxCell>
+        <mxCell id="sodexo-subtitle" value="Booking orchestration &amp;amp; platform operations" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=12;fontColor=#DDE1F6;" vertex="1" parent="1">
+          <mxGeometry x="455" y="170" width="270" height="24" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="operator-card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FFFFFF;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="447" y="215" width="286" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="operator-icon" value="" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#DDE1F6;strokeColor=#2B3797;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="468" y="232" width="29" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="operator-text" value="&lt;b&gt;Booking Operators&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#5F6685&quot;&gt;Review requests and book&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=14;fontColor=#1A2040;" vertex="1" parent="1">
+          <mxGeometry x="513" y="227" width="205" height="52" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="sodexo-admin-card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FFFFFF;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="447" y="310" width="286" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="sodexo-admin-icon" value="" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#DDE1F6;strokeColor=#2B3797;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="468" y="327" width="29" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="sodexo-admin-text" value="&lt;b&gt;Sodexo Administrators&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#5F6685&quot;&gt;Configure, report and operate&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=14;fontColor=#1A2040;" vertex="1" parent="1">
+          <mxGeometry x="513" y="322" width="205" height="52" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="platform" value="&lt;b&gt;ACCOMMODATION BOOKING PLATFORM&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;Policy · Workflow · Booking · Audit&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ED1C24;strokeColor=#C9151C;strokeWidth=2;fontFamily=Arial;fontSize=14;fontColor=#FFFFFF;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="447" y="416" width="286" height="82" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="providers-body" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDEBEC;strokeColor=#F2B6BA;strokeWidth=2;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="810" y="115" width="335" height="425" as="geometry"/>
+        </mxCell>
+        <mxCell id="providers-header" value="&lt;b&gt;ACCOMMODATION PROVIDERS&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;1 … N supplier corporations&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ED1C24;strokeColor=#ED1C24;fontFamily=Arial;fontSize=16;fontColor=#FFFFFF;align=left;spacingLeft=62;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="810" y="115" width="335" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="providers-icon" value="P" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;strokeColor=#FFFFFF;fontFamily=Arial;fontSize=17;fontStyle=1;fontColor=#ED1C24;" vertex="1" parent="1">
+          <mxGeometry x="829" y="131" width="38" height="38" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="provider-a" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F2B6BA;strokeWidth=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="830" y="205" width="295" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="provider-a-name" value="Provider Corp A" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=1;fontColor=#1A2040;" vertex="1" parent="1">
+          <mxGeometry x="850" y="218" width="180" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="provider-a-tag" value="SUPPLIER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBDADD;strokeColor=none;fontFamily=Arial;fontSize=10;fontStyle=1;fontColor=#C9151C;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1041" y="219" width="66" height="23" as="geometry"/>
+        </mxCell>
+        <mxCell id="provider-a-user-icon" value="" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#FBDADD;strokeColor=#ED1C24;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="851" y="262" width="31" height="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="provider-a-users" value="&lt;b&gt;Reservation Agents&lt;/b&gt;&lt;br&gt;Property Administrators" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=13;fontColor=#1A2040;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="895" y="258" width="205" height="58" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="provider-many" value="•••" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBDADD;strokeColor=#F2B6BA;fontFamily=Arial;fontSize=17;fontStyle=1;fontColor=#C9151C;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="933" y="351" width="88" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="provider-n" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F2B6BA;strokeWidth=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="830" y="392" width="295" height="128" as="geometry"/>
+        </mxCell>
+        <mxCell id="provider-n-name" value="Provider Corp N" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=15;fontStyle=1;fontColor=#1A2040;" vertex="1" parent="1">
+          <mxGeometry x="850" y="404" width="180" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="provider-n-tag" value="SUPPLIER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBDADD;strokeColor=none;fontFamily=Arial;fontSize=10;fontStyle=1;fontColor=#C9151C;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1041" y="405" width="66" height="23" as="geometry"/>
+        </mxCell>
+        <mxCell id="provider-n-user-icon" value="" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#FBDADD;strokeColor=#ED1C24;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="851" y="445" width="31" height="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="provider-n-users" value="&lt;b&gt;Reservation Agents&lt;/b&gt;&lt;br&gt;Property Administrators" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=13;fontColor=#1A2040;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="895" y="441" width="205" height="58" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="request-label" value="REQUESTS" style="text;html=1;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=10;fontStyle=1;fontColor=#2B3797;" vertex="1" parent="1">
+          <mxGeometry x="366" y="284" width="58" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="request-arrow-shaft" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2B3797;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="366" y="318" width="30" height="5" as="geometry"/>
+        </mxCell>
+        <mxCell id="request-arrow-head" value="" style="triangle;whiteSpace=wrap;html=1;fillColor=#2B3797;strokeColor=#2B3797;direction=east;" vertex="1" parent="1">
+          <mxGeometry x="393" y="310" width="18" height="21" as="geometry"/>
+        </mxCell>
+        <mxCell id="booking-label" value="BOOKINGS" style="text;html=1;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=10;fontStyle=1;fontColor=#C9151C;" vertex="1" parent="1">
+          <mxGeometry x="756" y="284" width="58" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="booking-arrow-shaft" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ED1C24;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="756" y="318" width="30" height="5" as="geometry"/>
+        </mxCell>
+        <mxCell id="booking-arrow-head" value="" style="triangle;whiteSpace=wrap;html=1;fillColor=#ED1C24;strokeColor=#ED1C24;direction=east;" vertex="1" parent="1">
+          <mxGeometry x="783" y="310" width="18" height="21" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="principle-one" value="TENANT-ISOLATED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F6FC;strokeColor=#C9CEE8;fontFamily=Arial;fontSize=11;fontStyle=1;fontColor=#2B3797;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="326" y="573" width="160" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="principle-two" value="USERS BELONG TO A CORP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F6FC;strokeColor=#C9CEE8;fontFamily=Arial;fontSize=11;fontStyle=1;fontColor=#2B3797;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="500" y="573" width="185" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="principle-three" value="1 … N ON BOTH SIDES" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDEBEC;strokeColor=#F2B6BA;fontFamily=Arial;fontSize=11;fontStyle=1;fontColor=#C9151C;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="699" y="573" width="165" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
