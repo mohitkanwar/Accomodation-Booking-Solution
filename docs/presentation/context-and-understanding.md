@@ -55,6 +55,26 @@ outside the frontend boundary. Supporting-system relationships are intentionally
 kept in the system-context and API-flow views so this diagram stays focused on
 users and UI capabilities.
 
+## Sodexo employee webapp container view
+
+```plantuml-image
+./diagrams/context-and-understanding/sodexo-employee-webapp-container-diagram.puml | Sodexo employee webapp container diagram
+```
+
+This is the "Admin Application" from the system-context view: the internal
+webapp the Sodexo Administrator uses, separate from the customer-facing B2C
+application above. The Sodexo Administrator signs in to administer client
+tenants and supplier integrations, and to generate the operational and audit
+reporting described in the Sodexo Administrator journeys on the
+[Entities and Users](./users.mdx) page.
+
+The blue blocks manage client-side configuration (tenant onboarding, policy
+and role administration). The red blocks manage the supplier side
+(accommodation-provider directory and integration configuration). The green
+blocks cover reporting, monitoring, reconciliation, and controlled support
+investigation. As with the B2C view, these are logical UI capabilities rather
+than independently deployable containers.
+
 ## Interpreted business journey
 
 ```text

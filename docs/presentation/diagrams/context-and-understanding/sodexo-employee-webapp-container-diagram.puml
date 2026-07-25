@@ -1,0 +1,64 @@
+@startuml
+!include ../../../../plantuml/vendor/c4-plantuml/C4_Container.puml
+!include ../../../../plantuml/sodexo-theme.puml
+!include ../../../../plantuml/sodexo-c4-theme.puml
+
+title Sodexo Employee Webapp — UI Capability View
+footer (c) Developed by <b>Mohit Kanwar</b>
+caption UI capability view · Sodexo Administrator at the top · Blue = client administration · Red = supplier administration · Green = reporting and operations
+
+skinparam linetype polyline
+skinparam nodesep 18
+skinparam ranksep 28
+
+
+AddElementTag("client", $bgColor=SODEXO_BLUE_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_BLUE, $shadowing="false", $legendText="Client administration")
+AddElementTag("supplier", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $legendText="Supplier administration")
+AddElementTag("reporting", $bgColor=SODEXO_SUCCESS_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_SUCCESS, $shadowing="false", $legendText="Reporting and operations")
+AddBoundaryTag("clientGroup", $bgColor=SODEXO_BLUE_LIGHT, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BLUE, $shadowing="false", $borderStyle="dashed", $legendText="Client administration area")
+AddBoundaryTag("supplierGroup", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $borderStyle="dashed", $legendText="Supplier administration area")
+AddBoundaryTag("reportingGroup", $bgColor=SODEXO_SUCCESS_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_SUCCESS, $shadowing="false", $borderStyle="dashed", $legendText="Reporting and operations area")
+AddBoundaryTag("userGroup", $bgColor=SODEXO_WHITE, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BLUE, $shadowing="false", $borderStyle="dashed", $legendText="Sodexo user group")
+
+Boundary(sodexoUsers, "SODEXO USERS", $tags="userGroup") {
+  Person(sodexoAdmin, "Sodexo Administrator", "Administers client and supplier configuration and reviews operational reporting")
+}
+
+System_Boundary(adminApp, "Sodexo Admin Application") {
+  Container_Boundary(adminShell, "Admin Console · React SPA") {
+    Boundary(clientAdmin, "CLIENT ADMINISTRATION", $tags="clientGroup") {
+      Container(tenantOnboarding, "Corporate Tenant\nOnboarding", "Admin UI/UX", "Create a client tenant and configure identity mapping, currencies and localisation", $tags="client")
+      Container(tenantSettings, "Client Configuration\n& Settings", "Admin UI/UX", "Maintain destinations, role levels, travel policy and price ranges per client", $tags="client")
+      Container(accessManagement, "Platform Roles\n& Access", "Admin UI/UX", "Grant, modify and revoke privileged access across corporate, operator and Sodexo roles", $tags="client")
+    }
+
+    Boundary(supplierAdmin, "SUPPLIER ADMINISTRATION", $tags="supplierGroup") {
+      Container(supplierDirectory, "Supplier\nDirectory", "Admin UI/UX", "Onboard and maintain accommodation-provider corporations", $tags="supplier")
+      Container(supplierConfig, "Integration\nConfiguration", "Admin UI/UX", "Configure endpoints, feature flags, timeouts and retry limits per environment", $tags="supplier")
+      Container(supplierHealth, "Integration Health\n& Promotion", "Admin UI/UX", "Test connectivity and promote a validated configuration with rollback information", $tags="supplier")
+    }
+
+    Boundary(reporting, "REPORTING & OPERATIONS", $tags="reportingGroup") {
+      Container(operationalReports, "Operational &\nAudit Reports", "Admin UI/UX", "Generate and export adoption, approval, booking, failure and audit reports", $tags="reporting")
+      Container(monitoring, "Booking & Approval\nMonitoring", "Admin UI/UX", "Review platform health, queue depth, latency and supplier availability", $tags="reporting")
+      Container(reconciliation, "Reconciliation\nExceptions", "Admin UI/UX", "Investigate and resolve mismatches between platform, supplier and financial records", $tags="reporting")
+      Container(supportCase, "Controlled Support\nInvestigation", "Admin UI/UX", "Diagnose user or booking problems using masked records and approved tooling", $tags="reporting")
+    }
+  }
+}
+
+Lay_D(sodexoUsers, adminApp)
+Lay_R(clientAdmin, supplierAdmin)
+Lay_R(supplierAdmin, reporting)
+
+Lay_D(tenantOnboarding, tenantSettings)
+Lay_D(tenantSettings, accessManagement)
+
+Lay_D(supplierDirectory, supplierConfig)
+Lay_D(supplierConfig, supplierHealth)
+
+Lay_D(operationalReports, monitoring)
+Lay_D(monitoring, reconciliation)
+Lay_D(reconciliation, supportCase)
+
+@enduml
