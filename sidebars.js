@@ -35,7 +35,16 @@ const sidebars = {
       items: ['presentation/booking-com-integration'],
       collapsed: false,
     },
-    'presentation/architecture-principles',
+    {
+      type: 'category',
+      label: '5. Architecture Principles',
+      link: {
+        type: 'doc',
+        id: 'presentation/architecture-principles',
+      },
+      items: ['presentation/non-functional-requirements'],
+      collapsed: false,
+    },
     'presentation/next-steps-and-workshops',
   ],
 };
