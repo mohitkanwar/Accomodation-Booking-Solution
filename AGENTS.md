@@ -91,5 +91,22 @@ Rules for keeping this structure intact:
   primary-worktree changes into the task commit.
 - If integration encounters a conflict or active Git lock, leave the validated
   task commit on its branch and wait rather than forcing the operation.
-- After successful integration and verification, remove only the agent's own
-  temporary worktree. Do not remove another agent's worktree or branch.
+
+## Push integrated changes and finish
+
+- After successful integration, verify that `main` contains the intended task
+  commit and that unrelated primary-worktree changes remain untouched.
+- Push the integrated `main` branch to `origin/main`. Do not report the task as
+  complete merely because the task commit exists locally or has been merged
+  into the local `main` branch.
+- Confirm that the push succeeded and that `origin/main` resolves to the
+  integrated commit before declaring completion.
+- Never force-push `main`. If the push is rejected because the remote branch
+  moved, fetch the new state, reconcile and revalidate in the task worktree,
+  then repeat the short integration window.
+- If authentication, permissions, network access, or a protected-branch rule
+  prevents the push, keep the validated commit and worktree intact and report
+  the exact blocker.
+- Only after the commit is integrated, verified, and successfully pushed may
+  the agent remove its own temporary worktree. Do not remove another agent's
+  worktree or branch.
