@@ -1,0 +1,159 @@
+@startuml
+!pragma layout smetana
+!include plantuml/sodexo-theme.puml
+
+title Accommodation Booking — Domain Model Catalogue
+
+scale 0.9
+hide circle
+skinparam linetype ortho
+
+package "Client & Organisation" {
+  entity "CorporateClient" as CorporateClient <<configuration>> {
+    *client_id
+  }
+  entity "CorporateLocations" as CorporateLocations <<configuration>> {
+    *site_id
+  }
+  entity "CorporateUserRoles" as CorporateUserRoles <<configuration>> {
+    *role_level_id
+  }
+  entity "CorporateApprovalPolicy" as CorporateApprovalPolicy <<configuration>> {
+    *policy_id
+  }
+  entity "CorporatePriceRange" as CorporatePriceRange <<configuration>> {
+    *price_range_id
+  }
+  entity "ApproverAssignment" as ApproverAssignment <<configuration>> {
+    *approver_assignment_id
+  }
+}
+
+package "Traveller, Request & Approval" {
+  entity "TravellerDetails" as TravellerDetails <<identity>> {
+    *employee_id
+  }
+  entity "AccommodationRequest" as AccommodationRequest <<workflow>> {
+    *request_id
+  }
+  entity "OfferSnapshot" as OfferSnapshot <<workflow>> {
+    *offer_snapshot_id
+  }
+  entity "PolicySnapshot" as PolicySnapshot <<workflow>> {
+    *policy_snapshot_id
+  }
+  entity "ClarificationThread" as ClarificationThread <<workflow>> {
+    *thread_id
+  }
+  entity "ApprovalDecision" as ApprovalDecision <<workflow>> {
+    *approval_id
+  }
+}
+
+package "Booking & Supplier" {
+  entity "SupplierBooking" as SupplierBooking <<integration>> {
+    *supplier_booking_id
+  }
+  entity "BookingChangeRequest" as BookingChangeRequest <<integration>> {
+    *change_request_id
+  }
+  entity "IdempotencyRecord" as IdempotencyRecord <<integration>> {
+    *idempotency_key
+  }
+  entity "SupplierCorporation" as SupplierCorporation <<integration>> {
+    *supplier_id
+  }
+  entity "SupplierIntegrationConfig" as SupplierIntegrationConfig <<integration>> {
+    *integration_config_id
+  }
+}
+
+package "Financial" {
+  entity "Invoice" as Invoice <<financial>> {
+    *invoice_id
+  }
+  entity "BillValidation" as BillValidation <<financial>> {
+    *validation_id
+  }
+  entity "PaymentInstruction" as PaymentInstruction <<financial>> {
+    *payment_id
+  }
+  entity "ReconciliationException" as ReconciliationException <<financial>> {
+    *exception_id
+  }
+}
+
+package "Platform & Administration" {
+  entity "PlatformAccessGrant" as PlatformAccessGrant <<identity>> {
+    *access_grant_id
+  }
+  entity "SupportCase" as SupportCase <<evidence>> {
+    *case_id
+  }
+}
+
+package "Cross-Cutting Evidence" {
+  entity "AuditEvent" as AuditEvent <<evidence>> {
+    *event_id
+  }
+  entity "OutboxEvent" as OutboxEvent <<evidence>> {
+    *event_id
+  }
+}
+
+' --- Client & organisation ---
+CorporateClient ||--o{ CorporateLocations
+CorporateClient ||--o{ CorporateUserRoles
+CorporateClient ||--o{ CorporateApprovalPolicy
+CorporateClient ||--o{ CorporatePriceRange
+CorporateUserRoles ||--o{ CorporateApprovalPolicy
+CorporateLocations ||--o{ CorporateApprovalPolicy
+CorporateUserRoles ||--o{ CorporatePriceRange
+CorporateLocations ||--o{ CorporatePriceRange
+CorporateUserRoles ||--o{ ApproverAssignment
+
+' --- Traveller, request & approval ---
+CorporateClient ||--o{ TravellerDetails
+CorporateUserRoles ||--o{ TravellerDetails
+TravellerDetails ||--o{ AccommodationRequest : requester / traveller
+CorporateLocations ||--o{ AccommodationRequest
+CorporateApprovalPolicy ||..o{ PolicySnapshot : snapshot
+AccommodationRequest ||--o{ OfferSnapshot
+AccommodationRequest ||--o{ PolicySnapshot
+AccommodationRequest ||--o{ ClarificationThread
+AccommodationRequest ||--o{ ApprovalDecision
+ApproverAssignment ||--o{ ApprovalDecision
+
+' --- Booking & supplier ---
+AccommodationRequest ||--o| SupplierBooking
+SupplierBooking ||--o{ BookingChangeRequest
+AccommodationRequest ||--o{ IdempotencyRecord
+SupplierCorporation ||--o{ SupplierBooking
+SupplierCorporation ||--o{ SupplierIntegrationConfig
+
+' --- Financial ---
+SupplierBooking ||--o{ Invoice
+Invoice ||--o{ BillValidation
+BillValidation ||--o{ PaymentInstruction
+Invoice ||..o{ ReconciliationException
+SupplierBooking ||..o{ ReconciliationException
+
+' --- Platform & administration ---
+CorporateClient ||--o{ PlatformAccessGrant
+AccommodationRequest ||..o{ SupportCase
+
+' --- Cross-cutting evidence ---
+AccommodationRequest ||--o{ AuditEvent
+ApprovalDecision ||--o{ AuditEvent
+AccommodationRequest ||--o{ OutboxEvent
+
+legend right
+  |= Surface |= Responsibility |
+  |<#F5F6FC> Identity | Trusted traveller and access context |
+  |<#DDE1F6> Configuration | Client, roles, locations, policy, price |
+  |<#FFFFFF> Workflow | Request, offer, policy snapshot, approval |
+  |<#FBDADD> Integration | Supplier booking and provider integration |
+  |<#FFF4DD> Financial | Invoicing, validation, payment, reconciliation |
+  |<#DDF2E9> Evidence | Support, audit and reliable delivery |
+endlegend
+@enduml

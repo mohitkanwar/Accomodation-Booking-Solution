@@ -90,6 +90,15 @@ Written by every context; owned by none of them individually.
 | `AuditEvent` | Immutable record of a business or administrative event, required wherever a decision, override, or configuration change occurs. | Entity, event type, actor, timestamp, before/after values, correlation ID |
 | `OutboxEvent` | Reliable delivery record for notifications and downstream integration events. | Aggregate reference, event type, payload, delivery status, attempt count |
 
+## Relationships
+
+Primary keys only; supporting attributes are on the tables above, not on the
+diagram.
+
+```plantuml-image
+./diagrams/domain-models/domain-models.puml | Domain model catalogue — primary keys and relationships
+```
+
 ## Modelling notes
 
 - A `Corporate`-prefixed model is scoped to one `CorporateClient` and must

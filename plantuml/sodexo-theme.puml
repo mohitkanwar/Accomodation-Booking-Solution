@@ -83,6 +83,8 @@ skinparam entityBackgroundColor<<integration>> SODEXO_RED_LIGHT
 skinparam entityBorderColor<<integration>> SODEXO_RED
 skinparam entityBackgroundColor<<evidence>> SODEXO_SUCCESS_LIGHT
 skinparam entityBorderColor<<evidence>> SODEXO_SUCCESS
+skinparam entityBackgroundColor<<financial>> SODEXO_WARNING_LIGHT
+skinparam entityBorderColor<<financial>> SODEXO_WARNING
 
 skinparam component {
   BackgroundColor SODEXO_WHITE
