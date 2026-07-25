@@ -4,6 +4,7 @@ title: Entities and Users
 ---
 
 import ExpandableRoleCard from '@site/src/components/ExpandableRoleCard';
+import RoleGroup from '@site/src/components/RoleGroup';
 
 # Entities
 
@@ -15,8 +16,9 @@ organisational boundary, while Sodexo coordinates the booking interaction.
 
 # Users
 
-The accommodation capability serves five user roles within a corporate travel
-programme. Expand a role to review its associated user journey.
+The accommodation ecosystem serves six roles across client corporations,
+Sodexo operations, and accommodation provider corporations. Expand a role to
+review its associated user journey.
 
 :::info Corporate policy context
 
@@ -26,7 +28,14 @@ for its travellers, approvers, administrators, and booking operators.
 
 :::
 
-## User roles
+## User groups
+
+<RoleGroup
+  eyebrow="Client corporation"
+  title="Accommodation seeker corporation users"
+  description="Employees and administrators acting within a client corporation's tenant, policy, and organisational scope."
+  tone="seeker"
+>
 
 <ExpandableRoleCard
   index="01"
@@ -80,6 +89,15 @@ for its travellers, approvers, administrators, and booking operators.
 
 </ExpandableRoleCard>
 
+</RoleGroup>
+
+<RoleGroup
+  eyebrow="Service operator"
+  title="Sodexo users"
+  description="Operational and platform roles that coordinate requests, bookings, configuration, reporting, and controlled support."
+  tone="sodexo"
+>
+
 <ExpandableRoleCard
   index="04"
   name="Booking Operator"
@@ -114,6 +132,36 @@ with the delegated action recorded in the audit history.
 7. Record every privileged change and administrative action for audit.
 
 </ExpandableRoleCard>
+
+</RoleGroup>
+
+<RoleGroup
+  eyebrow="Supplier corporation"
+  title="Accommodation provider corporation users"
+  description="Supplier-side users who fulfil reservations and support the commercial and operational lifecycle in provider systems."
+  tone="provider"
+>
+
+<ExpandableRoleCard
+  index="06"
+  name="Accommodation Provider Agent"
+  description="A supplier-side user who manages accommodation inventory, reservations, and financial follow-up in the provider's own systems."
+>
+
+1. Maintain property content, rates, availability, and booking conditions in the provider's authorised systems.
+2. Receive a reservation created through the Booking.com distribution and fulfilment channel.
+3. Validate the stay, guest, commercial, and payment details and retain the supplier reference.
+4. Process supported amendments, cancellations, and fulfilment exceptions.
+5. Provide invoice and settlement information required for payment reconciliation.
+6. Investigate reservation, payment, or reconciliation discrepancies with traceable evidence.
+
+This is an ecosystem role rather than a direct user of the Sodexo B2C
+application. Integration exchanges reservation state and references with the
+provider channel.
+
+</ExpandableRoleCard>
+
+</RoleGroup>
 
 ## Cross-role controls
 
