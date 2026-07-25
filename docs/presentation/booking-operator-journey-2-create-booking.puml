@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Validate and Create a Booking
+header Sat, 25 Jul 2026 at 12:47:13 PM
+
+
+(*) -right-> "Validate the approval\nand selected offer"
+-right-> "Recheck live price,\navailability and terms"
+-right-> "Create the Booking.com order"
+-right-> "Confirm the reservation\nto the traveller" #DDF2E9
+-right-> (*)
+
+@enduml

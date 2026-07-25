@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Manage Destinations and Corporate Sites
+header Sat, 25 Jul 2026 at 12:45:43 PM
+
+
+(*) -right-> "Review destinations\nand corporate sites"
+-right-> "Add a destination and\nassociate corporate sites"
+-right-> "Configure availability\nand restrictions"
+-right-> "Publish the destination list" #DDF2E9
+-right-> (*)
+
+@enduml

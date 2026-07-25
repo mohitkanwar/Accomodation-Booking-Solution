@@ -49,8 +49,8 @@ for its travellers, approvers, administrators, and booking operators.
 3. Search, filter, and compare policy-evaluated Booking.com proposals.
 4. Review the price, cancellation conditions, and policy explanation.
 5. Select an option and submit an accommodation request.
-6. Respond to clarification requests and track approval and booking statuses.
-7. Receive the confirmed reservation or a clear rejection or failure outcome.
+6. Track approval and booking status, responding to any clarification questions along the way.
+7. Receive the confirmed reservation, or a clear rejection or failure outcome.
 
 **Traveller journey 1 · Select accommodation**
 
@@ -70,16 +70,16 @@ for its travellers, approvers, administrators, and booking operators.
 ./traveller-journey-3-edit-request.puml | Traveller journey — edit a submitted request
 ```
 
-**Traveller journey 4 · View requests**
+**Traveller journey 4 · View submitted requests**
 
 ```plantuml-image
-./traveller-journey-4-view-requests.puml | Traveller journey — view requests
+./traveller-journey-4-view-requests.puml | Traveller journey — view submitted requests
 ```
 
-**Traveller journey 5 · Follow up on an unapproved request**
+**Traveller journey 5 · Follow up on a request awaiting approval**
 
 ```plantuml-image
-./traveller-journey-5-follow-up.puml | Traveller journey — follow up on an unapproved request
+./traveller-journey-5-follow-up.puml | Traveller journey — follow up on a request awaiting approval
 ```
 
 **Traveller journey 6 · Download or email the confirmation letter**
@@ -118,6 +118,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Prioritise urgent and soon-to-expire accommodation offers.
 4. Open a request while preserving the queue position and current filters.
 
+
+```plantuml-image
+./approver-journey-1-manage-queue.puml | Approver journey — view and manage the approval queue
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -130,6 +135,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Compare the request with the applicable role, destination, and price-range policy.
 4. Review previous clarification messages, attachments, and exception evidence.
 5. Confirm that the approver is authorised and is not approving their own request.
+
+
+```plantuml-image
+./approver-journey-2-review-request.puml | Approver journey — review an accommodation request
+```
 
 </JourneyScenario>
 
@@ -144,6 +154,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Notify the traveller and route the request to the booking-operator queue.
 5. Retain the policy snapshot, decision, actor, and timestamp in the audit history.
 
+
+```plantuml-image
+./approver-journey-3-approve-request.puml | Approver journey — approve a request
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -155,6 +170,11 @@ for its travellers, approvers, administrators, and booking operators.
 2. Reject the request and prevent downstream booking.
 3. Notify the traveller with the decision and available next action.
 4. Retain the rejected request and decision evidence for reporting and audit.
+
+
+```plantuml-image
+./approver-journey-4-reject-request.puml | Approver journey — reject a request
+```
 
 </JourneyScenario>
 
@@ -169,6 +189,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Review the traveller's response and any amended request details.
 5. Approve, reject, or request further clarification with a complete conversation trail.
 
+
+```plantuml-image
+./approver-journey-5-seek-clarification.puml | Approver journey — seek clarification and resume the decision
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -180,6 +205,11 @@ for its travellers, approvers, administrators, and booking operators.
 2. Compare the changed price and conditions with the original approval and policy snapshot.
 3. Approve the revised offer, reject it, or seek clarification.
 4. Preserve both decisions and their related offer versions.
+
+
+```plantuml-image
+./approver-journey-6-reassess-offer.puml | Approver journey — reassess a materially changed offer
+```
 
 </JourneyScenario>
 
@@ -202,6 +232,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Preview the impact on representative traveller and destination scenarios.
 5. Publish the policy with an effective date and retain the previous version for audit.
 
+
+```plantuml-image
+./corporate-admin-journey-1-manage-policies.puml | Corporate Administrator journey — manage travel policies
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -214,6 +249,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Assign travellers, approvers, and administrators within the authorised organisation hierarchy.
 4. Configure approval relationships, delegation, and effective dates.
 5. Remove or expire access without deleting historical actions.
+
+
+```plantuml-image
+./corporate-admin-journey-2-manage-roles.puml | Corporate Administrator journey — manage corporate roles and assignments
+```
 
 </JourneyScenario>
 
@@ -228,6 +268,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Temporarily suspend or retire a destination.
 5. Preview the destination list visible to eligible travellers.
 
+
+```plantuml-image
+./corporate-admin-journey-3-manage-destinations.puml | Corporate Administrator journey — manage destinations and corporate sites
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -240,6 +285,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Configure warning, hard-stop, and exception-approval behaviour.
 4. Compare the new range with current market and booking data.
 5. Publish the versioned price rule and retain its change history.
+
+
+```plantuml-image
+./corporate-admin-journey-4-manage-price-ranges.puml | Corporate Administrator journey — manage price ranges and exceptions
+```
 
 </JourneyScenario>
 
@@ -254,6 +304,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Accept valid lines and raise a dispute or clarification for mismatches.
 5. Confirm the validated amount with evidence and an audit timestamp.
 
+
+```plantuml-image
+./corporate-admin-journey-5-validate-bills.puml | Corporate Administrator journey — validate accommodation bills
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -267,6 +322,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Record the payment reference and expected settlement date.
 5. Track paid, partially paid, failed, and reversed outcomes without duplicating payment.
 
+
+```plantuml-image
+./corporate-admin-journey-6-approve-payments.puml | Corporate Administrator journey — approve and make payments
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -279,6 +339,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Monitor bill-validation and payment status.
 4. Export authorised reports and drill into supporting records.
 5. Review the configuration and access-change audit trail.
+
+
+```plantuml-image
+./corporate-admin-journey-7-review-reports.puml | Corporate Administrator journey — review spend, compliance, and audit reports
+```
 
 </JourneyScenario>
 
@@ -309,6 +374,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Claim or assign a request to prevent duplicate operator activity.
 4. Open the complete request, approval, and communication history.
 
+
+```plantuml-image
+./booking-operator-journey-1-manage-queue.puml | Booking Operator journey — manage the booking work queue
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -323,6 +393,11 @@ for its travellers, approvers, administrators, and booking operators.
 5. Record the supplier reference and immutable booking response.
 6. Confirm the reservation to the traveller and close the work item.
 
+
+```plantuml-image
+./booking-operator-journey-2-create-booking.puml | Booking Operator journey — validate and create a booking
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -335,6 +410,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Return the revised offer for renewed approval when price or conditions materially change.
 4. Preserve the original offer, replacement offer, and reason for the change.
 5. Resume booking only after the required traveller or approver decision.
+
+
+```plantuml-image
+./booking-operator-journey-3-handle-changed-offer.puml | Booking Operator journey — handle a changed price or unavailable offer
+```
 
 </JourneyScenario>
 
@@ -349,6 +429,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Retry only when the previous outcome is conclusively absent or safely idempotent.
 5. Escalate unresolved outcomes and keep the traveller informed.
 
+
+```plantuml-image
+./booking-operator-journey-4-resolve-failed-booking.puml | Booking Operator journey — resolve a failed or uncertain booking
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -361,6 +446,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Obtain any required traveller or approver confirmation.
 4. Submit the supported change through the supplier workflow.
 5. Update the booking record and notify all affected parties.
+
+
+```plantuml-image
+./booking-operator-journey-5-amend-cancel-reservation.puml | Booking Operator journey — amend or cancel a reservation
+```
 
 </JourneyScenario>
 
@@ -375,6 +465,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Submit the request through the normal approval path.
 5. Record both the operator actor and the represented traveller in the audit history.
 
+
+```plantuml-image
+./booking-operator-journey-6-create-on-behalf.puml | Booking Operator journey — create a request on behalf of a traveller
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -387,6 +482,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Contact the provider channel or internal support team through the approved process.
 4. Record updates, agreed actions, and resolution deadlines.
 5. Notify the traveller and close the issue only after the outcome is confirmed.
+
+
+```plantuml-image
+./booking-operator-journey-7-investigate-issue.puml | Booking Operator journey — investigate a booking issue
+```
 
 </JourneyScenario>
 
@@ -409,6 +509,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Validate the setup in a controlled environment.
 5. Activate the tenant and retain an auditable onboarding record.
 
+
+```plantuml-image
+./sodexo-admin-journey-1-onboard-tenant.puml | Sodexo Administrator journey — onboard and maintain a corporate tenant
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -421,6 +526,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Enforce segregation of duties for approval, booking, billing, and administration.
 4. Review dormant and high-risk access periodically.
 5. Preserve every privileged access change for audit.
+
+
+```plantuml-image
+./sodexo-admin-journey-2-manage-access.puml | Sodexo Administrator journey — manage platform roles and access
+```
 
 </JourneyScenario>
 
@@ -435,6 +545,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Test connectivity and supported API capabilities.
 5. Promote a validated configuration with rollback information and change evidence.
 
+
+```plantuml-image
+./sodexo-admin-journey-3-configure-integrations.puml | Sodexo Administrator journey — configure supplier integrations
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -447,6 +562,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Correlate events using the request, booking, and supplier identifiers.
 4. Trigger an approved retry, escalation, or incident process.
 5. Track recovery and record the operational outcome.
+
+
+```plantuml-image
+./sodexo-admin-journey-4-monitor-operations.puml | Sodexo Administrator journey — monitor booking and approval operations
+```
 
 </JourneyScenario>
 
@@ -461,6 +581,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Correct authorised reference data or route the exception to the responsible team.
 5. Close the exception with evidence and without rewriting immutable booking history.
 
+
+```plantuml-image
+./sodexo-admin-journey-5-resolve-reconciliation.puml | Sodexo Administrator journey — resolve reconciliation exceptions
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -474,6 +599,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Export or schedule the report for authorised recipients.
 5. Record report generation and distribution where required.
 
+
+```plantuml-image
+./sodexo-admin-journey-6-generate-reports.puml | Sodexo Administrator journey — generate operational and audit reports
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -486,6 +616,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Use controlled support tooling rather than changing user-owned data directly.
 4. Apply an approved correction or coordinate remediation with the owning team.
 5. Record the investigator, evidence accessed, actions taken, and outcome.
+
+
+```plantuml-image
+./sodexo-admin-journey-7-support-investigation.puml | Sodexo Administrator journey — support a controlled investigation
+```
 
 </JourneyScenario>
 
@@ -517,6 +652,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Validate how the accommodation appears through the distribution channel.
 5. Publish the configuration with its effective timing and change history.
 
+
+```plantuml-image
+./provider-agent-journey-1-manage-configuration.puml | Accommodation Provider Agent journey — manage accommodation configuration
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -529,6 +669,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Retain the provider and distribution-channel references.
 4. Confirm fulfilment or raise an exception when the reservation cannot be honoured.
 5. Make the confirmed status available to the connected booking workflow.
+
+
+```plantuml-image
+./provider-agent-journey-2-fulfil-reservation.puml | Accommodation Provider Agent journey — receive and fulfil a reservation
+```
 
 </JourneyScenario>
 
@@ -543,6 +688,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Confirm or reject the change through the provider channel.
 5. Retain the revised reservation state and commercial evidence.
 
+
+```plantuml-image
+./provider-agent-journey-3-process-amendment.puml | Accommodation Provider Agent journey — process an amendment or cancellation
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -555,6 +705,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Coordinate with the property or distribution-channel support team.
 4. Provide a resolution, workaround, or escalation with an expected timeline.
 5. Record the final outcome and communicate it through the connected support process.
+
+
+```plantuml-image
+./provider-agent-journey-4-provide-support.puml | Accommodation Provider Agent journey — provide booking support
+```
 
 </JourneyScenario>
 
@@ -569,6 +724,11 @@ for its travellers, approvers, administrators, and booking operators.
 4. Respond to bill-validation questions or issue a correction or credit note.
 5. Track the invoice through accepted, disputed, and settled states.
 
+
+```plantuml-image
+./provider-agent-journey-5-provide-invoices.puml | Accommodation Provider Agent journey — provide invoices and settlement information
+```
+
 </JourneyScenario>
 
 <JourneyScenario
@@ -581,6 +741,11 @@ for its travellers, approvers, administrators, and booking operators.
 3. Identify timing differences, duplicate charges, missing credits, or reference errors.
 4. Correct authorised provider data or supply evidence to the responsible reconciliation team.
 5. Confirm closure and retain the resolution history.
+
+
+```plantuml-image
+./provider-agent-journey-6-resolve-discrepancy.puml | Accommodation Provider Agent journey — resolve a reconciliation discrepancy
+```
 
 </JourneyScenario>
 

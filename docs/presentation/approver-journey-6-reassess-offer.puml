@@ -1,0 +1,13 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Reassess a Materially Changed Offer
+header Sat, 25 Jul 2026 at 12:44:58 PM
+
+
+(*) -right-> "Review the operator's\nexplanation and replacement offer"
+-right-> "Compare with the original\napproval and policy snapshot"
+-right-> "Approve, reject, or\nseek clarification" #DDF2E9
+-right-> (*)
+
+@enduml

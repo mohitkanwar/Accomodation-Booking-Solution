@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Seek Clarification and Resume the Decision
+header Sat, 25 Jul 2026 at 12:44:43 PM
+
+
+(*) -right-> "Identify the missing\nrequest information"
+-right-> "Send a clarification question"
+-right-> "Review the traveller's response"
+-right-> "Approve, reject, or\nrequest further clarification" #DDF2E9
+-right-> (*)
+
+@enduml

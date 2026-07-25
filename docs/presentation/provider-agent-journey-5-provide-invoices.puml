@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Provide Invoices and Settlement Information
+header Sat, 25 Jul 2026 at 12:51:28 PM
+
+
+(*) -right-> "Generate the invoice\nfor the completed stay"
+-right-> "Include references,\ntaxes and fees"
+-right-> "Submit through the\ncommercial channel"
+-right-> "Track to a settled state" #DDF2E9
+-right-> (*)
+
+@enduml

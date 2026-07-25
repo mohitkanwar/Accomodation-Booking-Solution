@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Support a Controlled Investigation
+header Sat, 25 Jul 2026 at 12:50:13 PM
+
+
+(*) -right-> "Confirm the support\nrequest and authorisation"
+-right-> "Review logs and\nmasked business records"
+-right-> "Apply an approved correction"
+-right-> "Record the investigator\nand outcome" #DDF2E9
+-right-> (*)
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Manage Travel Policies
+header Sat, 25 Jul 2026 at 12:45:13 PM
+
+
+(*) -right-> "Review the currently\neffective policy"
+-right-> "Create a draft policy version"
+-right-> "Configure eligibility and\napproval rules"
+-right-> "Preview the impact on\nrepresentative scenarios"
+-right-> "Publish the policy" #DDF2E9
+-right-> (*)
+
+@enduml

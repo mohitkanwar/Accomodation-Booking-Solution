@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Create a Request on Behalf of a Traveller
+header Sat, 25 Jul 2026 at 12:48:13 PM
+
+
+(*) -right-> "Select the traveller"
+-right-> "Capture the trip need\nand requirements"
+-right-> "Select an offer under\nthe traveller's policy"
+-right-> "Submit the request\nfor approval" #DDF2E9
+-right-> (*)
+
+@enduml
