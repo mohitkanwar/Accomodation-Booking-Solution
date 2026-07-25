@@ -163,6 +163,21 @@ for (const {sourcePath, outputPath} of sources.values()) {
   if (!svg.includes('<svg')) {
     fail(`${relative(sourcePath)}: PlantUML did not return an SVG image.`);
   }
+  const renderedErrorMarkers = [
+    'An error has occured',
+    'An error has occurred',
+    'Dot executable does not exist',
+    'Cannot find Graphviz',
+  ];
+  const renderedError = renderedErrorMarkers.find((marker) =>
+    svg.includes(marker),
+  );
+  if (renderedError) {
+    fail(
+      `${relative(sourcePath)}: PlantUML returned an error SVG: ` +
+        renderedError,
+    );
+  }
 
   await mkdir(path.dirname(outputPath), {recursive: true});
   await writeFile(outputPath, svg, 'utf8');

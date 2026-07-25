@@ -41,6 +41,12 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Install Graphviz for PlantUML
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes graphviz
+          /usr/bin/dot -V
+
       - name: Cache PlantUML
         uses: actions/cache@v4
         with:
@@ -57,6 +63,8 @@ jobs:
 
       - name: Build Docusaurus
         run: pnpm build
+        env:
+          GRAPHVIZ_DOT: /usr/bin/dot
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
