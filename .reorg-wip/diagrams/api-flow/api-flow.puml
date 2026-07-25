@@ -1,5 +1,5 @@
 @startuml
-!include /Users/mohit.kanwar_1/projects/Accomodation-Booking-Solution/plantuml/sodexo-theme.puml
+!include plantuml/sodexo-theme.puml
 
 title Accommodation Search, Request and Booking
 header Thu, 23 Jul 2026 at 04:59:21 PM

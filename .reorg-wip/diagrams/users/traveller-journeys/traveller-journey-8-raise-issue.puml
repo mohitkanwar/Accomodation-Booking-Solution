@@ -1,5 +1,5 @@
 @startuml
-!include ../../plantuml/sodexo-theme.puml
+!include plantuml/sodexo-theme.puml
 
 title Raise a Booking Issue
 header Sat, 25 Jul 2026 at 11:05:42 AM

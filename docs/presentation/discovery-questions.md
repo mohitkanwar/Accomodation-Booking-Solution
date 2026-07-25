@@ -11,19 +11,23 @@ in this meeting.
 ## Business and product
 
 1. What business outcome and measurable success justify the feature?
-2. Who is eligible: employees, contractors, guests, or assistants booking for
-   someone else?
+1. Who supports the accomodation queries?
+   1. Sodexo, Booking.com or accomodation provider?
 3. Is the requester always the traveller?
+   1. Someone else may request on behalf of the traveller, e.g. an assistant or travel coordinator.
 4. May employees submit out-of-policy options, and who approves exceptions?
-5. Is operator approval required for every request?
+   1. Employees should not be allowed to submit out-of-policy options. But a booking operator may do on user's behalf. 
 6. Who owns the employee experience, operator service level, and post-booking
    support?
 7. Which countries, sites, languages, and currencies are required first?
+1. Need price calculation logic, e.g. If the price on booking.com is INR 100, what should be the price shown to the user? 
+   1. Should it include taxes and mandatory fees? 
+   2. How to handle foreign currencies? Currency conversion charges?
+   3. Discounts and offers?
 
 ## Policy
 
-1. What is the authoritative employee level: General, Director, or C-Level?
-2. Does the price cap include taxes and mandatory fees?
+1. Does the price cap include taxes and mandatory fees?
 3. Is the cap per room, per traveller, average night, highest night, or total
    stay?
 4. How are foreign currencies converted and which FX source is approved?

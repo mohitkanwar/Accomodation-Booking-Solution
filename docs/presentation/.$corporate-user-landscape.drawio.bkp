@@ -68,7 +68,7 @@
           <mxGeometry height="34" width="260" x="460" y="145" as="geometry" />
         </mxCell>
         <mxCell id="sodexo-subtitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=12;fontColor=#DDE1F6;" value="Booking orchestration &amp;amp; platform operations" vertex="1">
-          <mxGeometry height="24" width="270" x="455" y="176" as="geometry" />
+          <mxGeometry height="24" width="270" x="455" y="170" as="geometry" />
         </mxCell>
         <mxCell id="sodexo-admin-card" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FFFFFF;arcSize=8;" value="" vertex="1">
           <mxGeometry height="78" width="286" x="447" y="252" as="geometry" />
