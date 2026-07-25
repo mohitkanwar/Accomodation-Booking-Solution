@@ -30,6 +30,22 @@ and notification services remain external dependencies. Internal containers and
 implementation choices are intentionally deferred to lower-level architecture
 views.
 
+## B2C frontend container view
+
+```plantuml-image
+./diagrams/context-and-understanding/b2c-frontend-container-diagram.puml | Sodexo B2C frontend application container diagram
+```
+
+The existing React host continues to own authentication integration, session
+management, push notifications and alerts. The new Accommodation Booking Lego
+is a separately deployable React micro frontend that receives authenticated
+employee context from the host and calls only the server-side Accommodation
+Booking BFF.
+
+The map provider and its browser-versus-server access model remain an
+architecture decision. Booking.com credentials and Demand API calls remain
+outside the frontend boundary.
+
 ## Interpreted business journey
 
 ```text
