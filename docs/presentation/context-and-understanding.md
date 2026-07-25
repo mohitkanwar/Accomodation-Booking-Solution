@@ -51,7 +51,9 @@ interaction flows belong in the UX journey design.
 
 The map provider and its browser-versus-server access model remain an
 architecture decision. Booking.com credentials and Demand API calls remain
-outside the frontend boundary.
+outside the frontend boundary. Supporting-system relationships are intentionally
+kept in the system-context and API-flow views so this diagram stays focused on
+users and UI capabilities.
 
 ## Interpreted business journey
 

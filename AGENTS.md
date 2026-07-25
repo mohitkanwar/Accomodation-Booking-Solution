@@ -44,6 +44,8 @@ Rules for keeping this structure intact:
 - Keep PlantUML `!include` paths relative to the `.puml` source file, and verify
   direct rendering from that file's directory without a custom include path so
   IntelliJ preview remains functional.
+- Do not use `!pragma layout smetana` for IntelliJ-edited diagrams; use the
+  default Graphviz layout and validate with the PlantUML Integration runtime.
 - Content that is written but not yet part of the active workshop belongs
   under `archive/docs/`, preserving the same relative path it would have
   under `docs/` so it can be promoted later without renaming.

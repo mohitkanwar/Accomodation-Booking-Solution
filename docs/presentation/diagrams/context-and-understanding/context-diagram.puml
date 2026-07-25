@@ -8,7 +8,6 @@ header Thu, 23 Jul 2026 at 05:49:01 PM
 footer (c) Developed by <b>Mohit Kanwar</b>
 caption C4 Level 1 · Initial discovery view
 
-!pragma layout smetana
 skinparam linetype polyline
 LAYOUT_LANDSCAPE()
 

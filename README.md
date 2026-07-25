@@ -93,6 +93,10 @@ Deeper folders need one additional `../` per level. Before committing a moved
 diagram, render the file directly from its own directory without setting
 `plantuml.include.path`; this matches IntelliJ's resolution model.
 
+Use PlantUML's default Graphviz layout for diagrams edited in IntelliJ. Do not
+enable the experimental Smetana engine: PlantUML Integration's bundled renderer
+can fail with `java.lang.IllegalArgumentException` on larger C4 diagrams.
+
 The theme uses Sodexo blue for structure and hierarchy, red for selective
 emphasis, and accessible pale surfaces for identity, configuration, workflow,
 integration, and evidence elements. The two core color values are reference

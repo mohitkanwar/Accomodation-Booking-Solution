@@ -5,16 +5,14 @@
 
 title Sodexo B2C Frontend Application — UI Capability View
 footer (c) Developed by <b>Mohit Kanwar</b>
-caption UI capability view · Client roles at the top · Blue = existing experience · Red = proposed accommodation experience · Amber = decision required
+caption UI capability view · Client roles at the top · Blue = existing experience · Red = proposed accommodation experience
 
-!pragma layout smetana
 skinparam linetype polyline
 skinparam nodesep 18
 skinparam ranksep 28
 
 AddElementTag("existing", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_INK, $borderColor=SODEXO_BLUE, $shadowing="false", $legendText="Existing capability")
 AddElementTag("new", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $legendText="New accommodation capability")
-AddElementTag("decision", $bgColor=SODEXO_WARNING_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_WARNING, $shadowing="false", $legendText="Architecture decision required")
 AddBoundaryTag("existingGroup", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BLUE, $shadowing="false", $borderStyle="dashed", $legendText="Existing functional area")
 AddBoundaryTag("newGroup", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $borderStyle="dashed", $legendText="Proposed functional area")
 AddBoundaryTag("userGroup", $bgColor=SODEXO_WHITE, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BLUE, $shadowing="false", $borderStyle="dashed", $legendText="Client user group")
@@ -52,15 +50,6 @@ System_Boundary(b2cFrontend, "Sodexo B2C Frontend Application") {
   }
 }
 
-System_Ext(existingPlatform, "Existing B2C Platform Services", "Identity and access, session lifecycle, push notifications and alerts APIs", $tags="existing")
-System_Ext(accommodationBff, "Accommodation Booking BFF", "New server-side APIs for destinations, policy-aware search, proposals and booking requests", $tags="new")
-System_Ext(mapPlatform, "Map Platform", "Map tiles and rendering integration; provider and access model to be confirmed", $tags="decision")
-
-Rel_D(clientUsers, hostShell, "")
-Rel_D(existingFunctions, existingPlatform, "")
-Rel_D(proposedFunctions, accommodationBff, "")
-Rel_D(proposedFunctions, mapPlatform, "")
-
 Lay_R(traveller, approver)
 Lay_R(approver, corporateAdmin)
 Lay_R(corporateAdmin, bookingOperator)
@@ -81,8 +70,5 @@ Lay_R(corporateAdminWorkspace, bookingWorkspace)
 Lay_D(clientUsers, hostShell)
 Lay_D(existingFunctions, proposedFunctions)
 Lay_D(proposedFunctions, roleWorkspaces)
-Lay_D(hostShell, existingPlatform)
-Lay_R(existingPlatform, accommodationBff)
-Lay_R(accommodationBff, mapPlatform)
 
 @enduml
