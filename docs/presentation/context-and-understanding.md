@@ -42,6 +42,10 @@ is a separately deployable React micro frontend that receives authenticated
 employee context from the host and calls only the server-side Accommodation
 Booking BFF.
 
+The blue blocks expand the host's existing shared functionality. The red blocks
+show the proposed employee accommodation journey inside the new Lego. These are
+logical functional blocks rather than independently deployable containers.
+
 The map provider and its browser-versus-server access model remain an
 architecture decision. Booking.com credentials and Demand API calls remain
 outside the frontend boundary.

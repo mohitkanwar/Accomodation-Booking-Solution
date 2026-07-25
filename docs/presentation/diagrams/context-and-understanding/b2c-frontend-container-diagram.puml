@@ -3,44 +3,78 @@
 !include plantuml/sodexo-theme.puml
 !include plantuml/sodexo-c4-theme.puml
 
-title Sodexo B2C Frontend Application — Container View
+title Sodexo B2C Frontend Application — Host Shell Functional View
 footer (c) Developed by <b>Mohit Kanwar</b>
-caption C4 Level 2 · Blue = existing · Red = new accommodation capability · Amber = decision required
+caption C4 container view with functional blocks · Blue = existing · Red = proposed · Amber = decision required
 
 !pragma layout smetana
 skinparam linetype polyline
-skinparam nodesep 35
-skinparam ranksep 45
-LAYOUT_LANDSCAPE()
+skinparam nodesep 18
+skinparam ranksep 28
 
 AddElementTag("existing", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_INK, $borderColor=SODEXO_BLUE, $shadowing="false", $legendText="Existing capability")
 AddElementTag("new", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $legendText="New accommodation capability")
 AddElementTag("decision", $bgColor=SODEXO_WARNING_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_WARNING, $shadowing="false", $legendText="Architecture decision required")
+AddBoundaryTag("existingGroup", $bgColor=SODEXO_BLUE_PALE, $fontColor=SODEXO_BLUE_DARK, $borderColor=SODEXO_BLUE, $shadowing="false", $borderStyle="dashed", $legendText="Existing functional area")
+AddBoundaryTag("newGroup", $bgColor=SODEXO_RED_LIGHT, $fontColor=SODEXO_INK, $borderColor=SODEXO_RED, $shadowing="false", $borderStyle="dashed", $legendText="Proposed functional area")
 
 Person(employee, "Employee Traveller", "Uses the Sodexo B2C application to request accommodation")
 Person_Ext(bookingTeam, "Client Booking Team", "Receives and processes employee booking requests")
 
 System_Boundary(b2cFrontend, "Sodexo B2C Frontend Application") {
-  Container(hostShell, "B2C Host Shell", "React SPA · Existing", "Provides authentication and authorization integration, session management, push notification handling, alerts management, navigation and Lego composition", $tags="existing")
-  Container(accommodationLego, "Accommodation Booking Lego", "React Micro Frontend · New", "Lists client countries and sites; captures destination, dates and stay needs; displays sortable, filterable and map-based proposals; confirms selection and submits a booking request", $tags="new")
+  Container_Boundary(hostShell, "B2C Host Shell · React SPA") {
+    Boundary(existingFunctions, "EXISTING SHARED FUNCTIONALITY", $tags="existingGroup") {
+      Container(auth, "Authentication &\nAuthorization", "Functional block · Existing", "Identifies the employee and enforces access to B2C capabilities", $tags="existing")
+      Container(session, "Session\nManagement", "Functional block · Existing", "Maintains the authenticated browser session and user context", $tags="existing")
+      Container(push, "Push\nNotifications", "Functional block · Existing", "Registers devices and handles employee push messages", $tags="existing")
+      Container(alerts, "Alerts\nManagement", "Functional block · Existing", "Displays and manages in-application alerts", $tags="existing")
+      Container(composition, "Navigation & Lego\nComposition", "Functional block · Existing", "Loads React Legos and passes trusted employee context", $tags="existing")
+    }
+
+    Boundary(proposedFunctions, "PROPOSED ACCOMMODATION FUNCTIONALITY · REACT MICRO FRONTEND", $tags="newGroup") {
+      Container(destinations, "Destinations &\nSodexo Sites", "Functional block · Proposed", "Lists countries and client sites available to the employee", $tags="new")
+      Container(searchForm, "Accommodation\nSearch Form", "Functional block · Proposed", "Captures destination, dates, guests and accommodation needs", $tags="new")
+      Container(proposals, "Proposals, Sort\n& Filter", "Functional block · Proposed", "Shows policy-eligible accommodation proposals with sorting and filters", $tags="new")
+      Container(mapView, "Map-based\nProposal View", "Functional block · Proposed", "Plots proposals and supports geographic comparison", $tags="new")
+      Container(request, "Selection Confirmation\n& Booking Request", "Functional block · Proposed", "Confirms the selected offer and submits it to the client booking team", $tags="new")
+    }
+  }
 }
 
 System_Ext(existingPlatform, "Existing B2C Platform Services", "Identity and access, session lifecycle, push notifications and alerts APIs", $tags="existing")
 System_Ext(accommodationBff, "Accommodation Booking BFF", "New server-side APIs for destinations, policy-aware search, proposals and booking requests", $tags="new")
 System_Ext(mapPlatform, "Map Platform", "Map tiles and rendering integration; provider and access model to be confirmed", $tags="decision")
 
-Rel(employee, hostShell, "Uses", "HTTPS")
-Rel(hostShell, existingPlatform, "Authenticates users, maintains sessions and exchanges push and alert data", "OIDC / OAuth 2.0 / HTTPS")
-Rel(hostShell, accommodationLego, "Loads and supplies authenticated user context", "Module federation / runtime contract")
-Rel(accommodationLego, accommodationBff, "Loads destinations, searches proposals and submits booking requests", "HTTPS / JSON")
-Rel(accommodationLego, mapPlatform, "Displays proposals on a map", "Map SDK / HTTPS")
-Rel(accommodationBff, bookingTeam, "Routes the confirmed request for review and booking", "Workflow / notification")
+Rel_D(employee, auth, "Signs in and uses", "HTTPS")
+Rel_R(auth, session, "Establishes trusted context")
+Rel_R(session, composition, "Supplies employee context")
+Rel_D(composition, destinations, "Loads the Lego", "Module federation / runtime contract")
 
-Lay_R(employee, hostShell)
-Lay_R(hostShell, accommodationLego)
-Lay_R(accommodationLego, accommodationBff)
+Rel_R(destinations, searchForm, "Selects site")
+Rel_R(searchForm, proposals, "Searches")
+Rel_R(proposals, mapView, "Offers map view")
+Rel_R(proposals, request, "Selects offer")
+
+Rel_D(existingFunctions, existingPlatform, "Uses identity, session, push and alerts services", "OIDC / OAuth 2.0 / HTTPS")
+Rel_D(proposedFunctions, accommodationBff, "Loads destinations, searches policy-eligible stays and submits requests", "HTTPS / JSON")
+Rel_D(mapView, mapPlatform, "Displays proposals", "Map SDK / HTTPS")
+Rel_R(accommodationBff, bookingTeam, "Routes the confirmed request for review and booking", "Workflow / notification")
+
+Lay_R(auth, session)
+Lay_R(session, push)
+Lay_R(push, alerts)
+Lay_R(alerts, composition)
+
+Lay_R(destinations, searchForm)
+Lay_R(searchForm, proposals)
+Lay_R(proposals, mapView)
+Lay_R(mapView, request)
+
+Lay_D(employee, hostShell)
+Lay_D(existingFunctions, proposedFunctions)
 Lay_D(hostShell, existingPlatform)
-Lay_D(accommodationLego, mapPlatform)
-Lay_D(accommodationBff, bookingTeam)
+Lay_R(existingPlatform, accommodationBff)
+Lay_R(accommodationBff, mapPlatform)
+Lay_R(accommodationBff, bookingTeam)
 
 @enduml
