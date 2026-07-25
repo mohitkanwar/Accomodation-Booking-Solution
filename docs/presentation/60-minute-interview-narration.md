@@ -11,6 +11,9 @@ is designed for approximately **50 minutes of presentation and 10 minutes of
 Q&A**. The tone is simple, visual, decisive, and story-led: short sentences,
 deliberate pauses, and one clear idea at a time.
 
+Download the accompanying
+[Sodexo-themed PowerPoint presentation](./assets/Accommodation-Booking-Discovery-Sodexo.pptx).
+
 ## Delivery map
 
 | Time | Section | Message to land |
