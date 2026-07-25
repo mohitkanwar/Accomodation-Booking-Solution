@@ -1,0 +1,13 @@
+{
+  "name": "deck-tooling",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Local-only tooling to generate assets and build the PowerPoint deck. Not part of the Docusaurus site.",
+  "dependencies": {
+    "pptxgenjs": "^4.0.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-icons": "^5.7.0",
+    "sharp": "^0.35.3"
+  }
+}
