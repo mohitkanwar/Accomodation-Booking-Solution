@@ -16,7 +16,16 @@ const sidebars = {
     },
     'presentation/discovery-questions',
     'presentation/data-model',
-    'presentation/api-flow',
+    {
+      type: 'category',
+      label: '4. High-Level API Flow',
+      link: {
+        type: 'doc',
+        id: 'presentation/api-flow',
+      },
+      items: ['presentation/booking-com-integration'],
+      collapsed: false,
+    },
     'presentation/architecture-principles',
     'presentation/next-steps-and-workshops',
   ],

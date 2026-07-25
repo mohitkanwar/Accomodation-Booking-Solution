@@ -1,0 +1,145 @@
+---
+id: booking-com-integration
+title: Booking.com Integration
+sidebar_label: Booking.com Integration
+---
+
+import BookingApiExplorer from '@site/src/components/BookingApiExplorer';
+
+# Booking.com integration
+
+This page documents the Booking.com Demand API v3.2 accommodation collection
+used by the discovery solution. The source of truth remains Booking.com's
+[Accommodation API reference](https://developers.booking.com/demand/docs/open-api/demand-api/accommodations)
+and the current
+[Demand API v3.2 specification](https://developers.booking.com/demand/docs/open-api/3.2/demand-api).
+
+:::important Accommodation discovery is not order creation
+
+The eight `/accommodations` endpoints below support search, availability,
+property content, and reviews. Completing a reservation additionally requires
+the separate `/orders/preview`, `/orders/create`, and order-management
+endpoints. Those calls belong in the controlled server-side booking workflow.
+
+:::
+
+## Recommended integration stance
+
+The employee micro frontend should call the Sodexo BFF, not Booking.com
+directly. The BFF owns authentication, endpoint allow-listing, policy
+enforcement, audit correlation, timeouts, retries, and response normalisation.
+
+| Context | Recommended connection |
+| --- | --- |
+| Docusaurus workshop on a developer machine | Local allow-listed proxy in sandbox mode |
+| Shared discovery environment | HTTPS non-production BFF with sandbox credentials |
+| Production B2C application | Production BFF with secret management and restricted Booking.com permissions |
+| Direct browser mode | Diagnostic sandbox use only; may be blocked by CORS |
+
+Because GitHub Pages is static hosting, it cannot safely store Booking.com
+credentials or provide a server-side proxy. The interactive console therefore
+defaults to a local/BFF endpoint.
+
+## Obtain the API key and affiliate ID
+
+Booking.com requires both credentials on every Demand API request:
+
+```text
+Authorization: Bearer <API_KEY_TOKEN>
+X-Affiliate-Id: <AFFILIATE_ID>
+```
+
+Follow Booking.com's
+[prerequisites](https://developers.booking.com/demand/docs/getting-started/prerequisites)
+and
+[authentication guide](https://developers.booking.com/demand/docs/development-guide/authentication):
+
+1. Register as a Booking.com Managed Affiliate Partner and complete the
+   required partner agreement.
+2. Ask the Booking.com Account Manager to enable Affiliate Partner Centre
+   access where it is not already available.
+3. Sign in to Affiliate Partner Centre with the authorised partner account.
+4. Locate the API user and its affiliate ID. The first affiliate ID is normally
+   created when the partner account is configured.
+5. Generate an API key token for that API user.
+6. Copy the token immediately—it is shown in full only once—and store it in an
+   approved secret manager.
+7. Rotate the key at least annually, and revoke it immediately if compromise is
+   suspected. Booking.com permits two active keys to support rotation.
+
+Never commit a token, embed it in Docusaurus, include it in screenshots, or
+store it in browser local storage.
+
+## Environments and test data
+
+| Environment | Base URL | Purpose |
+| --- | --- | --- |
+| Sandbox | `https://demandapi-sandbox.booking.com/3.2` | Discovery and integration testing |
+| Production | `https://demandapi.booking.com/3.2` | Live inventory and partner traffic |
+
+The [Booking.com sandbox guide](https://developers.booking.com/demand/docs/getting-started/sandbox)
+states that sandbox and production use the same partner credentials. The
+examples in this page use sandbox accommodation `10507360`—Demand API Sandbox
+Hotel Orion—and generate future check-in dates when loaded into the console.
+
+## Available accommodation APIs
+
+All eight operations are HTTPS `POST` requests returning JSON. The review
+endpoints may require explicit rights in the Booking.com partner agreement.
+Each card contains a safe cURL template and can be loaded into the console.
+
+<BookingApiExplorer />
+
+## Run the local credential-hiding proxy
+
+The repository includes an allow-listed development proxy. It accepts only the
+eight accommodation paths shown above and attaches credentials server-side.
+
+From the isolated development worktree:
+
+```bash
+export BOOKING_AFFILIATE_ID='<affiliate-id>'
+read -s BOOKING_API_TOKEN
+export BOOKING_API_TOKEN
+npm run booking-api-proxy
+```
+
+Enter the token when prompted, then use
+`http://localhost:8787/booking-demand` as the console's proxy base URL. The
+default proxy configuration:
+
+- binds only to `127.0.0.1`;
+- targets Booking.com sandbox v3.2;
+- accepts requests from `http://localhost:3000`;
+- limits bodies to 1 MB and upstream calls to 30 seconds;
+- never logs credentials or request bodies.
+
+Optional environment variables:
+
+```text
+BOOKING_API_ENV=production
+BOOKING_PROXY_PORT=8787
+BOOKING_PROXY_ORIGIN=http://localhost:3000
+```
+
+Production must use a hardened BFF rather than this developer helper. The BFF
+should validate its caller, allow-list operations, inject credentials from a
+secret manager, apply rate limits, redact logs, propagate correlation IDs, and
+return the upstream status and JSON body without exposing the token.
+
+## Expected error responses
+
+| Status | Typical meaning | Action |
+| --- | --- | --- |
+| `400` | Invalid body, date, filter, or pagination token | Validate against the selected v3.2 schema |
+| `401` | Missing, invalid, expired, or revoked authentication | Verify the bearer token and affiliate ID |
+| `403` | API user lacks permission for the endpoint | Confirm partner-contract and API-user rights |
+| `404` | Wrong version, base URL, path, or environment | Verify sandbox versus production and `/3.2` |
+| `405` | Unsupported HTTP method | Use `POST` |
+| `406` | Missing acceptable response type | Send `Accept: application/json` |
+| `429` | Rate limit reached | Back off and respect the applicable quota |
+| `5xx` | Booking.com or network failure | Record the request ID, retry safely, and reconcile uncertain outcomes |
+
+Booking.com returns a `request_id` in successful and error responses. Preserve
+it with the internal correlation ID so support and reconciliation can trace the
+same interaction.

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
+    "booking-api-proxy": "node scripts/booking-demand-proxy.mjs",
     "plantuml": "node scripts/generate-plantuml.mjs",
     "prestart": "node scripts/generate-plantuml.mjs",
     "start": "docusaurus start",
