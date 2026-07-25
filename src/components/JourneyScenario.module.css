@@ -1,0 +1,137 @@
+.scenario {
+  margin: 0 0 0.75rem;
+  overflow: hidden;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--sodexo-border);
+  border-radius: 12px;
+}
+
+.scenario:last-child {
+  margin-bottom: 0;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem 0.95rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:focus-visible {
+  outline: 3px solid rgb(43 55 151 / 24%);
+  outline-offset: -3px;
+}
+
+.symbol {
+  display: grid;
+  width: 1.9rem;
+  height: 1.9rem;
+  place-items: center;
+  color: var(--sodexo-blue);
+  font-size: 1rem;
+  font-weight: 800;
+  background: var(--sodexo-blue-pale);
+  border-radius: 50%;
+}
+
+.identity {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.title {
+  color: var(--ifm-heading-color);
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.description {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.toggle {
+  position: relative;
+  width: 1.65rem;
+  height: 1.65rem;
+  background: var(--sodexo-blue-pale);
+  border: 1px solid var(--sodexo-border);
+  border-radius: 50%;
+}
+
+.toggle::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.42rem;
+  height: 0.42rem;
+  content: '';
+  border-right: 2px solid var(--sodexo-blue);
+  border-bottom: 2px solid var(--sodexo-blue);
+  transform: translate(-50%, -68%) rotate(45deg);
+  transition: transform 160ms ease;
+}
+
+.scenario[open] {
+  border-color: rgb(43 55 151 / 45%);
+}
+
+.scenario[open] .symbol,
+.scenario[open] .toggle {
+  color: #fff;
+  background: var(--sodexo-red);
+  border-color: var(--sodexo-red);
+}
+
+.scenario[open] .toggle::before {
+  border-color: #fff;
+  transform: translate(-50%, -32%) rotate(225deg);
+}
+
+.steps {
+  padding: 0.9rem 1rem 1rem 3.6rem;
+  background: rgb(245 246 252 / 72%);
+  border-top: 1px solid var(--sodexo-border);
+}
+
+.steps > :last-child {
+  margin-bottom: 0;
+}
+
+[data-theme='dark'] .scenario {
+  background: var(--ifm-background-surface-color);
+}
+
+[data-theme='dark'] .steps {
+  background: rgb(32 42 120 / 15%);
+}
+
+@media (max-width: 576px) {
+  .summary {
+    gap: 0.6rem;
+    padding: 0.8rem;
+  }
+
+  .description {
+    font-size: 0.78rem;
+  }
+
+  .steps {
+    padding: 0.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle::before {
+    transition: none;
+  }
+}

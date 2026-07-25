@@ -20,7 +20,7 @@ export default function ExpandableRoleCard({
       </summary>
 
       <div className={styles.expanded}>
-        <p className={styles.eyebrow}>Associated user journey</p>
+        <p className={styles.eyebrow}>Associated user journeys</p>
         <div className={styles.journey}>{children}</div>
       </div>
     </details>
