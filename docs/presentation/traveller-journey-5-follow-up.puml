@@ -1,0 +1,13 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Traveller Journey 5 · Follow Up on an Unapproved Request
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+start
+:Open a pending request;
+:Send a follow-up reminder;
+:Approver is notified; <<#DDF2E9>>
+stop
+
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Traveller Journey 1 · Select Accommodation
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+start
+:Log in through the\nexisting Sodexo B2C application;
+:Search for available accommodation;
+:Select an option;
+:Submit for approval; <<#DDF2E9>>
+stop
+
+@enduml

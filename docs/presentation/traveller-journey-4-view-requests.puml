@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Traveller Journey 4 · View Requests
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+start
+:Open my requests;
+:View the list of\nsubmitted requests;
+:Select a request;
+:View request status and details; <<#DDF2E9>>
+stop
+
+@enduml

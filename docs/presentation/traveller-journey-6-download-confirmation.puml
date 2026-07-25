@@ -1,0 +1,16 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Traveller Journey 6 · Download or Email the Confirmation Letter
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+start
+:Open a confirmed booking;
+if (Download or email?) then (download)
+  :Download the confirmation letter; <<#DDF2E9>>
+else (email)
+  :Email the confirmation letter; <<#DDF2E9>>
+endif
+stop
+
+@enduml

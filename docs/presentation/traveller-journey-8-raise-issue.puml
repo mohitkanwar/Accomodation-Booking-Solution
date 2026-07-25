@@ -1,0 +1,14 @@
+@startuml
+!include ../../plantuml/sodexo-theme.puml
+
+title Traveller Journey 8 · Raise a Booking Issue
+footer (c) Developed by <b>Mohit Kanwar</b>
+
+start
+:Open a booking;
+:Select raise an issue;
+:Describe the issue;
+:Submit the issue to support; <<#DDF2E9>>
+stop
+
+@enduml
