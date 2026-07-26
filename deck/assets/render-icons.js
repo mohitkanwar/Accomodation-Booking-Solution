@@ -45,6 +45,10 @@ const icons = {
   clipboard: 'FiClipboard',
   cpu: 'FiCpu',
   zap: 'FiZap',
+  xCircle: 'FiXCircle',
+  download: 'FiDownload',
+  phone: 'FiPhone',
+  logIn: 'FiLogIn',
 };
 
 async function run() {

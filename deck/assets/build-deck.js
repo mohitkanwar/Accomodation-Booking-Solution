@@ -68,7 +68,7 @@ function addHeader(slide, kicker, title, opts) {
     fontFace: FONT_BODY,
     fontSize: 12,
     bold: true,
-    color: dark ? C.blueLight : C.red,
+    color: dark ? C.blueLight : C.blue,
     charSpacing: 2,
     margin: 0,
   });
@@ -342,7 +342,7 @@ function addBulletBlock(slide, x, y, w, h, heading, items, opts) {
     w: 2.55,
     h: 0.5,
     rectRadius: 0.25,
-    fill: { color: C.red },
+    fill: { color: C.blueDark },
     line: { type: 'none' },
   });
   slide.addText('60-minute session', {
@@ -429,7 +429,7 @@ function addBulletBlock(slide, x, y, w, h, heading, items, opts) {
     fontFace: FONT_BODY,
     fontSize: 13,
     bold: true,
-    color: C.red,
+    color: C.blue,
     charSpacing: 1.5,
     margin: 0,
   });
@@ -443,7 +443,7 @@ function addBulletBlock(slide, x, y, w, h, heading, items, opts) {
   const cw = (PAGE_W - MARGIN * 2 - 0.45 * 3) / 4;
   outcomes.forEach((o, i) => {
     const x = MARGIN + i * (cw + 0.45);
-    addCard(slide, x, 3.8, cw, 2.9, o[0], o[1], o[2], i % 2 === 0 ? C.blue : C.red);
+    addCard(slide, x, 3.8, cw, 2.9, o[0], o[1], o[2], i % 2 === 0 ? C.blue : C.blueDark);
   });
 
   footer(slide, nextPage());
@@ -486,7 +486,7 @@ function addBulletBlock(slide, x, y, w, h, heading, items, opts) {
       y,
       w: 0.44,
       h: 0.44,
-      fill: { color: isLast ? C.red : C.blue },
+      fill: { color: isLast ? C.blueDark : C.blue },
       line: { type: 'none' },
     });
     slide.addText(String(i + 1), {
@@ -578,7 +578,7 @@ function sectionDivider(num, title, minutes, iconName) {
     color: C.blueDark,
     margin: 0,
   });
-  addIconCircle(slide, MARGIN + 4.55, 3.28, 1.05, C.red, iconName, 0.5);
+  addIconCircle(slide, MARGIN + 4.55, 3.28, 1.05, C.blueDark, iconName, 0.5);
   slide.addText(title, {
     x: MARGIN + 5.25,
     y: 2.75,
@@ -642,7 +642,7 @@ sectionDivider('01', 'Context and Understanding', '5 minutes', 'compass');
     const row = Math.floor(i / 2);
     const x = MARGIN + col * (colW + 0.4);
     const y = 2.35 + row * 1.35;
-    addIconCircle(slide, x + 0.3, y + 0.32, 0.56, col === 0 ? C.blue : C.red, it[0], 0.5);
+    addIconCircle(slide, x + 0.3, y + 0.32, 0.56, col === 0 ? C.blue : C.blueDark, it[0], 0.5);
     slide.addText(it[1], {
       x: x + 0.7,
       y: y,
@@ -708,7 +708,7 @@ sectionDivider('01', 'Context and Understanding', '5 minutes', 'compass');
     },
     {
       label: 'SODEXO',
-      color: C.red,
+      color: C.blueDark,
       roles: [
         ['briefcase', 'Booking Operator', 'Validates requests, creates the reservation'],
         ['shield', 'Sodexo Administrator', 'Manages tenants, integrations, reporting'],
@@ -716,7 +716,7 @@ sectionDivider('01', 'Context and Understanding', '5 minutes', 'compass');
     },
     {
       label: 'SUPPLIER CORPORATION',
-      color: C.success,
+      color: C.red,
       roles: [
         ['home', 'Accommodation Provider Agent', 'Fulfils reservations, manages content'],
       ],
@@ -798,6 +798,176 @@ sectionDivider('01', 'Context and Understanding', '5 minutes', 'compass');
 
     gx += gw + 0.4;
   });
+
+  footer(slide, nextPage());
+})();
+
+(function travellerJourneyMap() {
+  const slide = newSlide(C.white);
+  addHeader(slide, 'Section 1 · Context and understanding', 'Traveller journey, combined');
+
+  slide.addText('All eight traveller journeys, in one map — the primary path plus every supporting action available at each stage.', {
+    x: MARGIN,
+    y: 1.55,
+    w: PAGE_W - MARGIN * 2,
+    h: 0.4,
+    fontFace: FONT_BODY,
+    fontSize: 12.5,
+    color: C.muted,
+    margin: 0,
+  });
+
+  // ---- Spine: the primary path ----
+  const spine = [
+    ['logIn', 'Sign in & search', C.blue],
+    ['arrowRight', 'Submit request', C.blue],
+    ['clock', 'Awaiting approval', C.blueDark],
+    ['checkCircle', 'Confirmed & booked', C.success],
+  ];
+  const spineY = 1.75;
+  const spineH = 0.95;
+  const spineGap = 0.32;
+  const spineW = (PAGE_W - MARGIN * 2 - spineGap * (spine.length - 1)) / spine.length;
+
+  function milestone(i) {
+    return MARGIN + i * (spineW + spineGap);
+  }
+
+  spine.forEach((s, i) => {
+    const x = milestone(i);
+    slide.addShape(pres.ShapeType.roundRect, {
+      x,
+      y: spineY,
+      w: spineW,
+      h: spineH,
+      rectRadius: 0.1,
+      fill: { color: s[2] },
+      line: { type: 'none' },
+    });
+    const iconD = 0.42;
+    slide.addImage({
+      path: icon(s[0]),
+      x: x + 0.22,
+      y: spineY + spineH / 2 - iconD / 2,
+      w: iconD,
+      h: iconD,
+    });
+    slide.addText(s[1], {
+      x: x + 0.22 + iconD + 0.12,
+      y: spineY,
+      w: spineW - (0.22 + iconD + 0.12) - 0.15,
+      h: spineH,
+      fontFace: FONT_BODY,
+      fontSize: 12.5,
+      bold: true,
+      color: C.white,
+      valign: 'middle',
+      margin: 0,
+      lineSpacingMultiple: 1.05,
+    });
+    if (i < spine.length - 1) {
+      slide.addShape(pres.ShapeType.rightArrow, {
+        x: x + spineW + 0.02,
+        y: spineY + spineH / 2 - 0.11,
+        w: spineGap - 0.04,
+        h: 0.22,
+        fill: { color: C.border },
+        line: { type: 'none' },
+      });
+    }
+  });
+
+  /** A short connector dropping from a spine milestone down to its action cluster. */
+  function dropConnector(spineIndex, toY) {
+    const x = milestone(spineIndex) + spineW / 2;
+    slide.addShape(pres.ShapeType.line, {
+      x,
+      y: spineY + spineH,
+      w: 0,
+      h: toY - (spineY + spineH),
+      line: { color: C.border, width: 2, dashType: 'dash' },
+    });
+  }
+
+  /** A row of action chips, evenly spread, each with an icon, label, and note. */
+  function actionRow(y, items, chipColor) {
+    const gap = 0.3;
+    const w = (PAGE_W - MARGIN * 2 - gap * (items.length - 1)) / items.length;
+    const h = 1.15;
+    items.forEach((it, i) => {
+      const x = MARGIN + i * (w + gap);
+      slide.addShape(pres.ShapeType.roundRect, {
+        x,
+        y,
+        w,
+        h,
+        rectRadius: 0.08,
+        fill: { color: C.bluePale },
+        line: { type: 'none' },
+      });
+      addIconCircle(slide, x + w / 2, y + 0.34, 0.48, it[2] || chipColor, it[0], 0.5);
+      slide.addText(it[1], {
+        x: x + 0.12,
+        y: y + 0.62,
+        w: w - 0.24,
+        h: h - 0.7,
+        fontFace: FONT_BODY,
+        fontSize: 10.5,
+        bold: true,
+        color: C.ink,
+        align: 'center',
+        valign: 'top',
+        margin: 0,
+        lineSpacingMultiple: 1.05,
+      });
+    });
+    return { w, gap };
+  }
+
+  // ---- While awaiting approval ----
+  const approvalLabelY = 2.98;
+  dropConnector(2, approvalLabelY - 0.05);
+  slide.addText('WHILE AWAITING APPROVAL, THE TRAVELLER CAN', {
+    x: MARGIN,
+    y: approvalLabelY,
+    w: PAGE_W - MARGIN * 2,
+    h: 0.3,
+    fontFace: FONT_BODY,
+    fontSize: 11,
+    bold: true,
+    color: C.blueDark,
+    charSpacing: 1,
+    align: 'center',
+    margin: 0,
+  });
+  actionRow(3.35, [
+    ['eye', 'View request status & details'],
+    ['fileText', 'Edit destination, dates, or requirements'],
+    ['messageSquare', 'Send a follow-up reminder'],
+    ['xCircle', 'Cancel the request', C.warning],
+  ], C.blue);
+
+  // ---- Once confirmed ----
+  const confirmedLabelY = 4.85;
+  dropConnector(3, confirmedLabelY - 0.05);
+  slide.addText('ONCE CONFIRMED, THE TRAVELLER CAN', {
+    x: MARGIN,
+    y: confirmedLabelY,
+    w: PAGE_W - MARGIN * 2,
+    h: 0.3,
+    fontFace: FONT_BODY,
+    fontSize: 11,
+    bold: true,
+    color: C.success,
+    charSpacing: 1,
+    align: 'center',
+    margin: 0,
+  });
+  actionRow(5.22, [
+    ['download', 'Download or email the confirmation letter'],
+    ['phone', 'View accommodation contact details'],
+    ['alertTriangle', 'Raise a booking issue', C.warning],
+  ], C.success);
 
   footer(slide, nextPage());
 })();
@@ -1081,7 +1251,7 @@ questionsSlide(
     'What price change after approval requires renewed consent?',
     'How are policies versioned, dated, overridden, and audited?',
   ],
-  C.red
+  C.warning
 );
 
 questionsSlide(
@@ -1246,7 +1416,7 @@ sectionDivider('03', 'Initial Data Model', '10 minutes', 'database');
     },
     {
       title: 'Request & booking',
-      color: C.red,
+      color: C.blueDark,
       icon: 'gitBranch',
       items: ['Booking Request', 'Approval', 'Supplier Booking', 'Audit Event', 'Outbox Event'],
     },
@@ -1323,7 +1493,7 @@ sectionDivider('03', 'Initial Data Model', '10 minutes', 'database');
 
   const groups = [
     { title: 'Client & Organisation', color: C.blue, items: ['CorporateClient', 'CorporateLocations', 'CorporateUserRoles', 'CorporateApprovalPolicy', 'CorporatePriceRange', 'ApproverAssignment'] },
-    { title: 'Traveller, Request & Approval', color: C.red, items: ['TravellerDetails', 'AccommodationRequest', 'OfferSnapshot', 'PolicySnapshot', 'ClarificationThread', 'ApprovalDecision'] },
+    { title: 'Traveller, Request & Approval', color: C.blueDark, items: ['TravellerDetails', 'AccommodationRequest', 'OfferSnapshot', 'PolicySnapshot', 'ClarificationThread', 'ApprovalDecision'] },
     { title: 'Booking & Supplier', color: C.success, items: ['SupplierBooking', 'BookingChangeRequest', 'IdempotencyRecord', 'SupplierCorporation', 'SupplierIntegrationConfig'] },
     { title: 'Financial', color: C.warning, items: ['Invoice', 'BillValidation', 'PaymentInstruction', 'ReconciliationException'] },
     { title: 'Platform & Administration', color: C.blueDark, items: ['PlatformAccessGrant', 'SupportCase'] },
@@ -1414,7 +1584,7 @@ sectionDivider('04', 'High-Level API Flow', '10 minutes', 'refreshCw');
     {
       icon: 'userCheck',
       title: 'B · Request and decision',
-      color: C.red,
+      color: C.blueDark,
       items: ['Recheck offer and policy; snapshot both', 'Notify the operator via the outbox', 'Operator approves, rejects, or clarifies', 'Persist the decision and audit event'],
     },
     {
@@ -1498,7 +1668,7 @@ sectionDivider('04', 'High-Level API Flow', '10 minutes', 'refreshCw');
   const cw = (PAGE_W - MARGIN * 2 - 0.4 * 3) / 4;
   items.forEach((it, i) => {
     const x = MARGIN + i * (cw + 0.4);
-    addCard(slide, x, 2.0, cw, 3.9, it[0], it[1], it[2], i % 2 === 0 ? C.blue : C.red);
+    addCard(slide, x, 2.0, cw, 3.9, it[0], it[1], it[2], i % 2 === 0 ? C.blue : C.blueDark);
   });
 
   slide.addShape(pres.ShapeType.roundRect, {
@@ -1555,7 +1725,7 @@ sectionDivider('05', 'Architecture Principles', '8 minutes', 'layers');
     const row = Math.floor(i / 2);
     const x = MARGIN + col * (colW + 0.4);
     const y = 1.75 + row * rowH;
-    addIconCircle(slide, x + 0.28, y + 0.32, 0.42, col === 0 ? C.blue : C.red, 'checkCircle', 0.5);
+    addIconCircle(slide, x + 0.28, y + 0.32, 0.42, col === 0 ? C.blue : C.blueDark, 'checkCircle', 0.5);
     slide.addText(
       [
         { text: p[0], options: { bold: true, fontSize: 12.5, color: C.ink, breakLine: true } },
@@ -1654,7 +1824,7 @@ sectionDivider('05', 'Architecture Principles', '8 minutes', 'layers');
       fill: { color: C.bluePale },
       line: { type: 'none' },
     });
-    addIconCircle(slide, x + cw / 2, y + 0.42, 0.5, row === 0 ? C.blue : C.red, n[0], 0.5);
+    addIconCircle(slide, x + cw / 2, y + 0.42, 0.5, row === 0 ? C.blue : C.blueDark, n[0], 0.5);
     slide.addText(n[1], {
       x: x + 0.06,
       y: y + 0.78,
@@ -1717,7 +1887,7 @@ sectionDivider('06', 'Next Steps and Workshops', '5 minutes', 'trendingUp');
       w: 0.36,
       h: 0.36,
       rectRadius: 0.18,
-      fill: { color: (row + col) % 2 === 0 ? C.blue : C.red },
+      fill: { color: (row + col) % 2 === 0 ? C.blue : C.blueDark },
       line: { type: 'none' },
     });
     slide.addText(String(i + 1), {
@@ -1833,7 +2003,7 @@ sectionDivider('06', 'Next Steps and Workshops', '5 minutes', 'trendingUp');
       fontFace: FONT_BODY,
       fontSize: 11,
       bold: true,
-      color: C.red,
+      color: C.blueDark,
       charSpacing: 1.5,
       margin: 0,
     });
@@ -1955,7 +2125,7 @@ sectionDivider('07', 'Q&A and Decision Recap', '10 minutes', 'messageSquare');
     line: { type: 'none' },
   });
 
-  addIconCircle(slide, PAGE_W / 2, 2.5, 1.3, C.red, 'messageSquare', 0.5);
+  addIconCircle(slide, PAGE_W / 2, 2.5, 1.3, C.blueDark, 'messageSquare', 0.5);
   slide.addText('Thank you', {
     x: 0,
     y: 3.3,
