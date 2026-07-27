@@ -221,6 +221,271 @@ function addBulletBlock(slide, x, y, w, h, heading, items, opts) {
   });
 }
 
+/**
+ * A "combined journey" slide: a horizontal spine of primary-path milestones,
+ * with one or more labeled clusters of supporting-action chips dropping from
+ * specific spine milestones. Used to summarize many small journey diagrams
+ * (which don't fit individually on a slide) into a single map.
+ *
+ * spine: array of [iconName, label, fillColor]
+ * clusters: array of { label, labelColor, fromSpineIndex, labelY, rowY, items, chipColor }
+ *   items: array of [iconName, label, chipColorOverride?]
+ */
+function lifecycleJourneySlide(kicker, title, intro, spine, clusters) {
+  const slide = newSlide(C.white);
+  addHeader(slide, kicker, title);
+
+  slide.addText(intro, {
+    x: MARGIN,
+    y: 1.55,
+    w: PAGE_W - MARGIN * 2,
+    h: 0.4,
+    fontFace: FONT_BODY,
+    fontSize: 12.5,
+    color: C.muted,
+    margin: 0,
+  });
+
+  const spineY = 1.75;
+  const spineH = 0.95;
+  const spineGap = 0.32;
+  const spineW = (PAGE_W - MARGIN * 2 - spineGap * (spine.length - 1)) / spine.length;
+
+  function milestoneX(i) {
+    return MARGIN + i * (spineW + spineGap);
+  }
+
+  spine.forEach((s, i) => {
+    const x = milestoneX(i);
+    slide.addShape(pres.ShapeType.roundRect, {
+      x,
+      y: spineY,
+      w: spineW,
+      h: spineH,
+      rectRadius: 0.1,
+      fill: { color: s[2] },
+      line: { type: 'none' },
+    });
+    const iconD = 0.42;
+    slide.addImage({
+      path: icon(s[0]),
+      x: x + 0.22,
+      y: spineY + spineH / 2 - iconD / 2,
+      w: iconD,
+      h: iconD,
+    });
+    slide.addText(s[1], {
+      x: x + 0.22 + iconD + 0.12,
+      y: spineY,
+      w: spineW - (0.22 + iconD + 0.12) - 0.15,
+      h: spineH,
+      fontFace: FONT_BODY,
+      fontSize: 12.5,
+      bold: true,
+      color: C.white,
+      valign: 'middle',
+      margin: 0,
+      lineSpacingMultiple: 1.05,
+    });
+    if (i < spine.length - 1) {
+      slide.addShape(pres.ShapeType.rightArrow, {
+        x: x + spineW + 0.02,
+        y: spineY + spineH / 2 - 0.11,
+        w: spineGap - 0.04,
+        h: 0.22,
+        fill: { color: C.border },
+        line: { type: 'none' },
+      });
+    }
+  });
+
+  function dropConnector(spineIndex, toY) {
+    const x = milestoneX(spineIndex) + spineW / 2;
+    slide.addShape(pres.ShapeType.line, {
+      x,
+      y: spineY + spineH,
+      w: 0,
+      h: toY - (spineY + spineH),
+      line: { color: C.border, width: 2, dashType: 'dash' },
+    });
+  }
+
+  function actionRow(y, items, chipColor) {
+    const gap = 0.3;
+    const w = (PAGE_W - MARGIN * 2 - gap * (items.length - 1)) / items.length;
+    const h = 1.15;
+    items.forEach((it, i) => {
+      const x = MARGIN + i * (w + gap);
+      slide.addShape(pres.ShapeType.roundRect, {
+        x,
+        y,
+        w,
+        h,
+        rectRadius: 0.08,
+        fill: { color: C.bluePale },
+        line: { type: 'none' },
+      });
+      addIconCircle(slide, x + w / 2, y + 0.34, 0.48, it[2] || chipColor, it[0], 0.5);
+      slide.addText(it[1], {
+        x: x + 0.12,
+        y: y + 0.62,
+        w: w - 0.24,
+        h: h - 0.7,
+        fontFace: FONT_BODY,
+        fontSize: 10.5,
+        bold: true,
+        color: C.ink,
+        align: 'center',
+        valign: 'top',
+        margin: 0,
+        lineSpacingMultiple: 1.05,
+      });
+    });
+  }
+
+  clusters.forEach((cl) => {
+    dropConnector(cl.fromSpineIndex, cl.labelY - 0.05);
+    slide.addText(cl.label, {
+      x: MARGIN,
+      y: cl.labelY,
+      w: PAGE_W - MARGIN * 2,
+      h: 0.3,
+      fontFace: FONT_BODY,
+      fontSize: 11,
+      bold: true,
+      color: cl.labelColor || C.blueDark,
+      charSpacing: 1,
+      align: 'center',
+      margin: 0,
+    });
+    actionRow(cl.rowY, cl.items, cl.chipColor);
+  });
+
+  footer(slide, nextPage());
+  return slide;
+}
+
+/**
+ * A "capability map" slide: a single hub node with two clusters of related
+ * capabilities laid out side by side beneath it. Used for roles whose
+ * documented scenarios are independent, ongoing capabilities rather than one
+ * sequential journey.
+ *
+ * hub: [iconName, label, fillColor]
+ * clusterA / clusterB: { label, labelColor, chipColor, items: [[iconName, label]] }
+ */
+function capabilityMapSlide(kicker, title, intro, hub, clusterA, clusterB) {
+  const slide = newSlide(C.white);
+  addHeader(slide, kicker, title);
+
+  slide.addText(intro, {
+    x: MARGIN,
+    y: 1.55,
+    w: PAGE_W - MARGIN * 2,
+    h: 0.4,
+    fontFace: FONT_BODY,
+    fontSize: 12.5,
+    color: C.muted,
+    margin: 0,
+  });
+
+  const hubW = 4.4;
+  const hubH = 0.85;
+  const hubX = (PAGE_W - hubW) / 2;
+  const hubY = 2.0;
+  slide.addShape(pres.ShapeType.roundRect, {
+    x: hubX,
+    y: hubY,
+    w: hubW,
+    h: hubH,
+    rectRadius: 0.1,
+    fill: { color: hub[2] },
+    line: { type: 'none' },
+  });
+  const iconD = 0.44;
+  slide.addImage({
+    path: icon(hub[0]),
+    x: hubX + 0.28,
+    y: hubY + hubH / 2 - iconD / 2,
+    w: iconD,
+    h: iconD,
+  });
+  slide.addText(hub[1], {
+    x: hubX + 0.28 + iconD + 0.15,
+    y: hubY,
+    w: hubW - (0.28 + iconD + 0.15) - 0.2,
+    h: hubH,
+    fontFace: FONT_BODY,
+    fontSize: 14,
+    bold: true,
+    color: C.white,
+    valign: 'middle',
+    margin: 0,
+  });
+
+  const half = (PAGE_W - MARGIN * 2 - 0.5) / 2;
+  const clusterY = 3.35;
+  const clusterH = 3.35;
+
+  function connector(toX) {
+    slide.addShape(pres.ShapeType.line, {
+      x: PAGE_W / 2,
+      y: hubY + hubH,
+      w: toX - PAGE_W / 2,
+      h: clusterY - (hubY + hubH),
+      line: { color: C.border, width: 2, dashType: 'dash' },
+    });
+  }
+
+  function cluster(x, cl) {
+    connector(x + half / 2);
+    slide.addShape(pres.ShapeType.roundRect, {
+      x,
+      y: clusterY,
+      w: half,
+      h: clusterH,
+      rectRadius: 0.1,
+      fill: { color: C.bluePale },
+      line: { type: 'none' },
+    });
+    slide.addText(cl.label, {
+      x: x + 0.3,
+      y: clusterY + 0.2,
+      w: half - 0.6,
+      h: 0.4,
+      fontFace: FONT_BODY,
+      fontSize: 12.5,
+      bold: true,
+      color: cl.labelColor || C.blueDark,
+      charSpacing: 0.5,
+      margin: 0,
+    });
+    const itemH = (clusterH - 0.75) / cl.items.length;
+    cl.items.forEach((it, i) => {
+      const y = clusterY + 0.7 + i * itemH;
+      addIconCircle(slide, x + 0.55, y + itemH / 2 - 0.02, 0.42, cl.chipColor || C.blue, it[0], 0.5);
+      slide.addText(it[1], {
+        x: x + 0.92,
+        y,
+        w: half - 1.2,
+        h: itemH,
+        fontFace: FONT_BODY,
+        fontSize: 12,
+        color: C.ink,
+        valign: 'middle',
+        margin: 0,
+        lineSpacingMultiple: 1.05,
+      });
+    });
+  }
+
+  cluster(MARGIN, clusterA);
+  cluster(MARGIN + half + 0.5, clusterB);
+
+  footer(slide, nextPage());
+  return slide;
+}
+
 // ---------------------------------------------------------------------------
 // 1. TITLE
 // ---------------------------------------------------------------------------
@@ -802,175 +1067,204 @@ sectionDivider('01', 'Context and Understanding', '5 minutes', 'compass');
   footer(slide, nextPage());
 })();
 
-(function travellerJourneyMap() {
-  const slide = newSlide(C.white);
-  addHeader(slide, 'Section 1 · Context and understanding', 'Traveller journey, combined');
-
-  slide.addText('All eight traveller journeys, in one map — the primary path plus every supporting action available at each stage.', {
-    x: MARGIN,
-    y: 1.55,
-    w: PAGE_W - MARGIN * 2,
-    h: 0.4,
-    fontFace: FONT_BODY,
-    fontSize: 12.5,
-    color: C.muted,
-    margin: 0,
-  });
-
-  // ---- Spine: the primary path ----
-  const spine = [
+lifecycleJourneySlide(
+  'Section 1 · Context and understanding',
+  'Traveller journey, combined',
+  'All eight traveller journeys, in one map — the primary path plus every supporting action available at each stage.',
+  [
     ['logIn', 'Sign in & search', C.blue],
     ['arrowRight', 'Submit request', C.blue],
     ['clock', 'Awaiting approval', C.blueDark],
     ['checkCircle', 'Confirmed & booked', C.success],
-  ];
-  const spineY = 1.75;
-  const spineH = 0.95;
-  const spineGap = 0.32;
-  const spineW = (PAGE_W - MARGIN * 2 - spineGap * (spine.length - 1)) / spine.length;
+  ],
+  [
+    {
+      label: 'WHILE AWAITING APPROVAL, THE TRAVELLER CAN',
+      labelColor: C.blueDark,
+      fromSpineIndex: 2,
+      labelY: 2.98,
+      rowY: 3.35,
+      chipColor: C.blue,
+      items: [
+        ['eye', 'View request status & details'],
+        ['fileText', 'Edit destination, dates, or requirements'],
+        ['messageSquare', 'Send a follow-up reminder'],
+        ['xCircle', 'Cancel the request', C.warning],
+      ],
+    },
+    {
+      label: 'ONCE CONFIRMED, THE TRAVELLER CAN',
+      labelColor: C.success,
+      fromSpineIndex: 3,
+      labelY: 4.85,
+      rowY: 5.22,
+      chipColor: C.success,
+      items: [
+        ['download', 'Download or email the confirmation letter'],
+        ['phone', 'View accommodation contact details'],
+        ['alertTriangle', 'Raise a booking issue', C.warning],
+      ],
+    },
+  ]
+);
 
-  function milestone(i) {
-    return MARGIN + i * (spineW + spineGap);
+lifecycleJourneySlide(
+  'Section 1 · Context and understanding',
+  'Approver journey, combined',
+  'All six approver journeys, in one map — manage the queue, review the request, then decide.',
+  [
+    ['clipboard', 'Manage approval queue', C.blue],
+    ['eye', 'Review request & policy', C.blue],
+    ['gitBranch', 'Decide', C.blueDark],
+  ],
+  [
+    {
+      label: 'THE APPROVER CAN THEN',
+      labelColor: C.blueDark,
+      fromSpineIndex: 2,
+      labelY: 3.05,
+      rowY: 3.45,
+      chipColor: C.blue,
+      items: [
+        ['checkCircle', 'Approve the request', C.success],
+        ['xCircle', 'Reject the request', C.warning],
+        ['messageSquare', 'Seek clarification'],
+        ['refreshCw', 'Reassess a changed offer'],
+      ],
+    },
+  ]
+);
+
+lifecycleJourneySlide(
+  'Section 1 · Context and understanding',
+  'Booking Operator journey, combined',
+  'All seven booking operator journeys, in one map — manage the queue, validate and create the booking, then handle what follows.',
+  [
+    ['clipboard', 'Manage booking queue', C.blue],
+    ['checkCircle', 'Validate & create booking', C.blue],
+    ['home', 'Reservation confirmed', C.success],
+  ],
+  [
+    {
+      label: 'WHEN SOMETHING CHANGES DURING BOOKING',
+      labelColor: C.blueDark,
+      fromSpineIndex: 1,
+      labelY: 2.98,
+      rowY: 3.35,
+      chipColor: C.blue,
+      items: [
+        ['refreshCw', 'Handle a changed price or offer'],
+        ['alertTriangle', 'Resolve a failed or uncertain booking', C.warning],
+      ],
+    },
+    {
+      label: 'ADDITIONAL OPERATOR RESPONSIBILITIES',
+      labelColor: C.success,
+      fromSpineIndex: 2,
+      labelY: 4.85,
+      rowY: 5.22,
+      chipColor: C.success,
+      items: [
+        ['fileText', 'Amend or cancel a reservation'],
+        ['helpCircle', 'Investigate a booking issue', C.warning],
+        ['userCheck', 'Create a request on behalf of a traveller'],
+      ],
+    },
+  ]
+);
+
+lifecycleJourneySlide(
+  'Section 1 · Context and understanding',
+  'Accommodation Provider Agent journey, combined',
+  'All six provider agent journeys, in one map — configure the property, fulfil the stay, then follow through.',
+  [
+    ['settings', 'Manage configuration', C.blue],
+    ['home', 'Receive & fulfil reservation', C.blue],
+    ['checkCircle', 'Stay complete', C.success],
+  ],
+  [
+    {
+      label: 'DURING THE STAY',
+      labelColor: C.blueDark,
+      fromSpineIndex: 1,
+      labelY: 2.98,
+      rowY: 3.35,
+      chipColor: C.blue,
+      items: [
+        ['fileText', 'Process an amendment or cancellation'],
+        ['helpCircle', 'Provide booking support', C.warning],
+      ],
+    },
+    {
+      label: 'AFTER THE STAY',
+      labelColor: C.success,
+      fromSpineIndex: 2,
+      labelY: 4.85,
+      rowY: 5.22,
+      chipColor: C.success,
+      items: [
+        ['dollarSign', 'Provide invoices & settlement information'],
+        ['refreshCw', 'Resolve a reconciliation discrepancy'],
+      ],
+    },
+  ]
+);
+
+capabilityMapSlide(
+  'Section 1 · Context and understanding',
+  'Corporate Administrator capabilities, combined',
+  'All seven corporate administrator journeys, in one map — grouped by what they manage, not a single sequence.',
+  ['settings', 'Corporate Administrator', C.blueDark],
+  {
+    label: 'POLICY & ACCESS CONFIGURATION',
+    labelColor: C.blueDark,
+    chipColor: C.blue,
+    items: [
+      ['clipboard', 'Manage travel policies'],
+      ['users', 'Manage corporate roles & assignments'],
+      ['mapPin', 'Manage destinations & corporate sites'],
+      ['dollarSign', 'Manage price ranges & exceptions'],
+    ],
+  },
+  {
+    label: 'BILLING & REPORTING',
+    labelColor: C.success,
+    chipColor: C.success,
+    items: [
+      ['fileText', 'Validate accommodation bills'],
+      ['checkCircle', 'Approve and make payments'],
+      ['barChart', 'Review spend, compliance & audit reports'],
+    ],
   }
+);
 
-  spine.forEach((s, i) => {
-    const x = milestone(i);
-    slide.addShape(pres.ShapeType.roundRect, {
-      x,
-      y: spineY,
-      w: spineW,
-      h: spineH,
-      rectRadius: 0.1,
-      fill: { color: s[2] },
-      line: { type: 'none' },
-    });
-    const iconD = 0.42;
-    slide.addImage({
-      path: icon(s[0]),
-      x: x + 0.22,
-      y: spineY + spineH / 2 - iconD / 2,
-      w: iconD,
-      h: iconD,
-    });
-    slide.addText(s[1], {
-      x: x + 0.22 + iconD + 0.12,
-      y: spineY,
-      w: spineW - (0.22 + iconD + 0.12) - 0.15,
-      h: spineH,
-      fontFace: FONT_BODY,
-      fontSize: 12.5,
-      bold: true,
-      color: C.white,
-      valign: 'middle',
-      margin: 0,
-      lineSpacingMultiple: 1.05,
-    });
-    if (i < spine.length - 1) {
-      slide.addShape(pres.ShapeType.rightArrow, {
-        x: x + spineW + 0.02,
-        y: spineY + spineH / 2 - 0.11,
-        w: spineGap - 0.04,
-        h: 0.22,
-        fill: { color: C.border },
-        line: { type: 'none' },
-      });
-    }
-  });
-
-  /** A short connector dropping from a spine milestone down to its action cluster. */
-  function dropConnector(spineIndex, toY) {
-    const x = milestone(spineIndex) + spineW / 2;
-    slide.addShape(pres.ShapeType.line, {
-      x,
-      y: spineY + spineH,
-      w: 0,
-      h: toY - (spineY + spineH),
-      line: { color: C.border, width: 2, dashType: 'dash' },
-    });
+capabilityMapSlide(
+  'Section 1 · Context and understanding',
+  'Sodexo Administrator capabilities, combined',
+  'All seven Sodexo administrator journeys, in one map — grouped by what they manage, not a single sequence.',
+  ['shield', 'Sodexo Administrator', C.blueDark],
+  {
+    label: 'SET UP & CONFIGURE',
+    labelColor: C.blueDark,
+    chipColor: C.blue,
+    items: [
+      ['flag', 'Onboard a corporate tenant'],
+      ['lock', 'Manage platform roles & access'],
+      ['link', 'Configure supplier integrations'],
+    ],
+  },
+  {
+    label: 'OPERATE & SUPPORT',
+    labelColor: C.success,
+    chipColor: C.success,
+    items: [
+      ['eye', 'Monitor booking & approval operations'],
+      ['refreshCw', 'Resolve reconciliation exceptions'],
+      ['barChart', 'Generate operational & audit reports'],
+      ['helpCircle', 'Support a controlled investigation', C.warning],
+    ],
   }
-
-  /** A row of action chips, evenly spread, each with an icon, label, and note. */
-  function actionRow(y, items, chipColor) {
-    const gap = 0.3;
-    const w = (PAGE_W - MARGIN * 2 - gap * (items.length - 1)) / items.length;
-    const h = 1.15;
-    items.forEach((it, i) => {
-      const x = MARGIN + i * (w + gap);
-      slide.addShape(pres.ShapeType.roundRect, {
-        x,
-        y,
-        w,
-        h,
-        rectRadius: 0.08,
-        fill: { color: C.bluePale },
-        line: { type: 'none' },
-      });
-      addIconCircle(slide, x + w / 2, y + 0.34, 0.48, it[2] || chipColor, it[0], 0.5);
-      slide.addText(it[1], {
-        x: x + 0.12,
-        y: y + 0.62,
-        w: w - 0.24,
-        h: h - 0.7,
-        fontFace: FONT_BODY,
-        fontSize: 10.5,
-        bold: true,
-        color: C.ink,
-        align: 'center',
-        valign: 'top',
-        margin: 0,
-        lineSpacingMultiple: 1.05,
-      });
-    });
-    return { w, gap };
-  }
-
-  // ---- While awaiting approval ----
-  const approvalLabelY = 2.98;
-  dropConnector(2, approvalLabelY - 0.05);
-  slide.addText('WHILE AWAITING APPROVAL, THE TRAVELLER CAN', {
-    x: MARGIN,
-    y: approvalLabelY,
-    w: PAGE_W - MARGIN * 2,
-    h: 0.3,
-    fontFace: FONT_BODY,
-    fontSize: 11,
-    bold: true,
-    color: C.blueDark,
-    charSpacing: 1,
-    align: 'center',
-    margin: 0,
-  });
-  actionRow(3.35, [
-    ['eye', 'View request status & details'],
-    ['fileText', 'Edit destination, dates, or requirements'],
-    ['messageSquare', 'Send a follow-up reminder'],
-    ['xCircle', 'Cancel the request', C.warning],
-  ], C.blue);
-
-  // ---- Once confirmed ----
-  const confirmedLabelY = 4.85;
-  dropConnector(3, confirmedLabelY - 0.05);
-  slide.addText('ONCE CONFIRMED, THE TRAVELLER CAN', {
-    x: MARGIN,
-    y: confirmedLabelY,
-    w: PAGE_W - MARGIN * 2,
-    h: 0.3,
-    fontFace: FONT_BODY,
-    fontSize: 11,
-    bold: true,
-    color: C.success,
-    charSpacing: 1,
-    align: 'center',
-    margin: 0,
-  });
-  actionRow(5.22, [
-    ['download', 'Download or email the confirmation letter'],
-    ['phone', 'View accommodation contact details'],
-    ['alertTriangle', 'Raise a booking issue', C.warning],
-  ], C.success);
-
-  footer(slide, nextPage());
-})();
+);
 
 (function systemContext() {
   const slide = newSlide(C.white);
