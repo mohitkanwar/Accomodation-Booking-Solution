@@ -5,6 +5,21 @@ title: 4. High-Level API Flow
 
 # High-Level API Flow
 
+## API landscape by microservice
+
+The API surface is deliberately split by responsibility. Channel-facing
+contracts remain stable for the B2C, operator, and administration
+experiences; domain services own business capabilities; supplier-specific
+contracts remain isolated behind the Booking.com integration service.
+
+```plantuml-image
+./diagrams/api-flow/api-landscape.puml | API types developed across the accommodation microservices
+```
+
+The gateway, authentication, access control, Kafka platform, ESB, and
+notification capabilities are reused. The service APIs shown below the
+platform edge are new accommodation capabilities.
+
 ## Context
 
 ```plantuml-image

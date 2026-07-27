@@ -1,0 +1,65 @@
+@startuml
+!include ../../../../plantuml/sodexo-theme.puml
+
+title The solution exposes purpose-built APIs while keeping supplier complexity behind an adapter
+caption Solid paths are synchronous HTTPS/JSON; the event rail carries versioned Kafka contracts.
+
+top to bottom direction
+hide stereotype
+
+skinparam linetype ortho
+skinparam nodesep 34
+skinparam ranksep 44
+skinparam ArrowColor SODEXO_MUTED
+skinparam ArrowFontColor SODEXO_MUTED
+skinparam ArrowFontSize 11
+skinparam rectangle {
+  FontSize 13
+  BorderThickness 1.5
+  RoundCorner 16
+  Padding 15
+}
+
+rectangle "<color:#2B3797><b>CHANNELS</b></color>\nB2C Accommodation Lego  ·  Operator Console  ·  Corporate / Sodexo Admin" as Channels #F5F6FC
+
+rectangle "<color:#2B3797><b>REUSED PLATFORM EDGE</b></color>\nAPI Gateway  ·  Authentication  ·  Tenant and role access control  ·  Rate limits" as Edge #DDE1F6
+
+rectangle "<color:#2B3797><b>ACCOMMODATION EXPERIENCE API</b></color>\n<color:#5F6685>CHANNEL-FACING REST APIs</color>\nTraveller API  ·  Operator API  ·  Administration API" as Experience #FFFFFF
+
+rectangle "<color:#2B3797><b>ACCOMMODATION SERVICE</b></color>\n<color:#5F6685>DOMAIN & REFERENCE APIs</color>\nDestinations · policy evaluation\nSearch · availability" as Accommodation #FFFFFF
+
+rectangle "<color:#2B3797><b>BOOKING WORKFLOW SERVICE</b></color>\n<color:#5F6685>COMMAND & WORKFLOW APIs</color>\nRequests · approvals · clarifications\nBook · amend · cancel" as Workflow #FFFFFF
+
+rectangle "<color:#2B3797><b>REPORTING SERVICE</b></color>\n<color:#5F6685>QUERY & EXPORT APIs</color>\nOperations · spend · compliance\nReports · exports" as Reporting #FFFFFF
+
+rectangle "<color:#2B3797><b>RECONCILIATION SERVICE</b></color>\n<color:#5F6685>OPERATIONS APIs</color>\nExceptions · retries\nEvidence · resolution" as Reconciliation #FFFFFF
+
+rectangle "<color:#ED1C24><b>BOOKING.COM INTEGRATION SERVICE</b></color>\n<color:#5F6685>SUPPLIER ADAPTER APIs</color>\nSearch · availability\nOrder preview · create · manage" as SupplierAdapter #FBDADD
+
+rectangle "<color:#ED1C24><b>BOOKING.COM</b></color>\nDemand API" as BookingCom #FFF4DD
+rectangle "<color:#2B3797><b>ENTERPRISE SYSTEMS</b></color>\nESB · Finance · Notifications" as Enterprise #F5F6FC
+
+rectangle "<color:#187A5A><b>VERSIONED EVENT APIs · KAFKA</b></color>\nRequestSubmitted  ·  ApprovalDecided  ·  BookingConfirmed / Failed  ·  InvoiceMatched  ·  ReconciliationResolved" as Events #DDF2E9
+
+Channels -down-> Edge
+Edge -down-> Experience
+
+Experience -down-> Accommodation
+Experience -down-> Workflow
+Experience -down-> Reporting
+Experience -down-> Reconciliation
+
+Accommodation -[hidden]right-> Workflow
+Workflow -[hidden]right-> Reporting
+Reporting -[hidden]right-> Reconciliation
+
+Accommodation -down-> SupplierAdapter
+Workflow -down-> SupplierAdapter
+SupplierAdapter -down-> BookingCom
+Reconciliation -down-> Enterprise
+
+BookingCom -[hidden]right-> Enterprise
+BookingCom -[hidden]down-> Events
+Enterprise -[hidden]down-> Events
+
+@enduml
