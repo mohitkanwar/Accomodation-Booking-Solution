@@ -1,46 +1,51 @@
 @startuml
-!pragma layout smetana
-!include plantuml/sodexo-theme.puml
+!include ../../../../plantuml/sodexo-theme.puml
 
-title Accommodation Booking — Conceptual Data Model
+title Accommodation booking data model
+caption Corporate context governs the journey; snapshots and audit evidence preserve every decision.
 
-scale 1.2
-hide circle
-hide empty members
+left to right direction
+hide stereotype
+
 skinparam linetype ortho
+skinparam nodesep 42
+skinparam ranksep 56
+skinparam ArrowFontSize 12
+skinparam ArrowColor SODEXO_MUTED
+skinparam ArrowFontColor SODEXO_MUTED
+skinparam rectangle {
+  FontSize 14
+  BorderThickness 1.6
+  RoundCorner 18
+  Padding 18
+}
 
-entity "Client" as Client <<identity>> SODEXO_BLUE_PALE
-entity "Employee Travel Profile" as Employee <<identity>> SODEXO_BLUE_PALE
-entity "Role Level" as Role <<configuration>> SODEXO_BLUE_LIGHT
-entity "Destination Site" as Site <<configuration>> SODEXO_BLUE_LIGHT
-entity "Travel Policy" as Policy <<configuration>> SODEXO_BLUE_LIGHT
-entity "Booking Request" as Request <<workflow>> SODEXO_WHITE
-entity "Approval" as Approval <<workflow>> SODEXO_WHITE
-entity "Supplier Booking" as Booking <<integration>> SODEXO_RED_LIGHT
-entity "Audit Event" as Audit <<evidence>> SODEXO_SUCCESS_LIGHT
-entity "Outbox Event" as Outbox <<evidence>> SODEXO_SUCCESS_LIGHT
+rectangle "<color:#2B3797><b>CORPORATE CONTEXT</b></color>\n\n<b>Corporate Client</b>\nTraveller Profile\nDestination Site\nTravel Policy" as Context #F5F6FC
 
-Client ||--o{ Employee
-Client ||--o{ Role
-Client ||--o{ Site
-Client ||--o{ Policy
-Role ||--o{ Employee
-Role ||--o{ Policy
-Site ||--o{ Policy
-Employee ||--o{ Request : requester / traveller
-Site ||--o{ Request
-Policy ||..o{ Request : snapshot
-Request ||--o{ Approval
-Request ||--o| Booking
-Request ||--o{ Audit
-Request ||--o{ Outbox
+rectangle "<color:#2B3797><b>01 · REQUEST</b></color>\n\n<b>Accommodation Request</b>\ndates · guests · purpose\nstatus" as Request #FFFFFF
 
-legend right
-  |= Surface |= Responsibility |
-  |<#F5F6FC> Identity | Trusted client and employee context |
-  |<#DDE1F6> Configuration | Levels, sites and policy |
-  |<#FFFFFF> Workflow | Request and approval |
-  |<#FBDADD> Integration | External reservation |
-  |<#DDF2E9> Evidence | Audit and reliable delivery |
-endlegend
+rectangle "<color:#2B3797><b>02 · DECIDE</b></color>\n\n<b>Approval Decision</b>\ndecision · reason\napprover" as Approval #FFFFFF
+
+rectangle "<color:#ED1C24><b>03 · BOOK</b></color>\n\n<b>Supplier Booking</b>\nsupplier reference\nstatus · confirmation" as Booking #FBDADD
+
+rectangle "<color:#9A5A00><b>04 · VALIDATE</b></color>\n\n<b>Invoice</b>\nstay · taxes · fees\ncredits" as Invoice #FFF4DD
+
+rectangle "<color:#9A5A00><b>05 · SETTLE</b></color>\n\n<b>Payment Instruction</b>\napproved amount\nsettlement status" as Payment #FFF4DD
+
+rectangle "<color:#187A5A><b>IMMUTABLE SNAPSHOTS</b></color>\n\n<b>Offer Snapshot</b>\nproperty · room · price · terms\n\n<b>Policy Snapshot</b>\npolicy version · result · exception" as Snapshots #DDF2E9
+
+rectangle "<color:#187A5A><b>AUDIT & EVENTS</b></color>\n\n<b>Audit Event</b>\nactor · change · correlation ID\n\n<b>Outbox Event</b>\npayload · delivery status · attempts" as Evidence #DDF2E9
+
+Context -down-> Request
+
+Request -down-> Approval
+Approval -down-> Booking
+Booking -down-> Invoice
+Invoice -down-> Payment
+
+Request -right-> Snapshots
+Booking -right-> Evidence
+
+Snapshots -[hidden]down-> Evidence
+
 @enduml

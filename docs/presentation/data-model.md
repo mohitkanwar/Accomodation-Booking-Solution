@@ -28,11 +28,20 @@ database technology or require duplication of authoritative employee data.
 | `audit_event` | entity, event, actor, timestamp, before/after, correlation ID | Immutable business and administrative evidence |
 | `outbox_event` | event ID, aggregate, type, payload, status, attempts | Reliable notification/integration delivery |
 
-## Relationships
+## Slide-ready conceptual model
+
+The visual follows the business lifecycle from corporate policy and employee
+context through request, approval, supplier booking, and settlement. Snapshot
+and evidence records sit alongside that lifecycle so the slide communicates
+both the flow and the controls without exposing implementation-level tables.
 
 ```plantuml-image
 ./diagrams/data-model/data-model.puml | Conceptual B2C-side accommodation data model
 ```
+
+Read the primary path from left to right. The supporting connections show
+which immutable snapshots and audit/integration records preserve the journey
+without competing with its main lifecycle.
 
 ## Modelling principles
 
