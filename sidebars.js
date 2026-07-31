@@ -32,7 +32,16 @@ const sidebars = {
       ],
       collapsed: false,
     },
-    'presentation/discovery-questions',
+    {
+      type: 'category',
+      label: '2. Discovery Questions',
+      link: {
+        type: 'doc',
+        id: 'presentation/discovery-questions',
+      },
+      items: ['presentation/discovery-questionnaire'],
+      collapsed: false,
+    },
     {
       type: 'category',
       label: '3. Initial Data Model',
