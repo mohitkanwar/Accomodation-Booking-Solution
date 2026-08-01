@@ -331,6 +331,22 @@ export const questionnaireSections = [
           'Discovery complete by…; MVP ready by…; pilot from…; phased country rollout by…; immovable deadline…',
       },
       {
+        id: 'expectedCostSaving',
+        type: 'input',
+        label: 'What cost saving do we expect from this project?',
+        hint: 'Include the amount, currency, current baseline, and whether the estimate is gross or net of implementation and operating costs.',
+        placeholder:
+          'For example: €500,000 net saving against the current annual baseline',
+      },
+      {
+        id: 'costSavingDuration',
+        type: 'input',
+        label: 'Over what duration should the expected saving be measured?',
+        hint: 'State the benefit-realisation period, ramp-up assumptions, and expected payback point.',
+        placeholder:
+          'For example: Over three years, with payback expected within 18 months',
+      },
+      {
         id: 'successMeasures',
         type: 'textarea',
         label: 'How will we know the feature is successful?',
