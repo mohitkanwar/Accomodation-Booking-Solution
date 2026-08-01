@@ -50,6 +50,23 @@ export const questionnaireSections = [
         placeholder:
           'Employees, countries, offices, languages, time zones, peak concurrent users…',
       },
+      {
+        id: 'initialUserCount',
+        type: 'input',
+        inputMode: 'numeric',
+        label: 'What is the expected number of users initially?',
+        hint: 'State whether this is the registered, eligible, active, or concurrent user population.',
+        placeholder:
+          'For example: 5,000 eligible employees; 800 monthly active users',
+      },
+      {
+        id: 'expectedUserGrowthRate',
+        type: 'input',
+        label: 'What user growth rate is expected?',
+        hint: 'Include the percentage, time period, and any known expansion milestones.',
+        placeholder:
+          'For example: 20% year-on-year; three additional countries in year two',
+      },
     ],
   },
   {

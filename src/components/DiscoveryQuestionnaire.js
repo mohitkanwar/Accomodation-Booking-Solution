@@ -215,6 +215,33 @@ export default function DiscoveryQuestionnaire() {
     const fieldId = `question-${question.id}`;
     const questionNumber = String(questionIndex + 1).padStart(2, '0');
 
+    if (question.type === 'input') {
+      return (
+        <div className={styles.question} key={question.id}>
+          <label className={styles.questionLabel} htmlFor={fieldId}>
+            <span className={styles.questionNumber}>{questionNumber}</span>
+            <span>
+              {question.label}
+              {question.required && (
+                <span className={styles.required}> Required</span>
+              )}
+            </span>
+          </label>
+          {question.hint && <p className={styles.hint}>{question.hint}</p>}
+          <input
+            id={fieldId}
+            type="text"
+            inputMode={question.inputMode}
+            value={formState.answers[question.id] || ''}
+            placeholder={question.placeholder}
+            onChange={(event) =>
+              updateAnswer(question.id, event.target.value)
+            }
+          />
+        </div>
+      );
+    }
+
     if (question.type === 'textarea') {
       return (
         <div className={styles.question} key={question.id}>
@@ -417,4 +444,3 @@ export default function DiscoveryQuestionnaire() {
     </form>
   );
 }
-
