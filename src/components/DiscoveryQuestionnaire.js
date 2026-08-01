@@ -21,8 +21,11 @@ function createEmptyState() {
 function isAnswered(question, answers) {
   const value = answers[question.id];
 
-  if (question.type === 'multi') {
-    return Array.isArray(value) && value.length > 0;
+  if (question.type === 'multi' || question.type === 'text-list') {
+    return (
+      Array.isArray(value) &&
+      value.some((item) => typeof item === 'string' && item.trim().length > 0)
+    );
   }
 
   return typeof value === 'string' && value.trim().length > 0;
@@ -128,6 +131,53 @@ export default function DiscoveryQuestionnaire() {
     markDirty();
   }
 
+  function updateListAnswer(questionId, itemIndex, value) {
+    setFormState((currentState) => {
+      const current = Array.isArray(currentState.answers[questionId])
+        ? [...currentState.answers[questionId]]
+        : [''];
+      current[itemIndex] = value;
+
+      return {
+        ...currentState,
+        answers: {...currentState.answers, [questionId]: current},
+      };
+    });
+    markDirty();
+  }
+
+  function addListAnswer(questionId) {
+    setFormState((currentState) => {
+      const current = Array.isArray(currentState.answers[questionId])
+        ? currentState.answers[questionId]
+        : [''];
+
+      return {
+        ...currentState,
+        answers: {...currentState.answers, [questionId]: [...current, '']},
+      };
+    });
+    markDirty();
+  }
+
+  function removeListAnswer(questionId, itemIndex) {
+    setFormState((currentState) => {
+      const current = Array.isArray(currentState.answers[questionId])
+        ? currentState.answers[questionId]
+        : [];
+      const next = current.filter((_, index) => index !== itemIndex);
+
+      return {
+        ...currentState,
+        answers: {
+          ...currentState.answers,
+          [questionId]: next.length > 0 ? next : [''],
+        },
+      };
+    });
+    markDirty();
+  }
+
   function createPayload(timestamp = new Date().toISOString()) {
     return {
       schemaVersion: SCHEMA_VERSION,
@@ -224,6 +274,72 @@ export default function DiscoveryQuestionnaire() {
   function renderQuestion(question, questionIndex) {
     const fieldId = `question-${question.id}`;
     const questionNumber = String(questionIndex + 1).padStart(2, '0');
+
+    if (question.type === 'text-list') {
+      const storedItems = formState.answers[question.id];
+      const items =
+        Array.isArray(storedItems) && storedItems.length > 0
+          ? storedItems
+          : [''];
+
+      return (
+        <fieldset className={styles.question} key={question.id}>
+          <legend className={styles.questionLabel}>
+            <span className={styles.questionNumber}>{questionNumber}</span>
+            <span>
+              {question.label}
+              {question.required && (
+                <span className={styles.required}> Required</span>
+              )}
+            </span>
+          </legend>
+          {question.hint && <p className={styles.hint}>{question.hint}</p>}
+          <div className={styles.listItems}>
+            {items.map((item, itemIndex) => {
+              const itemId = `${fieldId}-item-${itemIndex}`;
+
+              return (
+                <div className={styles.listItem} key={itemId}>
+                  <label htmlFor={itemId}>Issue {itemIndex + 1}</label>
+                  <div className={styles.listInputRow}>
+                    <input
+                      id={itemId}
+                      type="text"
+                      value={item}
+                      placeholder={question.placeholder}
+                      onChange={(event) =>
+                        updateListAnswer(
+                          question.id,
+                          itemIndex,
+                          event.target.value,
+                        )
+                      }
+                    />
+                    {items.length > 1 && (
+                      <button
+                        className={styles.removeListButton}
+                        type="button"
+                        aria-label={`Remove issue ${itemIndex + 1}`}
+                        onClick={() =>
+                          removeListAnswer(question.id, itemIndex)
+                        }>
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <button
+            className={styles.addListButton}
+            type="button"
+            onClick={() => addListAnswer(question.id)}>
+            {question.addLabel || 'Add another item'}
+          </button>
+        </fieldset>
+      );
+    }
 
     if (question.type === 'input') {
       return (

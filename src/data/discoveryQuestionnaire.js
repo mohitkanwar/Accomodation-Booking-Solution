@@ -106,21 +106,12 @@ export const questionnaireSections = [
       },
       {
         id: 'currentPainPoints',
-        type: 'multi',
-        label: 'Where does the current process create the most friction?',
-        options: [
-          'Slow approvals',
-          'Limited inventory visibility',
-          'Policy leakage',
-          'Manual rekeying',
-          'Price or availability changes',
-          'Poor traveller communication',
-          'Booking failures or duplicates',
-          'Invoice mismatch',
-          'Limited reporting and audit evidence',
-          'Other',
-        ],
-        otherLabel: 'Describe another pain point',
+        type: 'text-list',
+        label: 'What are some common issues in the current process?',
+        hint: 'Capture each distinct issue separately so it can be prioritised and traced to a cause or owner later.',
+        placeholder:
+          'For example: Approval requests frequently remain unanswered for several days',
+        addLabel: 'Add another issue',
       },
       {
         id: 'mostOverloadedRoles',

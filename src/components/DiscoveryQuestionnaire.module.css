@@ -275,6 +275,61 @@
   margin: -0.25rem 0 0.85rem 2.05rem;
 }
 
+.listItems {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.listItem {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.listItem > label {
+  color: var(--questionnaire-muted);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.listInputRow {
+  align-items: center;
+  display: grid;
+  gap: 0.55rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.addListButton,
+.removeListButton {
+  border-radius: 0.62rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  min-height: 2.55rem;
+  padding: 0.58rem 0.8rem;
+}
+
+.addListButton {
+  background: var(--questionnaire-blue-pale);
+  border: 1px solid var(--questionnaire-border);
+  color: var(--questionnaire-blue);
+  margin-top: 0.8rem;
+}
+
+.removeListButton {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--questionnaire-muted);
+}
+
+.addListButton:hover,
+.removeListButton:hover {
+  border-color: var(--questionnaire-blue);
+  color: var(--questionnaire-blue);
+}
+
 .options {
   display: grid;
   gap: 0.55rem;
@@ -494,6 +549,7 @@
 [data-theme='dark'] .questionnaire input[type='text'],
 [data-theme='dark'] .questionnaire input[type='date'],
 [data-theme='dark'] .questionnaire textarea,
+[data-theme='dark'] .addListButton,
 [data-theme='dark'] .exportButton {
   background: #161a2e;
   color: #f1f2fb;
