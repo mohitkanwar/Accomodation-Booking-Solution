@@ -204,6 +204,29 @@ export const questionnaireSections = [
         otherLabel: 'Add another capability',
       },
       {
+        id: 'existingGenAiToolsAndModels',
+        type: 'multi',
+        label:
+          'What existing GenAI tools and AI models are we using in development?',
+        hint: 'Select all approved or actively used tools and model families.',
+        options: [
+          'Tool — GitHub Copilot',
+          'Tool — ChatGPT / OpenAI Codex',
+          'Tool — Claude / Claude Code',
+          'Tool — Google Gemini / Gemini Code Assist',
+          'Tool — Cursor',
+          'Tool — JetBrains AI Assistant',
+          'Tool — Amazon Q Developer',
+          'Model — OpenAI GPT or reasoning models',
+          'Model — Anthropic Claude',
+          'Model — Google Gemini',
+          'Model — Open-source or self-hosted models',
+          'No approved or standardised GenAI tooling yet',
+          'Other',
+        ],
+        otherLabel: 'Add another tool or model',
+      },
+      {
         id: 'deliveryModel',
         type: 'single',
         label: 'What delivery model is expected?',
@@ -392,4 +415,3 @@ export const questionnaireSections = [
     ],
   },
 ];
-
