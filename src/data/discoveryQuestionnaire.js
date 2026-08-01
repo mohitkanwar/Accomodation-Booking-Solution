@@ -28,7 +28,11 @@ export const questionnaireSections = [
       {
         id: 'stakeholders',
         type: 'multi',
-        label: 'Who owns decisions and outcomes?',
+        label: 'Who owns or must approve the key decisions?',
+        hint: 'Select each relevant role, then identify the responsible person or enter TBD if the owner is not yet known.',
+        captureOptionDetails: true,
+        optionDetailLabel: 'Named owner, team, or TBD',
+        optionDetailPlaceholder: 'For example: Jane Smith — Group Travel',
         options: [
           'Business owner',
           'Product owner',
@@ -41,7 +45,7 @@ export const questionnaireSections = [
           'Client IT',
           'Other',
         ],
-        otherLabel: 'Add another stakeholder',
+        otherLabel: 'Other stakeholder role and named owner/team',
       },
       {
         id: 'userScale',

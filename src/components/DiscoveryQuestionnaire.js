@@ -110,12 +110,22 @@ export default function DiscoveryQuestionnaire() {
     });
   }
 
-  function toggleMultiAnswer(questionId, option) {
-    const current = formState.answers[questionId] || [];
-    const next = current.includes(option)
-      ? current.filter((item) => item !== option)
-      : [...current, option];
-    updateAnswer(questionId, next);
+  function toggleMultiAnswer(questionId, option, detailAnswerId) {
+    setFormState((currentState) => {
+      const current = currentState.answers[questionId] || [];
+      const removing = current.includes(option);
+      const next = removing
+        ? current.filter((item) => item !== option)
+        : [...current, option];
+      const answers = {...currentState.answers, [questionId]: next};
+
+      if (removing && detailAnswerId) {
+        delete answers[detailAnswerId];
+      }
+
+      return {...currentState, answers};
+    });
+    markDirty();
   }
 
   function createPayload(timestamp = new Date().toISOString()) {
@@ -288,17 +298,19 @@ export default function DiscoveryQuestionnaire() {
             const checked = isMulti
               ? (selectedValue || []).includes(option)
               : selectedValue === option;
-            const optionId = `${question.id}-${option
+            const optionSlug = option
               .toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')}`;
+              .replace(/[^a-z0-9]+/g, '-');
+            const optionId = `${question.id}-${optionSlug}`;
+            const detailAnswerId = `${question.id}Detail-${optionSlug}`;
+            const detailFieldId = `question-${detailAnswerId}`;
 
-            return (
+            const optionControl = (
               <label
                 className={`${styles.option} ${
                   checked ? styles.optionSelected : ''
                 }`}
-                htmlFor={optionId}
-                key={option}>
+                htmlFor={optionId}>
                 <input
                   id={optionId}
                   type={isMulti ? 'checkbox' : 'radio'}
@@ -306,12 +318,44 @@ export default function DiscoveryQuestionnaire() {
                   checked={checked}
                   onChange={() =>
                     isMulti
-                      ? toggleMultiAnswer(question.id, option)
+                      ? toggleMultiAnswer(
+                          question.id,
+                          option,
+                          question.captureOptionDetails
+                            ? detailAnswerId
+                            : null,
+                        )
                       : updateAnswer(question.id, option)
                   }
                 />
                 <span>{option}</span>
               </label>
+            );
+
+            if (!question.captureOptionDetails) {
+              return <div key={option}>{optionControl}</div>;
+            }
+
+            return (
+              <div className={styles.optionGroup} key={option}>
+                {optionControl}
+                {checked && option !== 'Other' && (
+                  <label
+                    className={styles.optionDetail}
+                    htmlFor={detailFieldId}>
+                    <span>{question.optionDetailLabel}</span>
+                    <input
+                      id={detailFieldId}
+                      type="text"
+                      value={formState.answers[detailAnswerId] || ''}
+                      placeholder={question.optionDetailPlaceholder}
+                      onChange={(event) =>
+                        updateAnswer(detailAnswerId, event.target.value)
+                      }
+                    />
+                  </label>
+                )}
+              </div>
             );
           })}
         </div>

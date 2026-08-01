@@ -309,6 +309,26 @@
   border-color: var(--questionnaire-blue);
 }
 
+.optionGroup {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.optionDetail {
+  background: #f8f8fc;
+  border: 1px solid var(--questionnaire-border);
+  border-radius: 0.7rem;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.65rem 0.75rem 0.75rem;
+}
+
+.optionDetail span {
+  color: var(--questionnaire-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
 .option input {
   accent-color: var(--questionnaire-blue);
   flex: 0 0 auto;
@@ -486,4 +506,3 @@
 [data-theme='dark'] .question {
   border-bottom-color: #343a5c;
 }
-
