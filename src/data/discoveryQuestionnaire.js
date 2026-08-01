@@ -323,6 +323,14 @@ export const questionnaireSections = [
         otherLabel: 'Add another must-have capability',
       },
       {
+        id: 'expectedDeliveryTimeline',
+        type: 'textarea',
+        label: 'What are the expected timelines for delivery?',
+        hint: 'Capture target dates, confidence levels, dependencies, and any fixed business or contractual deadlines.',
+        placeholder:
+          'Discovery complete by…; MVP ready by…; pilot from…; phased country rollout by…; immovable deadline…',
+      },
+      {
         id: 'successMeasures',
         type: 'textarea',
         label: 'How will we know the feature is successful?',
