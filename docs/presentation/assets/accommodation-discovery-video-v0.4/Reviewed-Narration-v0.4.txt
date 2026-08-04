@@ -1,0 +1,237 @@
+Accommodation Booking Solution Discovery Session — Reviewed Narration
+Version 0.4
+
+SLIDE 01 — FROM EMPLOYEE INTENT TO A CONFIRMED RESERVATION
+Delivery: Warm and welcoming, with quiet gravity on the traveller’s question and a confident close.
+
+Welcome, everyone. Let’s begin with a very ordinary moment. An employee has committed to a five-day strategy meetup. The meeting matters, the ideas matter, but the first practical question is much simpler: when I arrive, is there a safe, compliant room waiting for me? That is the promise this architecture has to protect. Tetra Pak brings the traveller need and policy context. Sodexo orchestrates the experience and operating model. Booking.com provides live accommodation content and fulfilment capability. We’ll move from that human need into the system choices, and finish with the decisions and owners needed to move forward. As we begin, hold one thought in mind: what would make this discovery genuinely valuable for your part of the organisation?
+
+SLIDE 02 — WHY WE ARE HERE
+Delivery: Measured and purposeful; subtly invite reflection at the end.
+
+This session needs to leave us with four practical outcomes. First, a clear scope boundary: the release-one journey, its actors and exceptions, and the things we are deliberately deferring. Second, evidence that the Booking.com route, configuration and integration constraints are feasible. Third, an architecture position that works not only for the happy path, but also when prices change or a supplier response is uncertain. And fourth, a readiness plan with named owners and acceptance gates. Consider a simple example. We may all agree that hotel search is in scope, but if nobody knows who can approve an exception, we are not ready to deliver. Discovery turns that ambiguity into an explicit decision. Which of these four outcomes feels least certain today? Keep that uncertainty visible as we work through the session.
+
+SLIDE 03 — ROADMAP FOR THE NEXT HOUR
+Delivery: Clear, energetic orientation with a smooth transition into the human story.
+
+Here is the route through the conversation. We’ll start with context and scope, because we must be clear whose problem we are solving. Then we’ll expose the business and product decisions that cannot be hidden inside technical design. From there, we’ll translate those choices into data, APIs, controls and boundaries. We’ll test the position against failure and quality, then turn the remaining gaps into focused workshops with accountable owners. The final recap is where we confirm what is decided, what remains open, and what happens next. Please challenge assumptions as they appear; the final question-and-answer period is for the issues that cut across the whole design, not the first opportunity to speak. With the route clear, let’s begin with the human promise behind the feature.
+
+SLIDE 04 — CONTEXT, SUCCESS CRITERIA AND SCOPE
+Delivery: Brief reset; conversational, reflective, and forward-moving.
+
+We’ll begin business-first. Before we discuss APIs or components, we need to agree whose journey matters, what a successful booking actually means, and where release one should stop. Most of us have experienced a trip disrupted by accommodation—sometimes through something as small as an unclear confirmation. Those moments reveal where ownership is vague. Let’s start with the traveller’s reality, then widen the view to the operators, administrators and suppliers who make a simple stay possible.
+
+SLIDE 05 — A GLOBAL FOOTPRINT CHANGES THE PROBLEM
+Delivery: Thoughtful and worldly, with emphasis on global variation.
+
+Tetra Pak’s global footprint is why a locally simple booking feature becomes a globally variable service. Employees may travel between mature hotel markets and locations with limited inventory, different currencies, taxes, languages and support expectations. A policy designed around one city cannot simply be assumed to work everywhere. A choice that feels obvious in London may be unavailable, unsafe or priced very differently near a remote production site. For discovery, we should deliberately test three kinds of market: one easy, one typical and one genuinely difficult. Those examples will give us evidence for policy, currency, availability and support decisions, rather than allowing the easiest market to define the whole design.
+
+SLIDE 06 — A STRATEGY MEETUP
+Delivery: Story-led and human; gentle momentum into Anna’s perspective.
+
+Imagine a five-day strategy workshop bringing leaders and specialists together. The request sounds straightforward, yet it immediately creates a chain of questions. Who is travelling? Which office is the destination? What price is permitted? Who approves? Who books? What happens if the rate changes, and who supports the traveller after confirmation? The experience should make the right choice feel simple even when the controls beneath it are complex. A traveller should not need to interpret a policy spreadsheet or understand supplier terminology. It is worth asking what the current process asks first—and whether that is the question the traveller actually cares about. Now let’s meet Anna, the person carrying the business outcome while simply trying to arrange a safe stay.
+
+SLIDE 07 — A SIMPLE TRIP HIDES A COMPLEX PROMISE
+Delivery: Empathetic and grounded, with subtle concern on abandonment triggers.
+
+Anna is preparing the ideas she will present at the strategy meetup. Accommodation is necessary, but it is not the purpose of her trip. She wants to enter a destination and dates, see meaningful options, understand which are compliant, and trust the status until a room is confirmed. That gives us a useful design test: does each architecture choice remove complexity from Anna without removing control from Tetra Pak? Hiding taxes may make a result appear simpler, for example, but it merely postpones a policy surprise. What would make Anna abandon the digital journey and call someone? Usually it is not one dramatic failure. It is unclear policy, no useful availability, a slow approval, a changing price, or uncertainty about whether anything has actually been booked.
+
+SLIDE 08 — POLICY ADAPTS TO ROLE AND DESTINATION
+Delivery: Analytical but approachable; slight emphasis on authoritative role data.
+
+Bob shows us that policy is contextual, not a single company-wide number. The same destination and dates can produce a different compliant set because role, tax basis, currency and destination rules change the permitted range. A room at two hundred and twenty euros may be outside policy for a general employee but valid for a director—unless taxes take it beyond the cap. The correct entitlement should be applied before the offer is presented or approved, not discovered at the final booking step. The key evidence question is where Bob’s role comes from. Is it supplied by identity, human resources, a travel system or local configuration? Until that source is authoritative, the result may look precise while resting on an uncertain input.
+
+SLIDE 09 — EXECUTIVE FLEXIBILITY STILL NEEDS GUARDRAILS
+Delivery: Calm authority, with nuanced emphasis on flexibility versus bypass.
+
+Chandler’s journey tests executive flexibility. A higher cap may widen the eligible range, but the choice should still be explainable: close to the office, suitable cancellation terms, acceptable safety and quality, and any exception recorded. The most expensive hotel is not automatically the best executive option if it is far from the meeting, non-refundable or outside agreed supplier terms. We need to separate genuine policy requirements—perhaps proximity, delegate booking, a room type or speed—from preferences. That distinction affects both the data model and the audit trail. Flexibility should feel responsive without becoming an invisible policy bypass. Once the request is submitted, the centre of accountability moves from the traveller to the client booking operator.
+
+SLIDE 10 — HUMAN APPROVAL MAKES THE RESERVATION ACCOUNTABLE
+Delivery: Steady and operational, with tension around the changing price example.
+
+Daniel is not a manual workaround; he is an accountable control point. He needs the request, policy evidence, approval state, current supplier terms, price variance and queue age in one coherent view. At booking time he refreshes the live terms, because the offer shown earlier is evidence of what was available—not a guarantee that inventory has remained unchanged. Suppose the approved rate has increased by eight percent. Daniel needs a defined path: continue within an agreed tolerance, request reconfirmation, or choose another offer. The important discovery question is what Daniel may decide without returning to the traveller or manager. That answer defines his authority, the tolerances we encode, and the service level the operating model must support.
+
+SLIDE 11 — ADMINISTRATION TURNS POLICY INTO AN OPERABLE SERVICE
+Delivery: Precise and reassuring, stressing controlled change.
+
+Elizabeth represents the administrative plane. She turns client policy into destinations, role limits, currencies, supplier endpoints and activation dates. That work must be tenant-scoped, versioned, reviewed and auditable, because one incorrect cap or endpoint could affect every traveller in a client organisation. Imagine a new nightly limit for Lund. It should be prepared as a future version, checked, activated on the agreed date and traceable to the person who approved it. Some configuration changes may be safe for one administrator to publish; others may require four-eyes approval. That is not merely a user-interface choice. It determines the control model around changes that can alter eligibility or supplier connectivity for an entire tenant.
+
+SLIDE 12 — APPROVAL IS A BUSINESS DECISION, NOT A POLICY CHECK
+Delivery: Warmly pragmatic, with empathy for both manager and traveller.
+
+Fiona’s role separates two decisions that are often blurred together. The system calculates whether the selected stay follows policy. Fiona decides whether the trip and its cost are justified for her team. A compliant six-night stay may still be declined because the meeting can be attended remotely. Conversely, an out-of-policy stay may be justified where safe local inventory is scarce—but that needs a visible exception route and a reason. To make a decision quickly, Fiona needs only the right evidence: purpose, dates, total cost, comparison with the cap, any exception reason and the deadline. If we force her to reconstruct the context, approval becomes a bottleneck and Anna is left waiting without knowing whether she should make another plan.
+
+SLIDE 13 — THE SUPPLIER FULFILS A STAY WE NEVER TOUCH DIRECTLY
+Delivery: Matter-of-fact with a human emphasis on fragmented support.
+
+Gustav represents the accommodation provider who fulfils the stay without using the Sodexo application. The provider owns the room, content, live availability, local terms and on-site guest experience. We consume that truth through Booking.com; we do not own it, and we cannot freeze it. Breakfast inclusion or a cancellation deadline may change between search and booking, which is why an approved offer must be revalidated before supplier commitment. After confirmation, support also needs clear routing. An on-site room issue may belong with the property, a supplier fulfilment issue with Booking.com, and a policy or workflow issue with the client booking team. If that boundary is unclear, Anna experiences the ecosystem as a series of hand-offs rather than one accountable service.
+
+SLIDE 14 — THE ACCOMMODATION ECOSYSTEM
+Delivery: Clear explanatory cadence, ending with a gently challenging question.
+
+The ecosystem has three sides. Seekers create intent: travellers request, managers approve, and operators act. The Sodexo platform translates that intent into policy checks, workflow, booking, administration and audit. Providers expose live inventory and ultimately fulfil the stay. In one sentence, Anna requests, the platform checks and routes, Daniel commits with the supplier, and everyone receives a traceable outcome. The critical boundary is multi-tenancy. Several client corporations may use the same platform, but their identities, policies, requests and audit data must remain inside their own organisation boundary. Now consider a booking that is confirmed, yet the property cannot find it. Where does accountability sit, and what evidence allows support to resolve the issue? That question tells us what the platform must preserve.
+
+SLIDE 15 — SIX ROLES ACROSS THREE GROUPS
+Delivery: Structured and confident, with a natural ensemble-story feel.
+
+We should resist treating every employee as the same kind of user. The traveller searches and tracks. The approver makes a business decision. The client booking operator validates the evidence and creates the reservation. The corporate administrator owns client policy and access. The Sodexo administrator operates the shared platform and integrations. The provider agent fulfils the reservation outside our application. These responsibilities lead to different permissions and audit rules. It is also worth testing whether a delegate, travel manager, finance reviewer or service-desk colleague is a genuinely distinct actor, or simply a permission variation on one of these roles. Getting that distinction right now keeps the access model understandable later. With the cast clear, we can follow each journey and see where state and accountability change hands.
+
+SLIDE 16 — TRAVELLER JOURNEY
+Delivery: Flowing and explanatory; slight emphasis on state changes.
+
+The traveller journey has four meaningful states. Sign in and search establishes trusted identity and context. Submit request captures the chosen offer and the policy evidence behind it. Awaiting approval must remain transparent, with controlled options to edit, remind or cancel. Confirmed and booked provides proof, contact information and a support route. The subtle part is what happens when something changes. If Anna edits the dates, the previous offer and policy result may no longer be valid, so the request must be evaluated again. Sending a reminder, however, should create a communication event—not a second approval task. And cancelling a request before booking is very different from cancelling a confirmed reservation with supplier terms attached. The design needs an explicit answer to which edits restart approval and which are harmless.
+
+SLIDE 17 — APPROVER JOURNEY
+Delivery: Compact, brisk, and attentive to the cost of delay.
+
+The approver’s journey should be compact: manage the queue, review the request with policy evidence, and decide. The normal case should be quick; the exceptional case should be unmistakable. Seeking clarification is a real workflow state, not an email conversation that disappears outside the audit trail. If a supplier price changes after approval, reassessment may only be necessary once an agreed tolerance is crossed. Otherwise, even a small movement creates delay. Time also matters. What happens when a request is untouched for four hours, for a day, or close to the travel date? Reminders, escalation, delegation and a service-level agreement need to work together so Anna is not stranded by silence.
+
+SLIDE 18 — CLIENT BOOKING OPERATOR JOURNEY
+Delivery: Operationally serious, building tension around the timeout and resolving calmly.
+
+The operator journey is queue, validation, supplier commitment and confirmation. Daniel does not simply click a booking button. He checks policy and approval evidence, refreshes live terms, and creates the reservation using controls that prevent duplication. Now imagine that Booking.com receives the request but the response times out. A blind retry could create two rooms. The honest state is neither success nor failure; it is pending confirmation. The platform must reconcile using an idempotency key, correlation information or a supplier reference before telling anyone what happened. Daniel should be able to resolve most cases from the operational evidence available to him, without needing engineering support. That requirement shapes the queue, diagnostic information, manual actions and support runbook.
+
+SLIDE 19 — CORPORATE ADMINISTRATOR CAPABILITIES
+Delivery: Controlled, governance-focused, and non-alarmist.
+
+The corporate administrator spans two domains that may later become separate permission groups. Policy and access configuration determine who may act and what counts as compliant. Billing and reporting validate spend and provide evidence for payment, compliance and audit. The risk appears when one person can change a cap, approve an exception and approve payment without appropriate controls. Discovery should identify which capabilities belong to human resources or travel, which belong to finance, and which belong to information technology administration. They may share an interface while still requiring strong segregation of duties. The design goal is not to create more roles than we need; it is to make powerful combinations visible and intentional rather than accidental.
+
+SLIDE 20 — SODEXO ADMINISTRATOR CAPABILITIES
+Delivery: Reassuring authority with emphasis on controlled support access.
+
+The Sodexo administrator operates across the platform: onboarding tenants, managing platform access, configuring supplier integrations, monitoring operations and supporting controlled investigations. The word controlled is important. Access to client data should be justified, time-bound, logged and limited to the tenant and purpose. When a booking outcome is uncertain, support may need correlation identifiers and supplier references; that should not grant unrestricted access to traveller profiles or other clients. We should also identify which operational actions must be available without a production deployment—perhaps activating an endpoint, changing a feature flag, reviewing a queue, running reconciliation or producing an audit report. Those are the controls that let operations recover safely without turning every incident into an engineering release.
+
+SLIDE 21 — SYSTEM CONTEXT, SIMPLIFIED
+Delivery: Architectural and clear, with a deliberate boundary-setting tone.
+
+This context view is a statement of responsibility, not a decision about how many services to deploy. Travellers and approvers arrive through the existing B2C host, while booking operations use the client administration channel. The accommodation capability owns search orchestration, policy evaluation, approval and booking workflow, administration and audit. It depends on trusted identity and employee context, live accommodation content and orders, and notification services. Internal decomposition comes later. First we need confidence that the boundary is complete. Is a supporting system missing—perhaps human resources, cost centre, finance, document storage or service management? Some may be essential for release one; others may be future integrations. Keeping that distinction explicit prevents a simplified diagram from becoming an accidental promise.
+
+SLIDE 22 — PHASED RELEASE MAP
+Delivery: Decisive and pragmatic, with careful emphasis on a complete core loop.
+
+Release one should deliver a complete promise: search, view compliant options, submit a request, operate the client queue, confirm the reservation, notify the people involved and preserve an audit trail. A release that can search but cannot reliably confirm is not a useful core loop. Phase two can enrich the journey with dynamic policy, map views, more customers and additional booking patterns. Phase three can broaden the domain into wider travel and finance integration. The sequencing principle is simple: release one proves the operating model and supplier feasibility; later phases add variety rather than repairing missing foundations. If anything currently shown outside phase one would make the Tetra Pak core loop unusable, that is a genuine scope challenge. It needs evidence and prioritisation, not a quiet assumption.
+
+SLIDE 23 — DISCOVERY QUESTIONS AND DECISIONS
+Delivery: Inviting but firm; clearly signal a decision-making phase.
+
+We now move from explaining the opportunity to making choices. The recommendations ahead are starting positions, not conclusions imposed by architecture. Each question should end in one of three states: accepted, rejected, or awaiting specific evidence. Anything unresolved needs a named owner and a date. If an important option is missing, that matters more than debating only the choices already written down. We’ll begin with the decisions closest to the human experience: who supports the traveller, and who may request on someone else’s behalf.
+
+SLIDE 24 — BUSINESS AND PRODUCT DECISIONS
+Delivery: Balanced and consultative; make trade-offs feel tangible.
+
+The first decision is support ownership. The working assumption is the client booking team because they understand the traveller, the policy and the internal escalation path. Booking.com support may reduce service-desk effort but lacks company context. Direct provider support can be fastest for an on-site issue, yet it fragments the experience. We may need different ownership before booking, during booking and during the stay. The second decision is who may request. Traveller-only is simple, but it excludes executive assistants, project coordinators and field teams. A named delegate preserves a real traveller while enabling help. Imagine an assistant arranging Chandler’s stay: the system must distinguish requester, traveller, authority and notification preference. Named delegation is the recommended release-one direction, but it depends on clear consent and delegation rules. If that direction is not acceptable, we need to identify the precise policy or evidence that blocks it.
+
+SLIDE 25 — POLICY DECISIONS
+Delivery: Analytical and patient, with emphasis on explainability.
+
+Policy needs a unit that people can explain. A per-room, per-night cap including taxes is the clearest comparison during search. An average-night rule tolerates one unusually expensive night but is harder to understand at selection. A total-stay cap controls the whole trip, yet makes individual offers opaque. The exception path is equally important. Blocking every out-of-policy stay creates clean control but can strand travellers where safe inventory is scarce. Client-operator approval keeps an accountable route open, though it adds workload and a service level. Consider a six-night stay where one conference night is unusually expensive and the other five are below cap. Which rule determines compliance? We need one complete policy sentence covering cap basis, tax treatment, currency source and exception owner. Any missing term becomes a discovery action, because the system cannot reliably label an offer without it.
+
+SLIDE 26 — BOOKING, PAYMENT AND OPERATIONS DECISIONS
+Delivery: Commercially aware and empathetic; give the Sunday scenario a natural pause.
+
+Merchant of record reaches far beyond the payment screen. If the supplier collects at the hotel, release one avoids card handling and much of the payment compliance scope, but refunds, no-shows, disputes and invoice evidence are less centralised. If Sodexo is merchant of record, the client gains a consolidated model, while Sodexo takes on payment, chargeback, tax and cash-flow responsibility. Employee payment is technically simple but pushes friction onto the traveller and finance. Changes and cancellations create a similar trade-off. Operator-only control is safest for policy and audit but requires responsive coverage. Traveller self-service is faster, provided supplier terms and guardrails are well understood. Imagine Sunday evening: Anna must cancel a room for Monday. Who can act, what evidence is required, and who bears the fee? That scenario will tell us whether the recommended operator-led model is workable or merely safe on paper.
+
+SLIDE 27 — PLATFORM, DATA AND SECURITY DECISIONS
+Delivery: Calm, security-conscious, and precise about assumptions.
+
+Reusing existing B2C authentication is the fastest identity path, but a successful login may not provide the attributes policy requires: tenant, employee role, cost centre, delegate relationship and market. We need the authoritative source for each attribute and a decision about stale or missing claims. Per-client single sign-on may matter later but adds onboarding effort. Standalone accounts should be a last resort because they create another identity lifecycle. For traveller data, an EU-first minimal model is a reasonable working assumption, not yet a final commitment. Store only what workflow, audit, support and reporting genuinely require. Name, email, employee identifier, role, cost centre, loyalty number, passport data and special requests should each be classified as required, optional, referenced or prohibited. That exercise turns a broad privacy ambition into a concrete data model and backlog.
+
+SLIDE 28 — DECISIONS THAT BLOCK READINESS
+Delivery: Serious and focused, with a sense of urgency without alarm.
+
+This is the readiness checkpoint. Booking.com commercial and API eligibility, the merchant-of-record model, the exact policy calculation and the authoritative employee-role source are still open. The client booking team’s operating model and service level also need validation. Each one can change scope, data, security, user experience and estimates. If API eligibility differs from the assumption, the commercial route may change. If merchant of record changes, payment and compliance scope changes. If the cap calculation is unclear, we cannot label search results honestly. If role data is weak, policy cannot be trusted. And if the operator service level is unstaffed, Anna’s journey can stall after approval. The most urgent blocker is not necessarily the most technical one; it is the one with the longest lead time and the clearest evidence gap. That item needs an owner now.
+
+SLIDE 29 — THE COMPLETE DISCOVERY QUESTION SET
+Delivery: Facilitative and organised, with gentle insistence on accountable outputs.
+
+The discovery work falls into six connected streams. Product defines the minimum journey, the fields and filters, and what can change before or after confirmation. Policy defines roles, caps, taxes, currency and exceptions. Booking.com and commercial confirm that the assumed endpoints, limits and support routes are actually available. Operations defines queue ownership, escalation and recovery. Identity and privacy define trusted attributes and the data we may retain. Non-functional discovery sets realistic targets for performance, availability, accessibility, monitoring and release. The output format matters: every question becomes a decision, a named owner, an evidence source and a due date. A note that simply says ‘to be confirmed’ does not move us closer to readiness. Each function should be able to identify one question it can answer directly and one where it depends on another team. Those dependencies will shape the workshop plan.
+
+SLIDE 30 — DATA AND ARCHITECTURE
+Delivery: Confident transition from business decisions to architecture.
+
+We can now translate the choices into a first-cut architecture position. It should be judged by outcomes: does it protect Anna’s confirmed stay, keep policy explainable, isolate tenants, handle supplier uncertainty and remain operable? We’ll focus on the logical model, configuration controls, security and quality principles, the end-to-end flow and the Lego boundary. Technology selection can follow once these responsibilities are sound. We begin with the data model, because reliable workflow depends on preserving what was known and decided at each step.
+
+SLIDE 31 — THE MODEL PRESERVES TEMPORAL TRUTH
+Delivery: Reflective technical explanation, with emphasis on temporal truth.
+
+The model separates policy, request evidence, decisions, booking attempts and the final reservation because they represent different truths. Client site and traveller role establish context. Travel policy defines the permitted range and exception route for a validity period. The request captures intent. The offer snapshot preserves the supplier price, taxes, terms and time that Anna selected. Approval records who decided and why. Booking attempts carry idempotency and correlation information. The reservation records the supplier-confirmed outcome. The essential idea is temporal truth: what was shown on Monday, approved on Tuesday and available on Wednesday may be different. We must preserve each fact rather than overwrite history. If a traveller challenges an out-of-policy warning, the audit should reproduce the exact policy version and offer used at the time. That means deciding which fields are immutable evidence and which are operational state allowed to change.
+
+SLIDE 32 — TENANT-SCOPED, VERSIONED API CONFIGURATION
+Delivery: Precise, controlled, and quietly reassuring.
+
+The administrative plane is separate from runtime booking. Supplier endpoints, credential references, client profiles, policy rules and operational controls are configuration objects with different owners. Secrets never belong in browser-visible configuration; the platform stores references to managed secrets and audits rotation. Versioning prevents a midday edit from silently changing an in-flight request. A proposed version is validated, approved, activated and published as an audit event. Rollback means activating a known previous version, not editing production values by hand. Before enabling a new market, we should know that currencies, destination rules, endpoint support and rollout controls are valid. Some changes may require tenant approval, some platform approval, and some both. That approval model should be explicit in the configuration lifecycle rather than left to informal practice.
+
+SLIDE 33 — SECURITY PRINCIPLES
+Delivery: Calm and authoritative; avoid dramatic threat language.
+
+Security is a behaviour at every boundary, not a review gate added before release. Personal data is encrypted in transit and at rest, with keys properly managed. Access is limited by role and tenant, with no shared administrator identity or standing privilege. Supplier credentials stay server-side, so the browser never becomes a secret-handling environment. We retain only the personal data that workflow and audit genuinely require. Authentication, sensitive reads, administrative changes and booking actions remain traceable. Consider a compromised traveller browser. It should reveal neither Booking.com credentials, nor another tenant’s data, nor a broad long-lived token. The most dangerous access is often privileged support or administration that quietly becomes permanent. Production support, tenant administration and personal-data export therefore need particularly clear controls and evidence.
+
+SLIDE 34 — MAINTAINABILITY PRINCIPLES
+Delivery: Pragmatic and experienced, with understated conviction.
+
+Maintainability determines whether release two is affordable; it is not merely code aesthetics. Simplicity reduces failure modes and makes support easier. Specifications and architecture decisions should evolve with the code so future teams understand why a boundary exists. Reusable capabilities should be configured per client rather than forked. Roles, caps, destinations and endpoints should be data managed through controlled configuration, not hard-coded releases. Shared conventions for naming, errors, libraries and automated checks reduce the number of ways teams have to solve the same problem. The first request for client-specific customisation will be a useful test. If Tetra Pak needs a different nightly cap, that should create a new configuration version—not a Tetra-Pak-specific branch of the policy engine. Complexity may sometimes be justified, but it should carry an explicit reason.
+
+SLIDE 35 — QUALITY PRINCIPLES
+Delivery: Constructive and exact, with livelier emphasis on the example scenario.
+
+Quality should arrive as automated evidence. Architecture tests can prevent forbidden dependencies and accidental coupling. Unit tests should concentrate on policy calculation, because small errors in caps, tax treatment, role mapping or currency directly change eligibility. Integration tests should exercise representative Booking.com responses, including errors and unusual terms. Behaviour-driven scenarios give product, operations and engineering a shared language before implementation. Performance testing must include supplier limits and peak search behaviour, not just isolated service speed. A concrete scenario might say: given Anna is a general employee travelling to Lund, when the nightly total including taxes exceeds the policy version valid for her dates, the offer is flagged and the configured exception route is shown. Which three business scenarios would make us unwilling to release if they were not automated? Those become the first acceptance-test candidates.
+
+SLIDE 36 — ROBUSTNESS PRINCIPLES
+Delivery: Build controlled tension, then resolve with calm certainty.
+
+We do not control supplier availability; we control how our service behaves when the supplier is unavailable. Every external call needs a timeout and a retry budget. Booking commands must be idempotent so a retry cannot create a second reservation. Circuit breakers isolate an unhealthy dependency while internal queues and administration remain available. Unknown outcomes are reconciled before anyone receives confirmation. Most importantly, failure is a visible workflow state with a clear next action. Imagine a create-booking request timing out after it reaches the supplier. The unsafe response is ‘try again’ without knowing whether a room exists. The safe response is pending confirmation, followed by reconciliation through the idempotency key or supplier reference. We also need an operational threshold: how long may Anna remain in that state before manual escalation begins?
+
+SLIDE 37 — SCALABILITY PRINCIPLES
+Delivery: Technical and balanced, with a lightly sceptical tone on fashion-driven complexity.
+
+Scale should follow domain boundaries and evidence, not fashion. Search, policy, workflow and administration have different load and failure characteristics, but that does not automatically require a service for every noun. Runtime services should remain stateless where practical, with durable state in the appropriate stores. Notifications, audit delivery and reconciliation can run asynchronously because the user need not wait for them. Stable reference data such as countries or sites may be cached; live price and availability must never be treated as stable. Independent deployment requires backward-compatible contracts and feature flags. A surge in traveller searches should not slow Daniel’s booking queue or duplicate a command. The key capacity question is which area will scale first—search volume, approval workflow, booking operations or reporting. Evidence from expected markets and peaks should decide where independence provides real value.
+
+SLIDE 38 — RELIABILITY PRINCIPLES
+Delivery: Quietly serious, with emotional weight on the false-confirmation consequence.
+
+Reliability is measured against the traveller’s outcome, not service uptime alone. A provisional ninety-nine-point-nine percent target for the application is meaningful only if supplier dependency is measured separately and failures are communicated honestly. Multi-zone deployment and health checks protect internal services. Recovery time and recovery point objectives must be agreed for each data store, then proven through restoration exercises. Observability should connect a traveller request, approval, booking attempt, notification and reconciliation through correlation identifiers. Feature flags and rehearsed rollback keep releases reversible by tenant. Consider a confirmed reservation whose notification fails. The booking state remains authoritative and the message is retried; we do not cancel or recreate the room. Five minutes of unavailable search is inconvenient. One false confirmation can leave Anna at a hotel desk without a room. That difference should guide our reliability priorities.
+
+SLIDE 39 — A CONTROLLED END-TO-END FLOW
+Delivery: Structured, confident, and increasingly emphatic toward the final definition.
+
+The flow contains three distinct commitments. During discovery, trusted identity provides client, traveller and role context; the Lego gathers criteria; and the experience API combines policy evaluation with live supplier search. During approval, the selected offer and policy result are revalidated and preserved as evidence before the request enters workflow. During supplier commitment, Daniel makes the decision, the adapter previews and creates with fresh terms and an idempotency key, and the platform persists the supplier-confirmed reservation before notifying anyone. The guardrails are deliberate: credentials remain server-side, policy and offers are rechecked, create is idempotent, evidence snapshots are immutable and unknown outcomes are reconciled. If the rate changes after approval, the platform does not silently substitute a different commercial offer. It follows the agreed tolerance and reconfirmation route. The business should believe a booking exists only when supplier confirmation has been persisted—not when approval is granted or a button is pressed.
+
+SLIDE 40 — THE LEGO IS DEPLOYABLE BUT GOVERNED BY THE HOST
+Delivery: Architectural clarity with a crisp distinction between UI state and business truth.
+
+The existing B2C host owns authentication, tenant context, locale, navigation, route ownership, design standards, accessibility hooks and telemetry. The accommodation Lego owns the presentation and interaction state for its journey. It calls versioned experience and workflow APIs; it never calls Booking.com directly and never handles supplier credentials. Durable requests, approvals, booking attempts, policy evidence, reservations and audit remain on the server. Independent deployment does not mean independent governance. The Lego must remain compatible with the host, use shared standards, release behind flags and contain failures through local error boundaries. Client operations stay in a separate application because the roles, information density and risk are different. If the Lego is refreshed during a search, disposable interface state may be lost or restored; durable workflow truth must never depend on that browser session.
+
+SLIDE 41 — FAILURE, RESILIENCE AND QUALITY
+Delivery: Concise and serious, setting up a scenario-based discussion.
+
+A trustworthy system is not one in which nothing fails. It is one in which failure leads to a safe, understandable and recoverable state. We’ll test supplier outages, changed offers, unknown booking outcomes and delayed downstream processing. As we do, listen for both the technical controls and the human response: what Anna sees, what Daniel sees, what alert fires and who acts. The most important failures are often those that create uncertainty rather than a clean error.
+
+SLIDE 42 — FAILURE PATHS ARE EXPLICIT WORKFLOW STATES
+Delivery: Narrative and controlled, building urgency through the four cases and landing firmly.
+
+Let’s walk through four failure stories. First, search is unavailable. We retain Anna’s criteria, explain that live availability cannot be reached, offer a safe retry and create no request from stale or missing results. Second, an offer changes or expires. We refresh price, availability, taxes and terms, show the precise difference, and follow the agreed tolerance or reconfirmation route. Third, the create outcome is unknown. This is the highest-risk state. We move to pending confirmation, reconcile through correlation and idempotency data, and never retry blindly. No confirmation is shown until supplier truth is established. Fourth, downstream processing fails after the reservation exists. The booking remains authoritative; notifications and audit delivery retry through an outbox, and unresolved items enter an operations queue. Now imagine the timeout after create. Anna sees a clear pending state, Daniel sees the evidence needed to investigate, an alert starts the clock, and ownership transfers according to the runbook. The non-negotiable remains simple: no failure may silently create a duplicate reservation or leave a traveller with a false confirmation.
+
+SLIDE 43 — WORKING QUALITY ASSUMPTIONS
+Delivery: Methodical and consultative; maintain energy through clear grouping and probing questions.
+
+These are working assumptions to validate, not promises. For availability, a provisional ninety-nine-point-nine percent B2C target may be reasonable, with supplier dependency measured separately. For performance, we need to define whether the proposed three-second search target excludes supplier latency and what feedback appears while waiting. Scale still requires evidence on users, markets, concurrency, seasonality and launch pattern. Security and privacy need confirmation of identity, secret handling, data minimisation, residency, retention and deletion. Resilience requires agreed timeouts, bounded retries, circuit breakers and idempotency. The booking state is durable, while notifications, reporting and reconciliation may be eventually consistent. Observability must expose correlation, search failure, queue age and uncertain outcomes. Accessibility covers keyboard, screen reader, responsive behaviour and clear testing ownership. Operability requires versioned configuration, rollback and runbooks. For each target, the useful response is accept, change or evidence needed. What is the approval-queue service level? How long may pending confirmation last? Which devices matter? What recovery objective applies to reservations? Every target needs an owner before architecture sign-off.
+
+SLIDE 44 — READINESS WORKSHOPS AND OWNERS
+Delivery: Practical, upbeat, and action-oriented.
+
+Delivery readiness will not come from one very large meeting. It comes from focused sessions with the right decision-makers, the right evidence and a defined output. Some workshops can run in parallel, although Booking.com feasibility and policy definition are likely early critical paths. The immediate planning question is practical: which session will be hardest to schedule because the accountable decision-maker is missing? Identifying that person now is far cheaper than discovering the gap halfway through a sprint.
+
+SLIDE 45 — SIX WORKSHOPS TO DELIVERY READINESS
+Delivery: Confident planning cadence; slightly lift energy toward the exit condition.
+
+The six workshops are defined by what they must produce. Product and journey gives us requirements, acceptance criteria and traceability for what travellers and operators must accomplish. Policy and entitlement gives us role mapping, destination caps, currencies, tax basis and exception rules. Booking.com feasibility confirms commercial eligibility, endpoints, limits, support routes, error semantics and configuration evidence. Data and privacy classifies fields and agrees retention, residency, access and audit obligations. Operations and support defines queue ownership, service levels, indicators, escalation and manual recovery for uncertain outcomes. Architecture and delivery converts the decisions into API and non-functional contracts, failure tests, dependencies, backlog and a release plan. Product, policy and Booking.com feasibility should begin early. Data, privacy and operations can then work against a concrete model, before architecture and delivery integrate the result. For each workshop we need a named accountable person, the participants who must attend, and the evidence required in advance. The exit condition is clear: named owners, agreed scope, validated feasibility and an estimated release-one backlog.
+
+SLIDE 46 — QUESTIONS AND DECISION RECAP
+Delivery: Open and inviting, while keeping the conversation focused.
+
+This is the point to resolve contradictions, identify missing decisions and test whether a focused discovery sprint is the right next commitment. Three questions are especially useful. What have we misunderstood about the current process? Which recommendation creates unacceptable business or technical risk? And what evidence is still missing before discovery can be approved? If ownership remains ambiguous, or one assumption could materially change the estimate, it belongs in the decision log with an owner and date. We’ll close by confirming the five blocking decisions and what ‘ready to build’ must mean.
+
+SLIDE 47 — PROCEED AFTER FIVE BLOCKING DECISIONS HAVE OWNERS
+Delivery: Assured and conclusive, ending warmly on Anna’s trusted confirmed stay.
+
+The recommendation is to approve a focused, time-boxed discovery sprint—not full delivery—until five blocking decisions are closed. Booking.com eligibility needs ownership from Commercial and Partner Management. Role source and mapping need Tetra Pak human resources or information technology together with Identity. Policy calculation belongs with Product and Tetra Pak Travel. The payment and merchant model require Finance, Legal and Product. The client booking operating model and service-level agreement belong with Client Operations and Service Management. For each decision, we need a named person, the evidence that closes it and a date. We are ready to build only when the minimum viable scope and acceptance criteria are approved, API eligibility and contracts are validated, privacy, security and non-functional reviews are complete, and failure paths, targets and the delivery backlog are accepted. Return for a moment to the outcome that felt least certain at the beginning. Confidence should now be higher, but any remaining gap must be visible. The next actions are to nominate the discovery lead, schedule the six workshops and publish the decision log within one working day. That is how Anna’s simple question becomes an accountable delivery plan—and, ultimately, a confirmed stay she can trust.

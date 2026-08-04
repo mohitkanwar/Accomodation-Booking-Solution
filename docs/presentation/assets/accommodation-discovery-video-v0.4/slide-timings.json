@@ -1,0 +1,334 @@
+{
+  "totalDurationSeconds": 2438.4500000000003,
+  "slides": [
+    {
+      "slide": 1,
+      "title": "From employee intent to a confirmed reservation",
+      "startSeconds": 0,
+      "durationSeconds": 46.5,
+      "endSeconds": 46.5
+    },
+    {
+      "slide": 2,
+      "title": "Why we are here",
+      "startSeconds": 46.5,
+      "durationSeconds": 46.7,
+      "endSeconds": 93.2
+    },
+    {
+      "slide": 3,
+      "title": "Roadmap for the next hour",
+      "startSeconds": 93.2,
+      "durationSeconds": 46.1,
+      "endSeconds": 139.3
+    },
+    {
+      "slide": 4,
+      "title": "Context, success criteria and scope",
+      "startSeconds": 139.3,
+      "durationSeconds": 33,
+      "endSeconds": 172.3
+    },
+    {
+      "slide": 5,
+      "title": "A global footprint changes the problem",
+      "startSeconds": 172.3,
+      "durationSeconds": 43.75,
+      "endSeconds": 216.05
+    },
+    {
+      "slide": 6,
+      "title": "A strategy meetup",
+      "startSeconds": 216.05,
+      "durationSeconds": 49.3,
+      "endSeconds": 265.35
+    },
+    {
+      "slide": 7,
+      "title": "A simple trip hides a complex promise",
+      "startSeconds": 265.35,
+      "durationSeconds": 46.05,
+      "endSeconds": 311.4
+    },
+    {
+      "slide": 8,
+      "title": "Policy adapts to role and destination",
+      "startSeconds": 311.4,
+      "durationSeconds": 47.7,
+      "endSeconds": 359.1
+    },
+    {
+      "slide": 9,
+      "title": "Executive flexibility still needs guardrails",
+      "startSeconds": 359.1,
+      "durationSeconds": 47.8,
+      "endSeconds": 406.9
+    },
+    {
+      "slide": 10,
+      "title": "Human approval makes the reservation accountable",
+      "startSeconds": 406.9,
+      "durationSeconds": 46.05,
+      "endSeconds": 452.95
+    },
+    {
+      "slide": 11,
+      "title": "Administration turns policy into an operable service",
+      "startSeconds": 452.95,
+      "durationSeconds": 46.15,
+      "endSeconds": 499.1
+    },
+    {
+      "slide": 12,
+      "title": "Approval is a business decision, not a policy check",
+      "startSeconds": 499.1,
+      "durationSeconds": 47.65,
+      "endSeconds": 546.75
+    },
+    {
+      "slide": 13,
+      "title": "The supplier fulfils a stay we never touch directly",
+      "startSeconds": 546.75,
+      "durationSeconds": 51.65,
+      "endSeconds": 598.4
+    },
+    {
+      "slide": 14,
+      "title": "The accommodation ecosystem",
+      "startSeconds": 598.4,
+      "durationSeconds": 55.45,
+      "endSeconds": 653.85
+    },
+    {
+      "slide": 15,
+      "title": "Six roles across three groups",
+      "startSeconds": 653.85,
+      "durationSeconds": 53.8,
+      "endSeconds": 707.65
+    },
+    {
+      "slide": 16,
+      "title": "Traveller journey",
+      "startSeconds": 707.65,
+      "durationSeconds": 52.3,
+      "endSeconds": 759.95
+    },
+    {
+      "slide": 17,
+      "title": "Approver journey",
+      "startSeconds": 759.95,
+      "durationSeconds": 47.2,
+      "endSeconds": 807.15
+    },
+    {
+      "slide": 18,
+      "title": "Client booking operator journey",
+      "startSeconds": 807.15,
+      "durationSeconds": 48.35,
+      "endSeconds": 855.5
+    },
+    {
+      "slide": 19,
+      "title": "Corporate administrator capabilities",
+      "startSeconds": 855.5,
+      "durationSeconds": 43.5,
+      "endSeconds": 899
+    },
+    {
+      "slide": 20,
+      "title": "Sodexo administrator capabilities",
+      "startSeconds": 899,
+      "durationSeconds": 51.7,
+      "endSeconds": 950.7
+    },
+    {
+      "slide": 21,
+      "title": "System context, simplified",
+      "startSeconds": 950.7,
+      "durationSeconds": 56.1,
+      "endSeconds": 1006.8
+    },
+    {
+      "slide": 22,
+      "title": "Phased release map",
+      "startSeconds": 1006.8,
+      "durationSeconds": 50.2,
+      "endSeconds": 1057
+    },
+    {
+      "slide": 23,
+      "title": "Discovery questions and decisions",
+      "startSeconds": 1057,
+      "durationSeconds": 35.55,
+      "endSeconds": 1092.55
+    },
+    {
+      "slide": 24,
+      "title": "Business and product decisions",
+      "startSeconds": 1092.55,
+      "durationSeconds": 58.9,
+      "endSeconds": 1151.45
+    },
+    {
+      "slide": 25,
+      "title": "Policy decisions",
+      "startSeconds": 1151.45,
+      "durationSeconds": 56.9,
+      "endSeconds": 1208.35
+    },
+    {
+      "slide": 26,
+      "title": "Booking, payment and operations decisions",
+      "startSeconds": 1208.35,
+      "durationSeconds": 56.2,
+      "endSeconds": 1264.55
+    },
+    {
+      "slide": 27,
+      "title": "Platform, data and security decisions",
+      "startSeconds": 1264.55,
+      "durationSeconds": 56.2,
+      "endSeconds": 1320.75
+    },
+    {
+      "slide": 28,
+      "title": "Decisions that block readiness",
+      "startSeconds": 1320.75,
+      "durationSeconds": 53.4,
+      "endSeconds": 1374.15
+    },
+    {
+      "slide": 29,
+      "title": "The complete discovery question set",
+      "startSeconds": 1374.15,
+      "durationSeconds": 60.55,
+      "endSeconds": 1434.7
+    },
+    {
+      "slide": 30,
+      "title": "Data and architecture",
+      "startSeconds": 1434.7,
+      "durationSeconds": 33.8,
+      "endSeconds": 1468.5
+    },
+    {
+      "slide": 31,
+      "title": "The model preserves temporal truth",
+      "startSeconds": 1468.5,
+      "durationSeconds": 61.85,
+      "endSeconds": 1530.35
+    },
+    {
+      "slide": 32,
+      "title": "Tenant-scoped, versioned API configuration",
+      "startSeconds": 1530.35,
+      "durationSeconds": 53.6,
+      "endSeconds": 1583.95
+    },
+    {
+      "slide": 33,
+      "title": "Security principles",
+      "startSeconds": 1583.95,
+      "durationSeconds": 53.3,
+      "endSeconds": 1637.25
+    },
+    {
+      "slide": 34,
+      "title": "Maintainability principles",
+      "startSeconds": 1637.25,
+      "durationSeconds": 52,
+      "endSeconds": 1689.25
+    },
+    {
+      "slide": 35,
+      "title": "Quality principles",
+      "startSeconds": 1689.25,
+      "durationSeconds": 54.2,
+      "endSeconds": 1743.45
+    },
+    {
+      "slide": 36,
+      "title": "Robustness principles",
+      "startSeconds": 1743.45,
+      "durationSeconds": 55.6,
+      "endSeconds": 1799.05
+    },
+    {
+      "slide": 37,
+      "title": "Scalability principles",
+      "startSeconds": 1799.05,
+      "durationSeconds": 58.25,
+      "endSeconds": 1857.3
+    },
+    {
+      "slide": 38,
+      "title": "Reliability principles",
+      "startSeconds": 1857.3,
+      "durationSeconds": 58.5,
+      "endSeconds": 1915.8
+    },
+    {
+      "slide": 39,
+      "title": "A controlled end-to-end flow",
+      "startSeconds": 1915.8,
+      "durationSeconds": 60.2,
+      "endSeconds": 1976
+    },
+    {
+      "slide": 40,
+      "title": "The Lego is deployable but governed by the host",
+      "startSeconds": 1976,
+      "durationSeconds": 56.5,
+      "endSeconds": 2032.5
+    },
+    {
+      "slide": 41,
+      "title": "Failure, resilience and quality",
+      "startSeconds": 2032.5,
+      "durationSeconds": 30.9,
+      "endSeconds": 2063.4
+    },
+    {
+      "slide": 42,
+      "title": "Failure paths are explicit workflow states",
+      "startSeconds": 2063.4,
+      "durationSeconds": 72.15,
+      "endSeconds": 2135.55
+    },
+    {
+      "slide": 43,
+      "title": "Working quality assumptions",
+      "startSeconds": 2135.55,
+      "durationSeconds": 80.25,
+      "endSeconds": 2215.8
+    },
+    {
+      "slide": 44,
+      "title": "Readiness workshops and owners",
+      "startSeconds": 2215.8,
+      "durationSeconds": 29.85,
+      "endSeconds": 2245.65
+    },
+    {
+      "slide": 45,
+      "title": "Six workshops to delivery readiness",
+      "startSeconds": 2245.65,
+      "durationSeconds": 78.1,
+      "endSeconds": 2323.75
+    },
+    {
+      "slide": 46,
+      "title": "Questions and decision recap",
+      "startSeconds": 2323.75,
+      "durationSeconds": 37.9,
+      "endSeconds": 2361.65
+    },
+    {
+      "slide": 47,
+      "title": "Proceed after five blocking decisions have owners",
+      "startSeconds": 2361.65,
+      "durationSeconds": 76.8,
+      "endSeconds": 2438.45
+    }
+  ]
+}
