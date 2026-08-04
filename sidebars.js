@@ -6,6 +6,7 @@ const journeySidebarGroups = require('./docs/presentation/user-journeys/_generat
 const sidebars = {
   documentationSidebar: [
     'introduction',
+    'presentation/discovery-session-video',
     {
       type: 'category',
       label: '1. Context and Understanding',

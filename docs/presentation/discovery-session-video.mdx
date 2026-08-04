@@ -1,0 +1,88 @@
+---
+id: discovery-session-video
+title: Discovery Session Video
+sidebar_label: Discovery Session Video
+description: Watch the complete narrated accommodation-booking discovery session and access its supporting narration and per-slide audio.
+---
+
+import videoUrl from './assets/accommodation-discovery-video-v0.4/Accommodation-Booking-Solution-Discovery-Session-v0.4.mp4';
+import posterUrl from './assets/accommodation-discovery-video-v0.4/video-poster.jpg';
+
+# Accommodation Booking Discovery Session
+
+Watch the complete solution-architecture discovery session for the proposed
+accommodation-booking capability. The session follows the traveller need from
+initial intent through policy, approval, supplier booking, failure handling and
+delivery readiness.
+
+<div
+  style={{
+    background: '#101938',
+    borderRadius: '16px',
+    boxShadow: '0 16px 40px rgba(16, 25, 56, 0.22)',
+    margin: '1.5rem 0',
+    padding: 'clamp(0.5rem, 2vw, 1.25rem)',
+  }}
+>
+  <video
+    aria-label="Accommodation Booking Solution discovery session"
+    controls
+    playsInline
+    poster={posterUrl}
+    preload="metadata"
+    style={{
+      aspectRatio: '16 / 9',
+      background: '#070b18',
+      borderRadius: '10px',
+      display: 'block',
+      height: 'auto',
+      width: '100%',
+    }}
+  >
+    <source src={videoUrl} type="video/mp4" />
+    Your browser does not support embedded MP4 video.
+  </video>
+</div>
+
+<p>
+  <a className="button button--primary" href={videoUrl} download>
+    Download the video
+  </a>{' '}
+  <a
+    className="button button--secondary"
+    href="https://raw.githubusercontent.com/mohitkanwar/Accomodation-Booking-Solution/main/docs/presentation/assets/accommodation-discovery-video-v0.4/Reviewed-Narration-v0.4.txt"
+  >
+    Download the narration
+  </a>
+</p>
+
+## Session structure
+
+| Time | Topic |
+| ---: | --- |
+| 00:00 | Purpose, context and the traveller promise |
+| 02:19 | Context, success criteria and release scope |
+| 17:37 | Discovery questions and blocking decisions |
+| 23:55 | Data model, architecture and Lego boundary |
+| 33:53 | Failure paths, resilience and quality assumptions |
+| 36:56 | Readiness workshops and owners |
+| 38:44 | Questions and decision recap |
+
+The video contains 47 embedded chapters—one for each source slide. Exact
+chapter boundaries are also available in the
+<a href="https://raw.githubusercontent.com/mohitkanwar/Accomodation-Booking-Solution/main/docs/presentation/assets/accommodation-discovery-video-v0.4/slide-timings.json">slide-timing data</a>.
+
+:::note Reference-session format
+
+This recording demonstrates how a senior architect can guide the material as
+a working discovery conversation. Recommendations and quality targets remain
+provisional where the source presentation identifies them as assumptions or
+open decisions.
+
+:::
+
+## Supporting audio
+
+The individual slide voice tracks are available in the
+[per-slide audio directory](https://github.com/mohitkanwar/Accomodation-Booking-Solution/tree/main/docs/presentation/assets/accommodation-discovery-video-v0.4/audio).
+The voice is AI-generated using the reviewed narration for this session.
