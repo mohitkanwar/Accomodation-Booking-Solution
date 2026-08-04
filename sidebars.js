@@ -73,7 +73,16 @@ const sidebars = {
       items: ['presentation/non-functional-requirements'],
       collapsed: false,
     },
-    'presentation/next-steps-and-workshops',
+    {
+      type: 'category',
+      label: '6. Next Steps and Workshops',
+      link: {
+        type: 'doc',
+        id: 'presentation/next-steps-and-workshops',
+      },
+      items: ['presentation/phased-release-map'],
+      collapsed: false,
+    },
   ],
 };
 
