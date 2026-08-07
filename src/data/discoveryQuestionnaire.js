@@ -1,81 +1,7 @@
 export const questionnaireSections = [
   {
-    id: 'users',
-    number: '01',
-    title: 'Users and stakeholders',
-    description:
-      'Identify who uses, governs, supports, and is affected by the service.',
-    questions: [
-      {
-        id: 'systemUsers',
-        type: 'multi',
-        required: true,
-        label: 'Who are the users of the system?',
-        hint: 'Select every role that needs a dedicated journey or permission model.',
-        options: [
-          'Traveller / accommodation seeker',
-          'Line manager or approver',
-          'Corporate administrator',
-          'Booking operator',
-          'Sodexo administrator',
-          'Finance or accounts-payable user',
-          'Accommodation provider agent',
-          'Audit, legal or compliance user',
-          'Other',
-        ],
-        otherLabel: 'Describe the other user type',
-      },
-      {
-        id: 'stakeholders',
-        type: 'multi',
-        label: 'Who owns or must approve the key decisions?',
-        hint: 'Select each relevant role, then identify the responsible person or enter TBD if the owner is not yet known.',
-        captureOptionDetails: true,
-        optionDetailLabel: 'Named owner, team, or TBD',
-        optionDetailPlaceholder: 'For example: Jane Smith — Group Travel',
-        options: [
-          'Business owner',
-          'Product owner',
-          'Corporate travel',
-          'Procurement',
-          'Finance',
-          'Legal / privacy',
-          'Information security',
-          'Sodexo operations',
-          'Client IT',
-          'Other',
-        ],
-        otherLabel: 'Other stakeholder role and named owner/team',
-      },
-      {
-        id: 'userScale',
-        type: 'textarea',
-        label: 'What is the expected user and geographic scale?',
-        placeholder:
-          'Employees, countries, offices, languages, time zones, peak concurrent users…',
-      },
-      {
-        id: 'initialUserCount',
-        type: 'input',
-        inputMode: 'numeric',
-        label: 'What is the expected number of users initially?',
-        hint: 'State whether this is the registered, eligible, active, or concurrent user population.',
-        placeholder:
-          'For example: 5,000 eligible employees; 800 monthly active users',
-      },
-      {
-        id: 'expectedUserGrowthRate',
-        type: 'input',
-        label: 'What user growth rate is expected?',
-        hint: 'Include the percentage, time period, and any known expansion milestones.',
-        placeholder:
-          'For example: 20% year-on-year; three additional countries in year two',
-      },
-    ],
-  },
-  {
     id: 'current-state',
-    number: '02',
+    number: '01',
     title: 'Current process',
     description:
       'Understand how accommodation is requested, approved, booked, and reconciled today.',
@@ -144,7 +70,7 @@ export const questionnaireSections = [
   },
   {
     id: 'architecture',
-    number: '03',
+    number: '02',
     title: 'Existing architecture',
     description:
       'Map the reusable platform capabilities, authoritative systems, and integration constraints.',
@@ -205,6 +131,80 @@ export const questionnaireSections = [
         label: 'What must the solution reuse or avoid?',
         placeholder:
           'Mandatory platforms, approved technologies, network zones, API standards, deployment controls, legacy dependencies…',
+      },
+    ],
+  },
+  {
+    id: 'users',
+    number: '03',
+    title: 'Users and stakeholders',
+    description:
+      'Identify who uses, governs, supports, and is affected by the service.',
+    questions: [
+      {
+        id: 'systemUsers',
+        type: 'multi',
+        required: true,
+        label: 'Who are the users of the system?',
+        hint: 'Select every role that needs a dedicated journey or permission model.',
+        options: [
+          'Traveller / accommodation seeker',
+          'Line manager or approver',
+          'Corporate administrator',
+          'Booking operator',
+          'Sodexo administrator',
+          'Finance or accounts-payable user',
+          'Accommodation provider agent',
+          'Audit, legal or compliance user',
+          'Other',
+        ],
+        otherLabel: 'Describe the other user type',
+      },
+      {
+        id: 'stakeholders',
+        type: 'multi',
+        label: 'Who owns or must approve the key decisions?',
+        hint: 'Select each relevant role, then identify the responsible person or enter TBD if the owner is not yet known.',
+        captureOptionDetails: true,
+        optionDetailLabel: 'Named owner, team, or TBD',
+        optionDetailPlaceholder: 'For example: Jane Smith — Group Travel',
+        options: [
+          'Business owner',
+          'Product owner',
+          'Corporate travel',
+          'Procurement',
+          'Finance',
+          'Legal / privacy',
+          'Information security',
+          'Sodexo operations',
+          'Client IT',
+          'Other',
+        ],
+        otherLabel: 'Other stakeholder role and named owner/team',
+      },
+      {
+        id: 'userScale',
+        type: 'textarea',
+        label: 'What is the expected user and geographic scale?',
+        placeholder:
+          'Employees, countries, offices, languages, time zones, peak concurrent users…',
+      },
+      {
+        id: 'initialUserCount',
+        type: 'input',
+        inputMode: 'numeric',
+        label: 'What is the expected number of users initially?',
+        hint: 'State whether this is the registered, eligible, active, or concurrent user population.',
+        placeholder:
+          'For example: 5,000 eligible employees; 800 monthly active users',
+      },
+      {
+        id: 'expectedUserGrowthRate',
+        type: 'input',
+        label: 'What user growth rate is expected?',
+        hint: 'Include the percentage, time period, and any known expansion milestones.',
+        placeholder:
+          'For example: 20% year-on-year; three additional countries in year two',
       },
     ],
   },
