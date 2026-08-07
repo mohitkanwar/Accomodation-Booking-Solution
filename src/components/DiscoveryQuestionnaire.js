@@ -1,6 +1,8 @@
 import {useEffect, useMemo, useState} from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 import {questionnaireSections} from '../data/discoveryQuestionnaire';
+import {downloadQuestionnairePdf} from '../utils/questionnairePdf';
 import styles from './DiscoveryQuestionnaire.module.css';
 
 const STORAGE_KEY = 'accommodation-discovery-questionnaire:v1';
@@ -54,6 +56,7 @@ function formatSavedTime(isoTimestamp) {
 }
 
 export default function DiscoveryQuestionnaire() {
+  const sodexoLogoUrl = useBaseUrl('/img/sodexo-logo.png');
   const [formState, setFormState] = useState(createEmptyState);
   const [savedAt, setSavedAt] = useState(null);
   const [status, setStatus] = useState({
@@ -61,6 +64,7 @@ export default function DiscoveryQuestionnaire() {
     message: 'Your answers have not been saved yet.',
   });
   const [dirty, setDirty] = useState(false);
+  const [pdfGenerating, setPdfGenerating] = useState(false);
 
   const requiredQuestions = useMemo(
     () =>
@@ -269,6 +273,36 @@ export default function DiscoveryQuestionnaire() {
       tone: 'success',
       message: 'Downloaded a portable JSON copy of the current answers.',
     });
+  }
+
+  async function downloadPdf() {
+    setPdfGenerating(true);
+    setStatus({
+      tone: 'neutral',
+      message: 'Preparing the professional PDF document...',
+    });
+
+    try {
+      await downloadQuestionnairePdf({
+        formState,
+        logoUrl: sodexoLogoUrl,
+        sections: questionnaireSections,
+      });
+      setStatus({
+        tone: 'success',
+        message: 'Downloaded the discovery workshop questionnaire PDF.',
+      });
+    } catch (error) {
+      setStatus({
+        tone: 'error',
+        message:
+          error instanceof Error
+            ? `The PDF could not be generated: ${error.message}`
+            : 'The PDF could not be generated. Please try again.',
+      });
+    } finally {
+      setPdfGenerating(false);
+    }
   }
 
   function clearDraft() {
@@ -716,6 +750,13 @@ export default function DiscoveryQuestionnaire() {
             type="button"
             onClick={downloadAnswers}>
             Download JSON
+          </button>
+          <button
+            className={styles.pdfButton}
+            type="button"
+            disabled={pdfGenerating}
+            onClick={downloadPdf}>
+            {pdfGenerating ? 'Preparing PDF...' : 'Download PDF'}
           </button>
           <button className={styles.saveButton} type="submit">
             Save answers

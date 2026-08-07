@@ -517,6 +517,17 @@
   color: var(--questionnaire-blue);
 }
 
+.pdfButton {
+  background: #fff;
+  border: 1px solid var(--questionnaire-red);
+  color: #b4171d;
+}
+
+.actions button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 .saveButton {
   background: var(--questionnaire-blue);
   border: 1px solid var(--questionnaire-blue);
@@ -593,8 +604,8 @@
   }
 
   .clearButton {
-    grid-column: 1 / -1;
-    grid-row: 2;
+    grid-column: auto;
+    grid-row: auto;
   }
 }
 
