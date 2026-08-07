@@ -411,6 +411,26 @@ export const questionnaireSections = [
         otherLabel: 'Describe other sensitive data',
       },
       {
+        id: 'dataRetentionRequirements',
+        type: 'textarea',
+        label:
+          'What retention, deletion, and legal-hold requirements apply to each data category?',
+        hint:
+          'Capture the policy or regulatory basis, retention period, deletion trigger, exceptions, and accountable owner for each category.',
+        placeholder:
+          'For example: Search activity — 90 days; booking and invoice records — 7 years after settlement; audit logs — 2 years; legal hold overrides deletion until formally released…',
+      },
+      {
+        id: 'dataArchivalPolicy',
+        type: 'textarea',
+        label:
+          'What archival, retrieval, restoration, and secure-disposal policy must the solution support?',
+        hint:
+          'Include archive eligibility, storage tier and location, encryption and access controls, retrieval service levels, restore testing, and evidence of final disposal.',
+        placeholder:
+          'For example: Move closed bookings to encrypted archive after 12 months; retrieve within one business day; test restoration annually; record deletion certificates…',
+      },
+      {
         id: 'legalOwners',
         type: 'textarea',
         label: 'Who must review and approve the legal, security, and privacy position?',
