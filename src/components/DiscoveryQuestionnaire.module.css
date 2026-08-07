@@ -275,6 +275,51 @@
   margin: -0.25rem 0 0.85rem 2.05rem;
 }
 
+.systemOwnershipTable {
+  border: 1px solid var(--questionnaire-border);
+  border-radius: 0.8rem;
+  overflow: hidden;
+}
+
+.systemOwnershipRow {
+  align-items: center;
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns:
+    minmax(10rem, 1fr) minmax(10rem, 1.25fr) minmax(10rem, 1.25fr);
+  padding: 0.72rem 0.8rem;
+}
+
+.systemOwnershipRow + .systemOwnershipRow {
+  border-top: 1px solid var(--questionnaire-border);
+}
+
+.systemOwnershipRow:nth-child(odd):not(.systemOwnershipHeader) {
+  background: var(--questionnaire-blue-pale);
+}
+
+.systemOwnershipRow strong {
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.systemOwnershipRow label {
+  margin: 0;
+}
+
+.systemOwnershipRow label > span {
+  display: none;
+}
+
+.systemOwnershipHeader {
+  background: var(--questionnaire-blue);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 .listItems {
   display: grid;
   gap: 0.75rem;
@@ -521,6 +566,25 @@
 
   .sectionBody {
     padding: 0 1rem;
+  }
+
+  .systemOwnershipHeader {
+    display: none;
+  }
+
+  .systemOwnershipRow {
+    align-items: stretch;
+    gap: 0.65rem;
+    grid-template-columns: 1fr;
+    padding: 0.9rem;
+  }
+
+  .systemOwnershipRow label > span {
+    color: var(--questionnaire-muted);
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 750;
+    margin-bottom: 0.3rem;
   }
 
   .actions {

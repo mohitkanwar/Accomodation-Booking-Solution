@@ -96,9 +96,12 @@ export const questionnaireSections = [
       },
       {
         id: 'authoritativeSystems',
-        type: 'multi',
-        label: 'Which systems are authoritative for the required data?',
-        options: [
+        type: 'system-ownership',
+        label:
+          'Which systems are authoritative for the required data, and who owns each one?',
+        hint:
+          'For each functional area, record the actual system or source name and the accountable person or team. Enter TBD where either has not yet been confirmed.',
+        functionalAreas: [
           'Identity and employee directory',
           'Organisation hierarchy',
           'Roles and access',
@@ -107,10 +110,11 @@ export const questionnaireSections = [
           'Finance / ERP',
           'Notification platform',
           'Reporting platform',
-          'No confirmed source yet',
-          'Other',
         ],
-        otherLabel: 'Add another authoritative system',
+        systemNameLabel: 'Actual system / source',
+        ownerLabel: 'Accountable person / team',
+        systemNamePlaceholder: 'System name or TBD',
+        ownerPlaceholder: 'Named person, team, or TBD',
       },
       {
         id: 'hostingModel',

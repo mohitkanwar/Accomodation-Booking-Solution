@@ -21,6 +21,19 @@ function createEmptyState() {
 function isAnswered(question, answers) {
   const value = answers[question.id];
 
+  if (question.type === 'system-ownership') {
+    return (
+      value &&
+      typeof value === 'object' &&
+      Object.values(value).some(
+        (entry) =>
+          entry &&
+          (entry.systemName?.trim().length > 0 ||
+            entry.owner?.trim().length > 0),
+      )
+    );
+  }
+
   if (question.type === 'multi' || question.type === 'text-list') {
     return (
       Array.isArray(value) &&
@@ -141,6 +154,30 @@ export default function DiscoveryQuestionnaire() {
       return {
         ...currentState,
         answers: {...currentState.answers, [questionId]: current},
+      };
+    });
+    markDirty();
+  }
+
+  function updateSystemOwnership(questionId, functionalArea, field, value) {
+    setFormState((currentState) => {
+      const currentQuestionAnswer =
+        currentState.answers[questionId] &&
+        !Array.isArray(currentState.answers[questionId]) &&
+        typeof currentState.answers[questionId] === 'object'
+          ? currentState.answers[questionId]
+          : {};
+      const currentAreaAnswer = currentQuestionAnswer[functionalArea] || {};
+
+      return {
+        ...currentState,
+        answers: {
+          ...currentState.answers,
+          [questionId]: {
+            ...currentQuestionAnswer,
+            [functionalArea]: {...currentAreaAnswer, [field]: value},
+          },
+        },
       };
     });
     markDirty();
@@ -274,6 +311,90 @@ export default function DiscoveryQuestionnaire() {
   function renderQuestion(question, questionIndex) {
     const fieldId = `question-${question.id}`;
     const questionNumber = String(questionIndex + 1).padStart(2, '0');
+
+    if (question.type === 'system-ownership') {
+      const storedAnswer = formState.answers[question.id];
+      const ownershipAnswers =
+        storedAnswer &&
+        !Array.isArray(storedAnswer) &&
+        typeof storedAnswer === 'object'
+          ? storedAnswer
+          : {};
+
+      return (
+        <fieldset className={styles.question} key={question.id}>
+          <legend className={styles.questionLabel}>
+            <span className={styles.questionNumber}>{questionNumber}</span>
+            <span>
+              {question.label}
+              {question.required && (
+                <span className={styles.required}> Required</span>
+              )}
+            </span>
+          </legend>
+          {question.hint && <p className={styles.hint}>{question.hint}</p>}
+          <div className={styles.systemOwnershipTable}>
+            <div
+              className={`${styles.systemOwnershipRow} ${styles.systemOwnershipHeader}`}
+              aria-hidden="true">
+              <span>Functional area</span>
+              <span>{question.systemNameLabel}</span>
+              <span>{question.ownerLabel}</span>
+            </div>
+            {question.functionalAreas.map((functionalArea) => {
+              const areaAnswer = ownershipAnswers[functionalArea] || {};
+              const areaSlug = functionalArea
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-');
+              const systemFieldId = `${fieldId}-${areaSlug}-system`;
+              const ownerFieldId = `${fieldId}-${areaSlug}-owner`;
+
+              return (
+                <div className={styles.systemOwnershipRow} key={functionalArea}>
+                  <strong>{functionalArea}</strong>
+                  <label htmlFor={systemFieldId}>
+                    <span>{question.systemNameLabel}</span>
+                    <input
+                      id={systemFieldId}
+                      type="text"
+                      aria-label={`${functionalArea}: ${question.systemNameLabel}`}
+                      value={areaAnswer.systemName || ''}
+                      placeholder={question.systemNamePlaceholder}
+                      onChange={(event) =>
+                        updateSystemOwnership(
+                          question.id,
+                          functionalArea,
+                          'systemName',
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                  <label htmlFor={ownerFieldId}>
+                    <span>{question.ownerLabel}</span>
+                    <input
+                      id={ownerFieldId}
+                      type="text"
+                      aria-label={`${functionalArea}: ${question.ownerLabel}`}
+                      value={areaAnswer.owner || ''}
+                      placeholder={question.ownerPlaceholder}
+                      onChange={(event) =>
+                        updateSystemOwnership(
+                          question.id,
+                          functionalArea,
+                          'owner',
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        </fieldset>
+      );
+    }
 
     if (question.type === 'text-list') {
       const storedItems = formState.answers[question.id];
