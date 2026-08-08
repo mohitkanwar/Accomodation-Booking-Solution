@@ -98,6 +98,31 @@ Service form the operational core. Reporting and reconciliation consume domain
 events so analytical or control workloads do not couple themselves to the
 transactional service databases.
 
+## Platform deployment view
+
+```plantuml-image
+./diagrams/context-and-understanding/platform-deployment-diagram.puml | Accommodation booking platform deployment diagram
+```
+
+The target topology starts with a governed cloud landing zone and separates
+edge, application, data, and operations concerns. Workloads run as signed Docker
+images on a multi-availability-zone Kubernetes cluster. A service mesh provides
+workload identity, mutual TLS, traffic policy, and consistent telemetry without
+moving domain logic into the platform layer.
+
+SQL remains the authoritative operational store for each service. Redis is a
+short-lived cache, Kafka carries durable domain events, and governed event data
+flows through an analytical landing zone into the enterprise data warehouse.
+Identity, secrets, network policy, controlled supplier egress, observability,
+security monitoring, backups, and disaster recovery are part of the deployment
+baseline rather than later additions.
+
+This is a cloud-provider-neutral production view. The discovery should confirm
+the chosen cloud services, environment and subscription/account boundaries,
+regional topology, sizing, data residency, recovery objectives, and which
+landing-zone capabilities already exist. Development and test should use the
+same infrastructure-as-code pattern at an appropriate scale.
+
 ## Interpreted business journey
 
 ```text

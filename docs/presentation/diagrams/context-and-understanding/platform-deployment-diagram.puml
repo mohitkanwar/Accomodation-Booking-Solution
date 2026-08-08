@@ -1,0 +1,131 @@
+@startuml
+!include ../../../../plantuml/sodexo-theme.puml
+
+title Accommodation Booking Platform — Deployment View
+header Sat, 08 Aug 2026
+footer (c) Developed by <b>Mohit Kanwar</b>
+caption Cloud-provider-neutral target topology · Production shown; lower environments use the same IaC pattern at an appropriate scale
+
+top to bottom direction
+skinparam linetype ortho
+skinparam nodesep 28
+skinparam ranksep 36
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+
+skinparam node {
+  BackgroundColor SODEXO_WHITE
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+}
+skinparam cloud {
+  BackgroundColor SODEXO_BLUE_PALE
+  BorderColor SODEXO_BLUE
+  FontColor SODEXO_INK
+}
+skinparam artifact {
+  BackgroundColor SODEXO_SUCCESS_LIGHT
+  BorderColor SODEXO_SUCCESS
+  FontColor SODEXO_INK
+}
+
+actor "Travellers, approvers\nand administrators" as users
+cloud "Corporate identity provider\nOIDC · MFA · conditional access" as idp
+cloud "Booking.com Demand API" as bookingcom #FFF4DD
+cloud "Enterprise services\nNotifications · ESB · Finance / ERP" as enterprise
+actor "Platform operations / SOC" as operations
+
+frame "CLOUD LANDING ZONE" as landingZone {
+  rectangle "Governance and shared platform services" as governance #DDE1F6 {
+    component "Cloud policy and guardrails\nRBAC · tagging · budgets · audit" as guardrails
+    component "CI/CD + infrastructure as code\nSAST · dependency and policy checks" as cicd
+    artifact "Signed Docker images\nPrivate container registry" as registry
+    component "Secrets and key management\nKMS · rotation · workload identity" as secrets
+  }
+
+  frame "Production workload account / subscription" as prod {
+    rectangle "EDGE AND INGRESS ZONE" as edgeZone #F5F6FC {
+      component "DNS · CDN · DDoS protection\nWeb application firewall" as edge
+      component "API gateway / load balancer\nTLS · JWT · throttling · request limits" as gateway
+      component "Controlled egress\nFirewall · NAT · allow-listing" as egress
+    }
+
+    frame "PRIVATE APPLICATION SUBNETS — MULTI-AZ" as appSubnets {
+      node "Managed Kubernetes cluster" as k8s {
+        component "Ingress controller" as ingress
+        component "Service mesh control plane\nIdentity · mTLS · traffic policy · telemetry" as mesh
+
+        rectangle "Accommodation namespace" as namespace #F5F6FC {
+          component "API + domain microservice pods\nExperience API · Accommodation Service\nASP.NET Core · .NET 8" as apiPods
+          component "Workflow + integration pods\nBooking Workflow · Booking.com connector\n.NET 8 · resilience policies" as transactionPods
+          component "Event consumer pods\nReporting · reconciliation\n.NET Worker Services" as workerPods
+        }
+
+        component "Runtime controls\nHPA · network policy · PDB\nrolling / blue-green deployment" as runtime
+      }
+    }
+
+    frame "PRIVATE DATA SUBNETS — MANAGED SERVICES" as dataSubnets {
+      database "Service-owned SQL databases\nHA · encrypted · point-in-time restore" as sql
+      database "Redis cache\nTTL · encryption · eviction policy" as redis
+      queue "Kafka event platform\nHA brokers · schema registry · DLQ" as kafka
+      database "Object storage / data lake\nEncrypted analytical landing zone" as lake
+      database "Enterprise data warehouse / BI\nCurated models · governed access" as warehouse
+    }
+
+    rectangle "OPERATIONS AND SECURITY" as opsZone #DDF2E9 {
+      component "OpenTelemetry collectors\nLogs · metrics · traces" as otel
+      component "Observability platform\nDashboards · SLOs · alerting" as observability
+      component "SIEM / SOC\nSecurity events · audit evidence" as siem
+      component "Backup vault + secondary region\nTested restore · RTO / RPO · runbooks" as dr
+    }
+  }
+}
+
+users -down-> edge : HTTPS
+edge -right-> gateway
+gateway -right-> idp : Token validation / OIDC
+gateway -down-> ingress : Private routing
+ingress -down-> apiPods : Mesh route
+
+apiPods -right-> transactionPods : Synchronous APIs
+apiPods -down-> redis : Selective cache
+apiPods -down-> sql : Owns data
+transactionPods -down-> sql : Owns data
+transactionPods -down-> kafka : Transactional outbox events
+kafka -up-> workerPods : Consumer groups
+workerPods -down-> sql : Read models / evidence
+workerPods -down-> lake : Governed event export
+lake -right-> warehouse : Transform / curate
+
+transactionPods -right-> egress : Supplier calls
+egress -right-> bookingcom : HTTPS / allow-listed
+kafka -right-> enterprise : Events / integration
+
+cicd -right-> registry
+registry -down-> k8s : Deploy immutable images
+guardrails ..> prod
+secrets ..> k8s
+idp ..> k8s
+mesh ..> namespace
+runtime ..> namespace
+
+k8s -down-> otel : Telemetry
+kafka -down-> otel
+sql -down-> otel
+otel -right-> observability
+observability -right-> operations : Alerts and SLOs
+otel -down-> siem : Security-relevant signals
+siem -right-> operations : Incidents
+sql -down-> dr
+lake -down-> dr
+
+legend right
+  |= Surface |= Deployment meaning |
+  |<#DDE1F6> Blue | Shared landing-zone control |
+  |<#F5F6FC> Pale | Workload runtime boundary |
+  |<#DDF2E9> Green | Data, event or operational evidence |
+  |<#FFF4DD> Amber | External supplier dependency |
+endlegend
+
+@enduml
